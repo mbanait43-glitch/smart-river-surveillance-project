@@ -358,16 +358,17 @@ body.light-mode .glass-filter-bar {
 
 .filter-group {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: flex-end;
+    gap: 10px;
     flex: 1;
     min-width: 0;
 }
 
 .filter-icon {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--cyan-primary);
     flex-shrink: 0;
+    margin-bottom: 8px;
 }
 
 body.light-mode .filter-icon {
