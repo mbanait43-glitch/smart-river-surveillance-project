@@ -373,8 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Instant Center Focus WITHOUT Flying Animation!
         if (station.lat && station.lng) {
-            map.flyTo([station.lat, station.lng], 10, { duration: 1.5 });
+            map.panTo([station.lat, station.lng], { animate: false });
             if (markersMap[stationId]) {
                 markersMap[stationId].openPopup();
             }
