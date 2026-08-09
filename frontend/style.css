@@ -517,6 +517,36 @@ body.light-mode .metric-val {
     writing-mode: horizontal-tb !important;
 }
 
+/* FIX 2: LEAFLET MAP POPUP & TOOLTIP ALWAYS HORIZONTAL & BEAUTIFULLY FORMATTED */
+.leaflet-popup, .leaflet-popup-content-wrapper, .leaflet-popup-content, .leaflet-tooltip {
+    min-width: 230px !important;
+    max-width: 320px !important;
+    width: auto !important;
+    writing-mode: horizontal-tb !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow: visible !important;
+    text-align: left !important;
+    direction: ltr !important;
+}
+
+.leaflet-popup-content-wrapper {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.leaflet-popup-tip {
+    background: #ffffff !important;
+}
+
+.leaflet-popup-content div, .leaflet-popup-content strong, .leaflet-popup-content span {
+    writing-mode: horizontal-tb !important;
+    white-space: normal !important;
+}
+
 /* Print Header */
 .print-only-header { display: none; }
 

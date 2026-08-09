@@ -615,14 +615,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const doVal = stOverrides['Dissolved Oxygen'] !== undefined ? `${stOverrides['Dissolved Oxygen']} mg/l` : (s.parameters['Dissolved Oxygen'] ? `${s.parameters['Dissolved Oxygen'].value} mg/l` : '6.80 mg/l');
 
                 const popupContent = `
-                    <div style="font-family: sans-serif; font-size: 12px; color: #1e293b; padding: 2px;">
-                        <strong style="color: #0284c7; font-size: 13px;">${s.name}</strong><br/>
-                        <span>River: ${s.river} | Location: ${s.state}</span><br/>
-                        <span>pH: ${phVal} | DO: ${doVal}</span>
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #0f172a; min-width: 220px; max-width: 300px; line-height: 1.4; display: block; text-align: left;">
+                        <div style="font-size: 14px; font-weight: 800; color: #0284c7; margin-bottom: 4px; display: block; white-space: normal; word-break: normal;">${s.name}</div>
+                        <div style="font-size: 12px; color: #475569; margin-bottom: 6px; display: block;"><b>River:</b> ${s.river} | <b>Location:</b> ${s.state}</div>
+                        <div style="font-size: 12px; color: #0f172a; display: block;"><b>pH Level:</b> ${phVal} &nbsp;|&nbsp; <b>DO:</b> ${doVal}</div>
                     </div>
                 `;
 
-                marker.bindPopup(popupContent);
+                marker.bindPopup(popupContent, { minWidth: 230, maxWidth: 320, autoPan: true });
 
                 marker.on('click', () => {
                     stationSelect.value = s.id;
