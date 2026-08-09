@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('admin-login-form');
     const loginError = document.getElementById('login-error');
     const btnLogout = document.getElementById('btn-logout');
+    const btnLoginSubmit = document.getElementById('btn-admin-login-submit');
 
     const btnExportCsv = document.getElementById('btn-export-csv');
     let rawData = [];
@@ -84,31 +85,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Auth Session Check ---
+    // --- Auth Session Check & Perform Login (Mobile Touch Compatible) ---
     function checkAuth() {
         const isLoggedIn = localStorage.getItem('admin_logged_in');
         if (isLoggedIn === 'true') {
-            loginModal.style.display = 'none';
+            if (loginModal) loginModal.style.display = 'none';
             initAdminDashboard();
         } else {
-            loginModal.style.display = 'flex';
+            if (loginModal) loginModal.style.display = 'flex';
+        }
+    }
+
+    function performAdminLogin() {
+        const userEl = document.getElementById('admin-username');
+        const passEl = document.getElementById('admin-password');
+        if (!userEl || !passEl) return;
+
+        const user = userEl.value.trim().toLowerCase();
+        const pass = passEl.value.trim();
+
+        if ((user === 'admin' || user === 'admin ') && (pass === 'admin123' || pass === 'admin123 ')) {
+            localStorage.setItem('admin_logged_in', 'true');
+            if (loginError) loginError.style.display = 'none';
+            if (loginModal) loginModal.style.display = 'none';
+            initAdminDashboard();
+        } else {
+            if (loginError) {
+                loginError.style.display = 'block';
+                loginError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Invalid Credentials (Use: admin / admin123)';
+            }
         }
     }
 
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const user = document.getElementById('admin-username').value;
-            const pass = document.getElementById('admin-password').value;
+            performAdminLogin();
+        });
+    }
 
-            if (user === 'admin' && pass === 'admin123') {
-                localStorage.setItem('admin_logged_in', 'true');
-                loginError.style.display = 'none';
-                loginModal.style.display = 'none';
-                initAdminDashboard();
-            } else {
-                loginError.style.display = 'block';
-            }
+    if (btnLoginSubmit) {
+        btnLoginSubmit.addEventListener('click', (e) => {
+            e.preventDefault();
+            performAdminLogin();
+        });
+        btnLoginSubmit.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            performAdminLogin();
         });
     }
 

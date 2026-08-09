@@ -16,28 +16,28 @@
 <body class="light-mode" style="background-color: #f0f4f9; color: #0f172a;">
 
     <!-- Glassmorphic Login Overlay Modal -->
-    <div id="login-modal" class="admin-login-overlay" style="background: rgba(240, 244, 249, 0.95);">
-        <div class="admin-login-card" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-            <div class="brand-icon" style="width: 60px; height: 60px; font-size: 1.8rem; margin: 0 auto 16px;">
+    <div id="login-modal" class="admin-login-overlay" style="background: rgba(240, 244, 249, 0.96); z-index: 99999;">
+        <div class="admin-login-card" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 90%; max-width: 400px; padding: 24px;">
+            <div class="brand-icon" style="width: 54px; height: 54px; font-size: 1.6rem; margin: 0 auto 14px;">
                 <i class="fa-solid fa-user-shield"></i>
             </div>
-            <h2 style="color: #0f172a;">Admin Security Portal</h2>
-            <p style="color: #475569;">Smart River Water Level and Quality Surveillance Management Portal</p>
+            <h2 style="color: #0f172a; font-size: 1.3rem;">Admin Security Portal</h2>
+            <p style="color: #475569; font-size: 0.85rem; margin-bottom: 16px;">Smart River Water Level and Quality Surveillance</p>
             
-            <form id="admin-login-form" style="margin-top: 20px;">
-                <div style="text-align: left; margin-bottom: 16px;">
-                    <label style="font-size: 0.75rem; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Username</label>
-                    <input type="text" id="admin-username" placeholder="Username (Default: admin)" required style="width: 100%; background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important;">
+            <form id="admin-login-form" action="javascript:void(0);" style="margin-top: 16px;">
+                <div style="text-align: left; margin-bottom: 14px;">
+                    <label style="font-size: 0.75rem; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Username</label>
+                    <input type="text" id="admin-username" placeholder="Username: admin" required autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" value="admin" style="width: 100%; background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; font-size: 0.95rem; padding: 10px 14px;">
                 </div>
-                <div style="text-align: left; margin-bottom: 24px;">
-                    <label style="font-size: 0.75rem; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Password</label>
-                    <input type="password" id="admin-password" placeholder="Password (Default: admin123)" required style="width: 100%; background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important;">
+                <div style="text-align: left; margin-bottom: 20px;">
+                    <label style="font-size: 0.75rem; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Password</label>
+                    <input type="password" id="admin-password" placeholder="Password: admin123" required autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="current-password" value="admin123" style="width: 100%; background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; font-size: 0.95rem; padding: 10px 14px;">
                 </div>
-                <button type="submit" class="btn primary-pill" style="width: 100%; justify-content: center; padding: 12px 20px; font-size: 0.95rem; border-radius: 14px;"><i class="fa-solid fa-right-to-bracket"></i> Login to Management Portal</button>
+                <button type="submit" id="btn-admin-login-submit" class="btn primary-pill" style="width: 100%; justify-content: center; padding: 12px 20px; font-size: 0.95rem; border-radius: 14px; cursor: pointer;"><i class="fa-solid fa-right-to-bracket"></i> Login to Management Portal</button>
             </form>
 
-            <div id="login-error" style="color: #ef4444; margin-top: 14px; font-size: 0.85rem; display: none; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-circle-exclamation"></i> Invalid Username or Password</div>
-            <div style="margin-top: 20px;"><a href="index.html" style="color: #0284c7; text-decoration: none; font-size: 0.85rem; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Return to Public Dashboard</a></div>
+            <div id="login-error" style="color: #ef4444; margin-top: 12px; font-size: 0.82rem; display: none; background: rgba(239, 68, 68, 0.1); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-circle-exclamation"></i> Invalid Credentials (Use: admin / admin123)</div>
+            <div style="margin-top: 16px;"><a href="index.html" style="color: #0284c7; text-decoration: none; font-size: 0.85rem; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Return to Public Dashboard</a></div>
         </div>
     </div>
 
