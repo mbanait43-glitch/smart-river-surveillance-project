@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Auth Session Check & Perform Login (Mobile Touch Compatible) ---
+    // --- Auth Session Check & Perform Login ---
     function checkAuth() {
         const isLoggedIn = localStorage.getItem('admin_logged_in');
         if (isLoggedIn === 'true') {
@@ -96,15 +96,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function performAdminLogin() {
+    function performAdminLogin(e) {
+        if (e) {
+            e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation();
+        }
+
         const userEl = document.getElementById('admin-username');
         const passEl = document.getElementById('admin-password');
-        if (!userEl || !passEl) return;
 
-        const user = userEl.value.trim().toLowerCase();
-        const pass = passEl.value.trim();
+        if (!userEl || !passEl) return false;
 
-        if ((user === 'admin' || user === 'admin ') && (pass === 'admin123' || pass === 'admin123 ')) {
+        const user = (userEl.value || '').trim();
+        const pass = (passEl.value || '').trim();
+
+        if (user.toLowerCase() === 'admin' && pass === 'admin123') {
             localStorage.setItem('admin_logged_in', 'true');
             if (loginError) loginError.style.display = 'none';
             if (loginModal) loginModal.style.display = 'none';
@@ -112,27 +118,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             if (loginError) {
                 loginError.style.display = 'block';
-                loginError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Invalid Credentials (Use: admin / admin123)';
+                loginError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Incorrect Username or Password! (Default: admin / admin123)';
             }
         }
+        return false;
     }
 
     if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            performAdminLogin();
-        });
+        loginForm.addEventListener('submit', performAdminLogin);
     }
 
     if (btnLoginSubmit) {
-        btnLoginSubmit.addEventListener('click', (e) => {
-            e.preventDefault();
-            performAdminLogin();
-        });
-        btnLoginSubmit.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            performAdminLogin();
-        });
+        btnLoginSubmit.addEventListener('click', performAdminLogin);
     }
 
     if (btnLogout) {
