@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return { lat: 21.1458, lng: 79.0882 };
     }
 
-    // --- Tab Switcher Logic ---
+    // --- Tab Switcher Logic with Guaranteed Table Re-Render ---
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabPanels = document.querySelectorAll('.tab-content-panel');
 
@@ -77,6 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetPanel = document.getElementById(target);
             if (targetPanel) targetPanel.classList.add('active');
 
+            // Re-render table views instantly when tab is clicked!
+            if (target === 'tab-rivers') renderRivers();
+            if (target === 'tab-locations') renderLocations();
+            if (target === 'tab-stations') renderStations();
             if (target === 'tab-single-entry') {
                 setTimeout(initAdminMapPicker, 200);
             }
@@ -263,6 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {}
         }
+        renderRivers();
+        renderLocations();
         renderStations();
         updateStatsSummary();
     }
@@ -566,5 +572,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Auto load tables immediately on DOM Ready
+    renderRivers();
+    renderLocations();
+    renderStations();
     checkAuth();
 });
