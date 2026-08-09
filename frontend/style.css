@@ -789,7 +789,7 @@ body.light-mode th {
     .filter-divider { display: none; }
 }
 
-/* Smartphones & Mobile Devices (max-width: 768px) PREMIUM 3-TIER CLEAN HEADER & SMOOTH TOUCH SCROLL */
+/* Smartphones & Mobile Devices (max-width: 768px) PREMIUM CLEAN MOBILE HEADER FIX */
 @media screen and (max-width: 768px) {
     html, body {
         overflow-x: hidden !important;
@@ -807,8 +807,8 @@ body.light-mode th {
     .navbar {
         flex-direction: column !important;
         align-items: stretch !important;
-        padding: 10px 12px !important;
-        gap: 8px !important;
+        padding: 8px 10px !important;
+        gap: 6px !important;
         overflow: visible !important;
     }
 
@@ -820,13 +820,13 @@ body.light-mode th {
     }
 
     .brand-icon {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 1rem !important;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.95rem !important;
     }
 
     .brand-text h2 {
-        font-size: 0.8rem !important;
+        font-size: 0.78rem !important;
         line-height: 1.2 !important;
     }
 
@@ -837,48 +837,49 @@ body.light-mode th {
         justify-content: space-between !important;
         gap: 4px !important;
         padding: 4px !important;
-        border-radius: 14px !important;
+        border-radius: 12px !important;
         background: rgba(255, 255, 255, 0.05) !important;
     }
 
     .nav-link {
         flex: 1 !important;
         justify-content: center !important;
-        padding: 7px 4px !important;
-        font-size: 0.75rem !important;
+        padding: 6px 3px !important;
+        font-size: 0.72rem !important;
         font-weight: 700 !important;
         text-align: center !important;
-        border-radius: 10px !important;
+        border-radius: 8px !important;
         white-space: nowrap !important;
     }
 
-    /* ROW 3: STATUS & ACTIONS BAR (Sensors Operational, Theme, Refresh, Admin Login) */
+    /* ROW 3: STATUS & ACTIONS BAR - 100% UNCLIPPED & FIT */
     .nav-actions {
         width: 100% !important;
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
-        gap: 6px !important;
+        gap: 4px !important;
         flex-wrap: nowrap !important;
     }
 
+    /* Status Pill Badge: Fits 100% without cutting on narrow phone screens! */
     .status-pill {
-        padding: 5px 8px !important;
+        padding: 4px 8px !important;
         font-size: 0.68rem !important;
         font-weight: 700 !important;
-        border-radius: 10px !important;
+        border-radius: 8px !important;
         white-space: nowrap !important;
-        flex-shrink: 1 !important;
-        min-width: 0 !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
     }
 
     .primary-pill, .secondary-pill {
-        padding: 6px 10px !important;
-        font-size: 0.72rem !important;
+        padding: 5px 8px !important;
+        font-size: 0.68rem !important;
         font-weight: 700 !important;
-        border-radius: 10px !important;
+        border-radius: 8px !important;
         white-space: nowrap !important;
         flex-shrink: 0 !important;
     }
@@ -888,9 +889,9 @@ body.light-mode th {
     }
 
     .btn-icon {
-        width: 32px !important;
-        height: 32px !important;
-        border-radius: 10px !important;
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 8px !important;
         flex-shrink: 0 !important;
     }
 
@@ -1007,8 +1008,22 @@ body.light-mode th {
     }
 }
 
-/* Small Screen Phones (max-width: 480px) */
-@media screen and (max-width: 480px) {
+/* Extra Narrow Screen Phones (max-width: 400px) */
+@media screen and (max-width: 400px) {
+    .nav-actions {
+        gap: 2px !important;
+    }
+
+    .status-pill {
+        padding: 4px 6px !important;
+        font-size: 0.64rem !important;
+    }
+
+    .primary-pill, .secondary-pill {
+        padding: 4px 6px !important;
+        font-size: 0.64rem !important;
+    }
+
     .metrics-grid {
         grid-template-columns: 1fr;
     }
