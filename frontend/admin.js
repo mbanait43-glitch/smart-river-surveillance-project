@@ -38,6 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnExportCsv = document.getElementById('btn-export-csv');
     let rawData = [];
 
+    const redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [28, 46],
+        iconAnchor: [14, 46],
+        popupAnchor: [1, -36],
+        shadowSize: [46, 46]
+    });
+
     // Auto City GPS Mapping Dictionary
     function getCoordsForLocation(locationName) {
         const loc = (locationName || '').toLowerCase();
@@ -125,24 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedLat = 21.1458;
     let selectedLng = 79.0882;
 
-    function createAdminMarkerIcon() {
-        const svgHtml = `
-            <div style="position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.7));">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" fill="#f59e0b" stroke="#ffffff" stroke-width="1.8"/>
-                    <circle cx="12" cy="9" r="3.5" fill="#ffffff"/>
-                </svg>
-            </div>
-        `;
-        return L.divIcon({
-            html: svgHtml,
-            className: 'custom-leaflet-marker-admin',
-            iconSize: [36, 36],
-            iconAnchor: [18, 36],
-            popupAnchor: [0, -36]
-        });
-    }
-
     function initAdminMapPicker() {
         const mapEl = document.getElementById('admin-map-picker');
         if (!mapEl) return;
@@ -155,10 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             adminPickerMarker = L.marker([selectedLat, selectedLng], {
                 draggable: true,
-                icon: createAdminMarkerIcon()
+                icon: redIcon
             }).addTo(adminPickerMap);
 
-            adminPickerMarker.bindPopup('<b>Selected River Pin Spot</b><br/>Click anywhere on map or drag pin!', { minWidth: 200 }).openPopup();
+            adminPickerMarker.bindPopup('<b>Selected River Pin Spot</b><br/>Click anywhere on map or drag pin!').openPopup();
 
             function updatePickedCoords(lat, lng) {
                 selectedLat = Number(lat.toFixed(4));

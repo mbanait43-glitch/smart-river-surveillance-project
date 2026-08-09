@@ -47,29 +47,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return { lat: 21.1458, lng: 79.0882 };
     }
 
-    // Custom Leaflet SVG Marker Creator (Selected = Gold/Red, Normal = Blue)
-    function createCustomIcon(isHighlighted = false) {
-        const pinColor = isHighlighted ? '#f59e0b' : '#0284c7';
-        const glowColor = isHighlighted ? 'rgba(245, 158, 11, 0.7)' : 'rgba(2, 132, 199, 0.4)';
-        const size = isHighlighted ? 38 : 30;
+    // --- High-Definition Official Leaflet Color Marker Icons ---
+    const blueIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
 
-        const svgHtml = `
-            <div style="position: relative; width: ${size}px; height: ${size}px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 4px 10px ${glowColor});">
-                <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" fill="${pinColor}" stroke="#ffffff" stroke-width="1.8"/>
-                    <circle cx="12" cy="9" r="3.5" fill="#ffffff"/>
-                </svg>
-            </div>
-        `;
-
-        return L.divIcon({
-            html: svgHtml,
-            className: 'custom-leaflet-marker',
-            iconSize: [size, size],
-            iconAnchor: [size / 2, size],
-            popupAnchor: [0, -size]
-        });
-    }
+    const redSelectedIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [32, 52], // Larger & Highlighted Red Pin for Selected Station!
+        iconAnchor: [16, 52],
+        popupAnchor: [1, -42],
+        shadowSize: [52, 52]
+    });
 
     // --- Navigation Links Smooth Scroll Offset Fix ---
     document.querySelectorAll('.nav-link').forEach(link => {
@@ -350,16 +345,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Display Station Data & Highlight Selected Marker Pin ---
+    // --- Display Station Data & Highlight Selected Marker Pin with RED Pin ---
     function displayStationData(stationId) {
         selectedStationId = stationId;
         const station = stationMap[stationId];
         if (!station) return;
 
-        // Highlight selected station pin with Gold Icon, and keep others Blue!
+        // Switch selected station marker to RED icon, and others to BLUE icon!
         Object.keys(markersMap).forEach(id => {
             const isSelected = (id === stationId);
-            markersMap[id].setIcon(createCustomIcon(isSelected));
+            markersMap[id].setIcon(isSelected ? redSelectedIcon : blueIcon);
             if (isSelected) {
                 markersMap[id].setZIndexOffset(1000);
             } else {
@@ -611,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (s.lat && s.lng) {
                 const isSelected = (s.id === selectedStationId);
                 const marker = L.marker([s.lat, s.lng], {
-                    icon: createCustomIcon(isSelected),
+                    icon: isSelected ? redSelectedIcon : blueIcon,
                     zIndexOffset: isSelected ? 1000 : 0
                 }).addTo(map);
 
@@ -619,19 +614,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const phVal = stOverrides['pH'] !== undefined ? `${stOverrides['pH']}` : (s.parameters['pH'] ? `${s.parameters['pH'].value}` : '7.40');
                 const doVal = stOverrides['Dissolved Oxygen'] !== undefined ? `${stOverrides['Dissolved Oxygen']} mg/l` : (s.parameters['Dissolved Oxygen'] ? `${s.parameters['Dissolved Oxygen'].value} mg/l` : '6.80 mg/l');
 
-                const isCustom = stOverrides['pH'] !== undefined || stOverrides['Water Level'] !== undefined;
-
                 const popupContent = `
-                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #f8fafc; min-width: 200px;">
-                        <strong style="color: #38bdf8; font-size: 14px;">${s.name}</strong><br/>
-                        <span style="color: #94a3b8;">River: ${s.river} | Location: ${s.state}</span><br/><br/>
-                        <b>pH Level:</b> ${phVal}<br/>
-                        <b>Dissolved Oxygen:</b> ${doVal}<br/>
-                        <span style="color: ${isCustom ? '#38bdf8' : '#2dd4bf'}; font-weight: 700; display: inline-block; margin-top: 4px;">${isCustom ? '✓ Admin Verified Spot' : '● CPCB Live Station'}</span>
+                    <div style="font-family: sans-serif; font-size: 12px; color: #1e293b; padding: 2px;">
+                        <strong style="color: #0284c7; font-size: 13px;">${s.name}</strong><br/>
+                        <span>River: ${s.river} | Location: ${s.state}</span><br/>
+                        <span>pH: ${phVal} | DO: ${doVal}</span>
                     </div>
                 `;
 
-                marker.bindPopup(popupContent, { minWidth: 200 });
+                marker.bindPopup(popupContent);
 
                 marker.on('click', () => {
                     stationSelect.value = s.id;
