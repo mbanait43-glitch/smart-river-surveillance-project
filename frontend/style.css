@@ -636,7 +636,7 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
     .filter-divider { display: none; }
 }
 
-/* Smartphones & Mobile Devices (max-width: 768px) NO SLIDER / NO SCROLLBAR FIT */
+/* Smartphones & Mobile Devices (max-width: 768px) NO CUT-OFF FIT */
 @media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column !important;
@@ -681,24 +681,32 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
         white-space: nowrap !important;
     }
 
-    /* ALL NAV ACTIONS FIT DIRECTLY - NO HORIZONTAL SLIDER */
+    /* ALL NAV ACTIONS FIT DIRECTLY & WRAP TO PREVENT LOGOUT CUT-OFF */
     .nav-actions {
         width: 100% !important;
         display: flex !important;
+        flex-wrap: wrap !important; /* PREVENTS CUT OFF */
         align-items: center !important;
         justify-content: space-between !important;
         gap: 4px !important;
-        overflow: visible !important; /* NO SLIDER */
+        overflow: visible !important;
     }
 
     .status-pill {
         padding: 4px 8px !important;
         font-size: 0.7rem !important;
+        flex-shrink: 1 !important;
     }
 
     .primary-pill, .secondary-pill {
         padding: 5px 10px !important;
         font-size: 0.72rem !important;
+        flex-shrink: 1 !important;
+    }
+
+    #btn-logout {
+        flex-shrink: 0 !important;
+        margin-left: auto !important; /* Ensures Logout stays fully visible */
     }
 
     .btn-icon {
