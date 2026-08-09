@@ -380,17 +380,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 100% 60FPS LAG-FREE SMOOTH FLYTO ZOOM ANIMATION!
         if (station.lat && station.lng) {
-            // 1. Close active popups first to prevent DOM recalculation thrashing during GPU tile animation!
             map.closePopup();
 
-            // 2. Perform smooth 1.2s flyTo zoom transition
             map.flyTo([station.lat, station.lng], 9, {
                 duration: 1.2,
                 easeLinearity: 0.25,
                 noMoveStart: true
             });
 
-            // 3. Gently open popup card ONLY AFTER camera comes to rest at target station!
             map.once('moveend', () => {
                 if (markersMap[stationId]) {
                     markersMap[stationId].openPopup();
@@ -433,18 +430,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let hasOverride = false;
 
-        // Clickable Source Link Renderer
+        // Clickable Source Link Renderer (Clean Unit Display Fix - No Duplication!)
         function updateCardById(cardId, paramKey, fallbackUnit) {
             const card = document.getElementById(cardId);
             if (!card) return;
 
             const valSpan = card.querySelector('.value');
+            const unitSpan = card.querySelector('.metric-unit');
             const statusSpan = card.querySelector('.status-indicator');
 
             if (stationOverrides[paramKey] !== undefined) {
                 hasOverride = true;
                 const val = stationOverrides[paramKey];
-                valSpan.textContent = `${val} ${fallbackUnit || ''}`.trim();
+                valSpan.textContent = val;
+                if (unitSpan) unitSpan.textContent = fallbackUnit || '';
                 valSpan.style.color = '#38bdf8';
                 statusSpan.innerHTML = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;" title="Open Official Source Link"><i class="fa-solid fa-user-check"></i> Admin Verified (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem; margin-left: 3px;"></i></a>`;
                 return;
@@ -453,11 +452,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const param = station.parameters[paramKey];
             if (param && param.value !== undefined && param.value !== null) {
                 const unitStr = param.unit || fallbackUnit || '';
-                valSpan.textContent = `${param.value} ${unitStr}`.trim();
+                valSpan.textContent = param.value;
+                if (unitSpan) unitSpan.textContent = unitStr;
                 valSpan.style.color = '#38bdf8';
                 statusSpan.innerHTML = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;" title="Open Official CPCB RTWQMS Portal"><i class="fa-solid fa-satellite-dish"></i> CPCB RTWQMS Source (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem; margin-left: 3px;"></i></a>`;
             } else {
                 valSpan.textContent = 'N/A';
+                if (unitSpan) unitSpan.textContent = '';
                 valSpan.style.color = '#64748b';
                 statusSpan.innerHTML = '<span style="color: #64748b;">Not Reported</span>';
             }
@@ -469,8 +470,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">● CPCB Live Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
         }
 
-        updateCardById('card-level', 'Water Level', 'm');
-        updateCardById('card-ph', 'pH', '');
+        updateCardById('card-level', 'Water Level', 'm (MSL)');
+        updateCardById('card-ph', 'pH', 'pH');
         updateCardById('card-temp', 'Water Temperature', '°C');
         updateCardById('card-do', 'Dissolved Oxygen', 'mg/l');
         updateCardById('card-bod', 'Biochemical Oxygen Demand', 'mg/l');
