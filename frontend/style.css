@@ -109,6 +109,11 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
 }
 
+body.light-mode .brand-text h2 {
+    color: #0f172a !important;
+    font-weight: 800;
+}
+
 .nav-menu {
     display: flex;
     gap: 6px;
@@ -246,7 +251,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 body.light-mode .hero-banner {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(186, 230, 253, 0.3) 100%);
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(186, 230, 253, 0.35) 100%);
     border: 1px solid #bae6fd;
 }
 
@@ -271,9 +276,9 @@ body.light-mode .hero-banner {
 }
 
 body.light-mode .hero-tag {
-    background: #e0f2fe;
-    color: #0284c7;
-    border: 1px solid #bae6fd;
+    background: #e0f2fe !important;
+    color: #38bdf8 !important;
+    border: 1px solid #bae6fd !important;
 }
 
 .hero-content h1 {
@@ -286,10 +291,10 @@ body.light-mode .hero-tag {
 }
 
 body.light-mode .hero-content h1 {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: #0f172a;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+    color: #0284c7 !important;
+    font-weight: 800 !important;
 }
 
 .hero-stats {
