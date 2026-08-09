@@ -205,16 +205,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Dynamic Summary Stats Calculation (Live CPCB Data + Admin Custom)
     function updateStatsSummary() {
-        const rivers = getRivers();
-        const locations = getLocations();
+        const riversSet = new Set();
+        const locationsSet = new Set();
+
+        // 1. Live CPCB Rivers & Locations
+        rawData.forEach(item => {
+            const stName = item.station_name || '';
+            let riverName = "Ganga";
+            if (stName.includes('Yamuna')) riverName = 'Yamuna';
+            else if (stName.includes('Gandak')) riverName = 'Gandak';
+            else if (stName.includes('Godavari')) riverName = 'Godavari';
+            else if (stName.includes('Kanhan')) riverName = 'Kanhan River';
+            else if (stName.includes('Kaveri')) riverName = 'Kaveri';
+
+            riversSet.add(riverName);
+            if (item.territory_name) locationsSet.add(item.territory_name);
+        });
+
+        // 2. Custom Admin Rivers & Locations
+        const customRivers = JSON.parse(localStorage.getItem('admin_custom_rivers') || '[]');
+        customRivers.forEach(r => riversSet.add(r));
+
+        const customLocations = JSON.parse(localStorage.getItem('admin_custom_locations') || '[]');
+        customLocations.forEach(l => locationsSet.add(l));
 
         const riversCnt = document.getElementById('stat-count-rivers');
         const locationsCnt = document.getElementById('stat-count-locations');
         const stationsCnt = document.getElementById('stat-count-stations');
 
-        if (riversCnt) riversCnt.textContent = rivers.length;
-        if (locationsCnt) locationsCnt.textContent = locations.length;
+        if (riversCnt) riversCnt.textContent = riversSet.size;
+        if (locationsCnt) locationsCnt.textContent = locationsSet.size;
 
         const liveUniqueCount = rawData.length > 0 ? new Set(rawData.map(i => i.station_id || i.station_no)).size : 40;
         const customStations = getStations();
@@ -242,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (err) {}
         }
         renderStations();
+        updateStatsSummary();
     }
 
     // ==========================================================================
@@ -321,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const riversTbody = document.getElementById('rivers-table-tbody');
 
     function getRivers() {
-        return JSON.parse(localStorage.getItem('admin_custom_rivers') || '["Ganga", "Yamuna", "Godavari", "Gandak", "Kaveri"]');
+        return JSON.parse(localStorage.getItem('admin_custom_rivers') || '["Ganga", "Yamuna", "Gandak"]');
     }
 
     function saveRivers(list) {
@@ -373,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const locationsTbody = document.getElementById('locations-table-tbody');
 
     function getLocations() {
-        return JSON.parse(localStorage.getItem('admin_custom_locations') || '["Bihar", "Uttar Pradesh", "Haryana", "Uttarakhand", "West Bengal"]');
+        return JSON.parse(localStorage.getItem('admin_custom_locations') || '["Bihar", "Uttar Pradesh", "Haryana", "Uttarakhand", "West Bengal", "Jharkhand"]');
     }
 
     function saveLocations(list) {
