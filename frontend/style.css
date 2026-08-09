@@ -986,13 +986,13 @@ body.light-mode th {
 @media print {
     @page {
         size: A4 portrait;
-        margin: 10mm 12mm 10mm 12mm;
+        margin: 8mm 10mm 8mm 10mm;
     }
 
     body {
         background: #ffffff !important;
         color: #0f172a !important;
-        font-size: 10pt;
+        font-size: 9.5pt;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
@@ -1005,20 +1005,20 @@ body.light-mode th {
     /* Official Government Inspection Print Header */
     .print-only-header {
         display: block !important;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         border-bottom: 2px solid #0284c7;
-        padding-bottom: 10px;
+        padding-bottom: 8px;
     }
 
     .print-logo-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .print-logo-row h2 {
-        font-size: 13pt;
+        font-size: 12pt;
         color: #0284c7;
         font-weight: 900;
         text-transform: uppercase;
@@ -1031,21 +1031,21 @@ body.light-mode th {
         padding: 3px 8px;
         border-radius: 4px;
         font-weight: 700;
-        font-size: 8.5pt;
+        font-size: 8pt;
     }
 
     .print-meta-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 4px;
-        font-size: 8.5pt;
+        font-size: 8pt;
         color: #334155;
     }
 
     .main-wrapper {
         padding: 0 !important;
         max-width: 100% !important;
-        gap: 12px !important;
+        gap: 10px !important;
         margin: 0 !important;
     }
 
@@ -1054,35 +1054,34 @@ body.light-mode th {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
         box-shadow: none !important;
-        border-radius: 12px !important;
-        padding: 10px 16px !important;
+        border-radius: 10px !important;
+        padding: 8px 12px !important;
         flex-direction: row !important;
     }
 
-    .select-wrapper select {
+    .select-wrapper select, .last-update-box {
         background: transparent !important;
         color: #0f172a !important;
         border: none !important;
         font-weight: 700 !important;
-        font-size: 9.5pt !important;
-        appearance: none !important;
+        font-size: 8.5pt !important;
+        height: auto !important;
         padding: 0 !important;
     }
 
     .filter-divider {
         display: block !important;
         background: #cbd5e1 !important;
-        height: 28px !important;
+        height: 24px !important;
     }
 
     /* Station Details Bar */
     .station-details-bar {
         background: #f0f9ff !important;
         border: 1px solid #bae6fd !important;
-        border-radius: 10px !important;
-        padding: 10px 16px !important;
-        flex-direction: row !important;
-        font-size: 8.5pt !important;
+        border-radius: 8px !important;
+        padding: 8px 14px !important;
+        font-size: 8pt !important;
     }
 
     .detail-pill strong { color: #0284c7 !important; }
@@ -1091,19 +1090,18 @@ body.light-mode th {
     .wqi-score-card {
         background: #f0fdf4 !important;
         border: 1px solid #bbf7d0 !important;
-        border-radius: 14px !important;
-        padding: 14px 20px !important;
-        flex-direction: row !important;
+        border-radius: 10px !important;
+        padding: 10px 16px !important;
     }
 
-    .wqi-score-num { color: #16a34a !important; font-size: 20pt !important; }
+    .wqi-score-num { color: #16a34a !important; font-size: 18pt !important; }
     .wqi-status-tag { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; }
 
     /* 8 Metrics 2-Column Grid on Page 1 */
     .metrics-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: 10px !important;
+        gap: 8px !important;
         page-break-after: always !important;
         break-after: page !important;
     }
@@ -1111,46 +1109,58 @@ body.light-mode th {
     .metric-card {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 12px !important;
-        padding: 12px 16px !important;
+        border-radius: 10px !important;
+        padding: 10px 14px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 
-    .metric-name { color: #475569 !important; font-size: 8pt !important; }
-    .metric-val { color: #0284c7 !important; font-size: 15pt !important; }
+    .metric-name { color: #475569 !important; font-size: 7.5pt !important; }
+    .metric-val { color: #0284c7 !important; font-size: 13pt !important; }
     .metric-unit { color: #64748b !important; }
 
-    /* Page 2: Map & Analytics Side-by-Side */
+    /* Page 2: Clean Full Side-by-Side GIS Map & Analytics Panel */
     .split-view-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 12px !important;
-        page-break-before: always !important;
-        break-before: page !important;
+        page-break-before: auto !important;
+        break-before: auto !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-top: 10px !important;
     }
 
-    .panel-card {
+    .panel-card, #map-section, #analytics-section {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
         border-radius: 12px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        overflow: hidden !important;
     }
 
     .panel-header {
         background: #f8fafc !important;
         border-bottom: 1px solid #e2e8f0 !important;
-        padding: 10px 14px !important;
+        padding: 8px 12px !important;
     }
 
-    .panel-header h3 { color: #0284c7 !important; font-size: 9.5pt !important; }
-    .chart-type-selector { display: none !important; }
+    .panel-header h3 { color: #0284c7 !important; font-size: 9pt !important; }
 
-    .map-view, canvas {
-        height: 280px !important;
-        max-height: 280px !important;
+    #analytics-section .panel-body, #map-section .panel-body {
+        height: 250px !important;
+        max-height: 250px !important;
+        padding: 8px !important;
+    }
+
+    .map-view, canvas, #analyticsChart, #map {
+        height: 250px !important;
+        max-height: 250px !important;
+        width: 100% !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 }
