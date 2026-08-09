@@ -1,32 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Theme Toggling (Fixed & Persisted) ---
+    // --- Theme Toggling (Fixed & Persisted across Dashboard & Admin) ---
     const themeBtn = document.getElementById('theme-toggle');
     const body = document.body;
 
-    const savedTheme = localStorage.getItem('theme_preference') || 'light';
-    if (savedTheme === 'light') {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-        if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-    } else {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-        if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme_preference', 'dark');
+            if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            localStorage.setItem('theme_preference', 'light');
+            if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
     }
+
+    const savedTheme = localStorage.getItem('theme_preference') || 'light';
+    applyTheme(savedTheme);
     
     if (themeBtn) {
         themeBtn.addEventListener('click', () => {
-            if (body.classList.contains('light-mode')) {
-                body.classList.remove('light-mode');
-                body.classList.add('dark-mode');
-                localStorage.setItem('theme_preference', 'dark');
-                themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-            } else {
-                body.classList.remove('dark-mode');
-                body.classList.add('light-mode');
-                localStorage.setItem('theme_preference', 'light');
-                themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            }
+            const currentTheme = body.classList.contains('dark-mode') ? 'dark' : 'light';
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
         });
     }
 
