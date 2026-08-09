@@ -666,16 +666,17 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
     .filter-divider { display: none; }
 }
 
-/* Smartphones & Mobile Devices (max-width: 768px) NO CUT-OFF FIT */
+/* Smartphones & Mobile Devices (max-width: 768px) PREMIUM 3-TIER CLEAN HEADER */
 @media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column !important;
         align-items: stretch !important;
-        padding: 8px 10px !important;
-        gap: 6px !important;
+        padding: 10px 12px !important;
+        gap: 8px !important;
         overflow: visible !important;
     }
 
+    /* ROW 1: BRAND TITLE */
     .nav-brand {
         width: 100% !important;
         justify-content: flex-start !important;
@@ -689,59 +690,72 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
     }
 
     .brand-text h2 {
-        font-size: 0.82rem !important;
+        font-size: 0.8rem !important;
+        line-height: 1.2 !important;
     }
 
-    /* ALL NAV MENU ITEMS FIT DIRECTLY - NO HORIZONTAL SLIDER */
+    /* ROW 2: MAIN TABS BAR (Equal 3-Pill Segmented Control) */
     .nav-menu {
         width: 100% !important;
         display: flex !important;
         justify-content: space-between !important;
         gap: 4px !important;
-        padding: 3px !important;
-        border-radius: 20px !important;
-        overflow: visible !important; /* NO SLIDER */
+        padding: 4px !important;
+        border-radius: 14px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
     }
 
     .nav-link {
         flex: 1 !important;
         justify-content: center !important;
-        padding: 5px 8px !important;
-        font-size: 0.72rem !important;
+        padding: 7px 4px !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        border-radius: 10px !important;
         white-space: nowrap !important;
     }
 
-    /* ALL NAV ACTIONS FIT DIRECTLY & WRAP TO PREVENT LOGOUT CUT-OFF */
+    /* ROW 3: STATUS & ACTIONS BAR (Sensors Operational, Theme, Refresh, Admin Login) */
     .nav-actions {
         width: 100% !important;
         display: flex !important;
-        flex-wrap: wrap !important; /* PREVENTS CUT OFF */
         align-items: center !important;
         justify-content: space-between !important;
-        gap: 4px !important;
-        overflow: visible !important;
+        gap: 6px !important;
+        flex-wrap: nowrap !important;
     }
 
     .status-pill {
-        padding: 4px 8px !important;
-        font-size: 0.7rem !important;
+        padding: 5px 8px !important;
+        font-size: 0.68rem !important;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+        white-space: nowrap !important;
         flex-shrink: 1 !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
 
     .primary-pill, .secondary-pill {
-        padding: 5px 10px !important;
+        padding: 6px 10px !important;
         font-size: 0.72rem !important;
-        flex-shrink: 1 !important;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
 
     #btn-logout {
         flex-shrink: 0 !important;
-        margin-left: auto !important; /* Ensures Logout stays fully visible */
     }
 
     .btn-icon {
         width: 32px !important;
         height: 32px !important;
+        border-radius: 10px !important;
+        flex-shrink: 0 !important;
     }
 
     .main-wrapper {
