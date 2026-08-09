@@ -334,18 +334,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (currentSelectedStation && stationMap[currentSelectedStation]) {
             stationSelect.value = currentSelectedStation;
-            displayStationData(currentSelectedStation);
+            displayStationData(currentSelectedStation, false); // Don't reset riverSelect if station stays same
         } else if (filtered.length > 0) {
             stationSelect.value = filtered[0].id;
-            displayStationData(filtered[0].id);
+            displayStationData(filtered[0].id, false);
         }
     }
 
     // --- Display Station Data & Highlight Selected Marker Pin with RED Pin ---
-    function displayStationData(stationId) {
+    function displayStationData(stationId, autoSyncRiver = true) {
         selectedStationId = stationId;
         const station = stationMap[stationId];
         if (!station) return;
+
+        // AUTOMATIC BIDIRECTIONAL DROPDOWN SYNCING:
+        // Automatically sync River Name & Territory Location dropdowns to match selected Station!
+        if (autoSyncRiver && riverSelect && station.river) {
+            const options = Array.from(riverSelect.options).map(o => o.value);
+            if (options.includes(station.river)) {
+                riverSelect.value = station.river;
+            }
+        }
+        if (stateSelect && station.state && stateSelect.value === 'ALL') {
+            const stateOpts = Array.from(stateSelect.options).map(o => o.value);
+            if (stateOpts.includes(station.state)) {
+                stateSelect.value = station.state;
+            }
+        }
 
         // Switch selected station marker to RED icon, and others to BLUE icon!
         Object.keys(markersMap).forEach(id => {
@@ -557,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 marker.on('click', () => {
                     stationSelect.value = s.id;
-                    displayStationData(s.id);
+                    displayStationData(s.id, true);
                 });
 
                 markersMap[s.id] = marker;
@@ -627,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnRefresh) btnRefresh.addEventListener('click', fetchData);
     if (riverSelect) riverSelect.addEventListener('change', updateStationList);
     if (stateSelect) stateSelect.addEventListener('change', updateStationList);
-    if (stationSelect) stationSelect.addEventListener('change', (e) => displayStationData(e.target.value));
+    if (stationSelect) stationSelect.addEventListener('change', (e) => displayStationData(e.target.value, true));
 
     // --- Initial Auto Start ---
     fetchData();
