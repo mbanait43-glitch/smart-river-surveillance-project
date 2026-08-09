@@ -62,6 +62,18 @@ body.light-mode .hero-banner {
     border: 1px solid rgba(2, 132, 199, 0.2);
 }
 
+body.light-mode .hero-content h1 {
+    color: #0369a1 !important;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+}
+
+body.light-mode .hero-tag {
+    color: #0284c7 !important;
+    background: rgba(2, 132, 199, 0.15) !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+}
+
 body.light-mode .stat-box,
 body.light-mode .metric-card,
 body.light-mode .panel-card,
@@ -159,13 +171,17 @@ body.light-mode .metric-val {
     background: rgba(16, 185, 129, 0.15) !important;
     color: #10b981 !important;
     border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-shrink: 0;
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 .status-pill {
@@ -180,6 +196,7 @@ body.light-mode .metric-val {
     color: #10b981;
     border: 1px solid rgba(16, 185, 129, 0.3);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .pulse-dot {
@@ -223,6 +240,7 @@ body.light-mode .metric-val {
     gap: 6px;
     border: none;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .primary-pill { background: var(--blue-gradient); color: #ffffff; }
@@ -271,10 +289,8 @@ body.light-mode .metric-val {
 .hero-content h1 {
     font-size: clamp(1.2rem, 3.5vw, 1.8rem);
     font-weight: 900;
-    line-height: 1.2;
-    background: linear-gradient(135deg, #ffffff, #cbd5e1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    line-height: 1.25;
+    color: #f8fafc;
     margin-bottom: 4px;
 }
 
@@ -627,7 +643,13 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
 
     .nav-actions {
         width: 100%;
-        justify-content: space-between;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 2px;
     }
 
     .main-wrapper {
@@ -638,6 +660,13 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
     .hero-banner {
         padding: 16px;
         border-radius: 16px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.35rem;
+        color: #f8fafc !important;
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
     }
 
     .hero-stats {
