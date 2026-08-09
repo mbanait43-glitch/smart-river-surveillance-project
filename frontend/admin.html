@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Smart River Water Level and Quality Surveillance</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+
+    <!-- Glassmorphic Login Overlay Modal -->
+    <div id="login-modal" class="admin-login-overlay">
+        <div class="admin-login-card">
+            <div class="brand-icon" style="width: 60px; height: 60px; font-size: 1.8rem; margin: 0 auto 16px;">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h2>Admin Security Portal</h2>
+            <p>Smart River Water Level and Quality Surveillance Management Portal</p>
+            
+            <form id="admin-login-form" style="margin-top: 20px;">
+                <div style="text-align: left; margin-bottom: 16px;">
+                    <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Username</label>
+                    <input type="text" id="admin-username" placeholder="Username (Default: admin)" required style="width: 100%;">
+                </div>
+                <div style="text-align: left; margin-bottom: 24px;">
+                    <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">Password</label>
+                    <input type="password" id="admin-password" placeholder="Password (Default: admin123)" required style="width: 100%;">
+                </div>
+                <button type="submit" class="btn primary-pill" style="width: 100%; justify-content: center; padding: 12px 20px; font-size: 0.95rem; border-radius: 14px;"><i class="fa-solid fa-right-to-bracket"></i> Login to Management Portal</button>
+            </form>
+
+            <div id="login-error" style="color: #ef4444; margin-top: 14px; font-size: 0.85rem; display: none; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-circle-exclamation"></i> Invalid Username or Password</div>
+            <div style="margin-top: 20px;"><a href="index.html" style="color: var(--cyan-primary); text-decoration: none; font-size: 0.85rem; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Return to Public Dashboard</a></div>
+        </div>
+    </div>
+
+    <!-- Top Navigation Bar (Identical to Public Dashboard) -->
+    <header class="navbar no-print">
+        <div class="nav-brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-water"></i>
+            </div>
+            <div class="brand-text">
+                <h2>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</h2>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Public Dashboard</a>
+            <a href="admin.html" class="nav-link active admin-pill"><i class="fa-solid fa-user-shield"></i> Admin Control Panel</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div id="system-status" class="status-pill live">
+                <span class="pulse-dot"></span>
+                <span>Admin Authenticated</span>
+            </div>
+            <button id="theme-toggle" class="btn-icon" title="Toggle Theme"><i class="fa-solid fa-sun"></i></button>
+            <button id="btn-export-csv" class="btn primary-pill"><i class="fa-solid fa-file-csv"></i> Export Metadata CSV</button>
+            <button id="btn-logout" class="btn secondary-pill" style="color: #ef4444; border-color: rgba(239,68,68,0.3);"><i class="fa-solid fa-power-off"></i> Logout</button>
+        </div>
+    </header>
+
+    <!-- Main Wrapper (Identical Max Width Layout) -->
+    <main class="main-wrapper">
+
+        <!-- Hero Banner with Overview Stats -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <span class="hero-tag"><i class="fa-solid fa-flask-vial"></i> Single-Form All-India River Testing Hub</span>
+                <h1>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</h1>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-box">
+                    <span class="stat-num" id="stat-count-rivers">5</span>
+                    <span class="stat-label">Managed Rivers</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num" id="stat-count-locations" style="color: #2dd4bf;">5</span>
+                    <span class="stat-label">Territory Locations</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num" id="stat-count-stations" style="color: #f59e0b;">40</span>
+                    <span class="stat-label">Active Stations</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Floating Glass Module Tabs Bar -->
+        <section class="glass-filter-bar" style="padding: 12px 20px;">
+            <div class="admin-nav-tabs" style="border: none; padding: 0; margin: 0; width: 100%; justify-content: flex-start; gap: 12px;">
+                <button class="tab-btn active" data-tab="tab-single-entry"><i class="fa-solid fa-square-plus"></i> Add India River Water Test</button>
+                <button class="tab-btn" data-tab="tab-rivers"><i class="fa-solid fa-water"></i> Rivers Directory</button>
+                <button class="tab-btn" data-tab="tab-locations"><i class="fa-solid fa-location-dot"></i> State Territories</button>
+                <button class="tab-btn" data-tab="tab-stations"><i class="fa-solid fa-satellite-dish"></i> All Registered Stations</button>
+            </div>
+        </section>
+
+        <!-- Tab 1: Single-Step All-India River Water Test Entry (FEATURED FORM WITH INTERACTIVE MAP PICKER) -->
+        <section id="tab-single-entry" class="tab-content-panel active panel-card">
+            <div class="panel-header">
+                <h3><i class="fa-solid fa-flask-vial"></i> Add New India River Water Testing Entry</h3>
+                <span class="panel-tag">Direct Click-on-Map Pin Picker</span>
+            </div>
+            <div class="panel-body">
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                    Fill in the river details and <strong>click anywhere on the map below</strong> to place the exact location pin!
+                </p>
+
+                <form id="form-all-in-one-entry">
+                    <!-- Location & Spot Details -->
+                    <div style="background: rgba(6, 11, 19, 0.6); padding: 20px; border-radius: 16px; border: 1px solid var(--glass-border); margin-bottom: 24px;">
+                        <h4 style="color: var(--cyan-primary); font-size: 0.95rem; margin-bottom: 14px;"><i class="fa-solid fa-location-dot"></i> Spot & Location Information</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr 1fr; gap: 14px; margin-bottom: 16px;">
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;">River Name</label>
+                                <input type="text" id="all-river-name" placeholder="e.g. Kanhan River / Nag River" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;">State / City Location</label>
+                                <input type="text" id="all-location-name" placeholder="e.g. Nagpur, Maharashtra" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;">Station / Testing Spot Name</label>
+                                <input type="text" id="all-station-name" placeholder="e.g. Kanhan Intake Spot" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;">Station Code (ID)</label>
+                                <input type="text" id="all-station-code" placeholder="e.g. NGP_KANHAN_01" required style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <!-- Interactive Click-To-Pin Map Container -->
+                        <div style="margin-top: 10px;">
+                            <label style="font-size: 0.78rem; font-weight: 700; color: var(--cyan-primary); display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                <span><i class="fa-solid fa-map-pin"></i> Click anywhere on the map to set the exact River Pin spot:</span>
+                                <span id="picked-coords-badge" style="background: rgba(56, 189, 248, 0.15); padding: 2px 10px; border-radius: 10px; border: 1px solid rgba(56, 189, 248, 0.3); color: var(--cyan-primary); font-size: 0.75rem;">Selected Pin: Lat 21.1458, Lng 79.0882</span>
+                            </label>
+                            <div id="admin-map-picker" style="height: 260px; width: 100%; border-radius: 14px; border: 1px solid var(--glass-border);"></div>
+                        </div>
+                    </div>
+
+                    <!-- 8 Tested Parameters Entry Grid -->
+                    <div style="background: rgba(6, 11, 19, 0.6); padding: 20px; border-radius: 16px; border: 1px solid var(--glass-border); margin-bottom: 24px;">
+                        <h4 style="color: var(--cyan-primary); font-size: 0.95rem; margin-bottom: 14px;"><i class="fa-solid fa-vial-circle-check"></i> Tested Water Quality & Level Readings</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Water Level (m MSL)</label>
+                                <input type="number" step="0.01" id="all-param-level" placeholder="e.g. 2.85" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">pH Level (6.5 - 8.5)</label>
+                                <input type="number" step="0.01" id="all-param-ph" placeholder="e.g. 7.40" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Water Temp (°C)</label>
+                                <input type="number" step="0.01" id="all-param-temp" placeholder="e.g. 24.50" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Dissolved Oxygen DO (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-do" placeholder="e.g. 6.80" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">BOD Pollution Load (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-bod" placeholder="e.g. 2.10" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">COD Oxygen Demand (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-cod" placeholder="e.g. 12.50" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Turbidity Clarity (NTU)</label>
+                                <input type="number" step="0.01" id="all-param-turb" placeholder="e.g. 14.00" required style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 4px;">Conductivity EC (mS/cm)</label>
+                                <input type="number" step="0.01" id="all-param-ec" placeholder="e.g. 240.00" required style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn primary-pill" style="width: 100%; justify-content: center; padding: 14px; font-size: 1rem; border-radius: 14px;"><i class="fa-solid fa-paper-plane"></i> Publish Tested River Data & GIS Map Pin to Live Dashboard</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Tab 2: Rivers Directory Management -->
+        <section id="tab-rivers" class="tab-content-panel panel-card">
+            <div class="panel-header">
+                <h3><i class="fa-solid fa-water"></i> Rivers Directory Management</h3>
+                <span class="panel-tag">Rivers List</span>
+            </div>
+            <div class="panel-body">
+                <form id="form-add-river" style="display: flex; gap: 14px; margin-bottom: 20px;">
+                    <input type="text" id="river-name-input" placeholder="Enter River Name (e.g. Ganga, Yamuna, Godavari)" required style="flex: 1;">
+                    <button type="submit" class="btn primary-pill" style="padding: 10px 22px;"><i class="fa-solid fa-plus"></i> Add River</button>
+                </form>
+
+                <div class="crud-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>River Name</th>
+                                <th>Surveillance Status</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rivers-table-tbody">
+                            <!-- Dynamic Rivers -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Territory Locations Management -->
+        <section id="tab-locations" class="tab-content-panel panel-card">
+            <div class="panel-header">
+                <h3><i class="fa-solid fa-location-dot"></i> Territory Locations Management</h3>
+                <span class="panel-tag">Territories List</span>
+            </div>
+            <div class="panel-body">
+                <form id="form-add-location" style="display: flex; gap: 14px; margin-bottom: 20px;">
+                    <input type="text" id="location-name-input" placeholder="Enter Location / State Name (e.g. Bihar, Uttar Pradesh, Haryana)" required style="flex: 1;">
+                    <button type="submit" class="btn primary-pill" style="padding: 10px 22px;"><i class="fa-solid fa-plus"></i> Add Territory</button>
+                </form>
+
+                <div class="crud-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Location / State Name</th>
+                                <th>Surveillance Status</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="locations-table-tbody">
+                            <!-- Dynamic Locations -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: Separate Monitoring Stations Management -->
+        <section id="tab-stations" class="tab-content-panel panel-card">
+            <div class="panel-header">
+                <h3><i class="fa-solid fa-satellite-dish"></i> All Registered Monitoring Stations</h3>
+                <span class="panel-tag">Stations List</span>
+            </div>
+            <div class="panel-body">
+                <div class="crud-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Station Code</th>
+                                <th>Station Name</th>
+                                <th>River</th>
+                                <th>Territory Location</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stations-table-tbody">
+                            <!-- Dynamic Stations -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
