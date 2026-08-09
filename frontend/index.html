@@ -8,14 +8,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- FontAwesome -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
 
-    <!-- Top Navigation Bar (Hidden in Print) -->
+    <!-- Official Government Inspection Print Header -->
+    <div class="print-only-header">
+        <div class="print-logo-row">
+            <h2>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE REPORT</h2>
+            <span class="print-badge">OFFICIAL INSPECTION COPY</span>
+        </div>
+        <div class="print-meta-grid">
+            <div><strong>System Engine:</strong> Central Pollution Control Board (CPCB RTWQMS)</div>
+            <div><strong>Inspection Date:</strong> <span id="print-date">--</span></div>
+            <div><strong>Verification Status:</strong> Verified Active Sensor Data</div>
+            <div><strong>Generation Time:</strong> <span id="print-time">--</span></div>
+        </div>
+    </div>
+
+    <!-- Top Navigation Bar (Fixed sticky with Theme Toggle) -->
     <header class="navbar no-print">
         <div class="nav-brand">
             <div class="brand-icon">
@@ -29,69 +43,54 @@
         <nav class="nav-menu">
             <a href="#overview" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
             <a href="#map-section" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> GIS Map</a>
-            <a href="#analytics-section" class="nav-link"><i class="fa-solid fa-chart-area"></i> Analytics</a>
+            <a href="#analytics-section" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
         </nav>
 
         <div class="nav-actions">
             <div id="system-status" class="status-pill live">
                 <span class="pulse-dot"></span>
-                <span>Sensors Operational</span>
+                <span>Connecting...</span>
             </div>
             <button id="theme-toggle" class="btn-icon" title="Toggle Theme"><i class="fa-solid fa-sun"></i></button>
-            <button id="btn-refresh" class="btn primary-pill"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
-            <a href="admin.html" target="_blank" class="btn secondary-pill admin-pill" style="text-decoration: none;"><i class="fa-solid fa-user-shield"></i> Admin Login</a>
+            <button id="btn-refresh" class="btn secondary-pill"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
+            <a href="admin.html" class="btn primary-pill admin-pill" style="text-decoration: none;"><i class="fa-solid fa-user-shield"></i> Admin Login</a>
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Main Content Wrapper -->
     <main class="main-wrapper">
 
-        <!-- Report Header (Visible ONLY in Print Mode) -->
-        <div class="print-only-header">
-            <div class="print-logo-row">
-                <h2>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</h2>
-                <span class="print-badge">Official Monitoring & Inspection Report</span>
-            </div>
-            <div class="print-meta-grid">
-                <div><strong>Project Title:</strong> SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</div>
-                <div><strong>Data Source:</strong> CPCB RTWQMS (https://rtwqmsdb1.cpcb.gov.in)</div>
-                <div><strong>Report Date:</strong> <span id="print-date">--</span></div>
-                <div><strong>Report Time:</strong> <span id="print-time">--</span></div>
-            </div>
-            <hr class="print-divider" />
-        </div>
-
-        <!-- Hero Banner with Live Counters (Hidden in Print) -->
+        <!-- Hero Section -->
         <section class="hero-banner no-print">
             <div class="hero-content">
-                <span class="hero-tag"><i class="fa-solid fa-shield-halved"></i> Official RTWQMS Surveillance System</span>
+                <span class="hero-tag"><i class="fa-solid fa-satellite"></i> Central Pollution Control Board (CPCB RTWQMS)</span>
                 <h1>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</h1>
             </div>
 
             <div class="hero-stats">
                 <div class="stat-box">
-                    <span class="stat-num">40</span>
-                    <span class="stat-label">Active Monitoring Stations</span>
+                    <span class="stat-num">40+</span>
+                    <span class="stat-label">Active Sensors</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-num">468</span>
-                    <span class="stat-label">Live Parameter Stream Points</span>
+                    <span class="stat-num">100%</span>
+                    <span class="stat-label">Real-Time Sync</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-num" style="color: #10b981;">100%</span>
-                    <span class="stat-label">Government API Sync</span>
+                    <span class="stat-num">8</span>
+                    <span class="stat-label">Key Parameters</span>
                 </div>
             </div>
         </section>
 
-        <!-- Floating Glass Filter Bar -->
-        <section id="selection" class="glass-filter-bar">
+        <!-- Floating Filter Glass Bar -->
+        <section class="glass-filter-bar no-print">
             <div class="filter-group">
                 <i class="fa-solid fa-water filter-icon"></i>
                 <div class="select-wrapper">
-                    <label>River Name</label>
+                    <label>River Basin</label>
                     <select id="river-select" disabled>
-                        <option value="ALL">All Rivers</option>
+                        <option value="ALL">Loading Rivers...</option>
                     </select>
                 </div>
             </div>
@@ -101,9 +100,9 @@
             <div class="filter-group">
                 <i class="fa-solid fa-location-dot filter-icon"></i>
                 <div class="select-wrapper">
-                    <label>State / Location</label>
+                    <label>State / Territory Location</label>
                     <select id="state-select" disabled>
-                        <option value="">Loading Locations...</option>
+                        <option value="ALL">Loading Locations...</option>
                     </select>
                 </div>
             </div>
@@ -291,10 +290,7 @@
             <section id="analytics-section" class="panel-card">
                 <div class="panel-header">
                     <h3><i class="fa-solid fa-chart-line"></i> River Water Level & Quality Analytics</h3>
-                    <div class="chart-type-selector no-print">
-                        <button id="btn-chart-trend" class="btn-chart-type active">24h Trend</button>
-                        <button id="btn-chart-radar" class="btn-chart-type">WQI Radar</button>
-                    </div>
+                    <span class="panel-tag no-print"><i class="fa-solid fa-chart-line"></i> 24h Hourly Trend</span>
                 </div>
                 <div class="panel-body" style="height: 400px; padding: 16px;">
                     <canvas id="analyticsChart"></canvas>

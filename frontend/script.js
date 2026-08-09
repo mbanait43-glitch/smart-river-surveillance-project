@@ -117,10 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const printDate = document.getElementById('print-date');
     const printTime = document.getElementById('print-time');
 
-    const btnChartTrend = document.getElementById('btn-chart-trend');
-    const btnChartRadar = document.getElementById('btn-chart-radar');
-
-    let currentChartMode = 'trend';
     let rawData = [];
     let stationMap = {}; // stationId -> structured station object
     let markersMap = {}; // stationId -> Leaflet marker
@@ -452,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAnalyticsChart(station);
     }
 
-    // --- Render Analytics Chart ---
+    // --- Render Clean Analytics Chart ---
     function renderAnalyticsChart(station) {
         const ctx = document.getElementById('analyticsChart');
         if (!ctx) return;
@@ -464,134 +460,69 @@ document.addEventListener('DOMContentLoaded', () => {
         const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
         const stationOverrides = overrides[station.id] || {};
 
-        if (currentChartMode === 'trend') {
-            const hours = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now (Live)'];
-            const levelBase = stationOverrides['Water Level'] !== undefined ? stationOverrides['Water Level'] : (station.parameters['Water Level'] ? station.parameters['Water Level'].value : 2.5);
-            const phBase = stationOverrides['pH'] !== undefined ? stationOverrides['pH'] : (station.parameters['pH'] ? station.parameters['pH'].value : 7.4);
-            const doBase = stationOverrides['Dissolved Oxygen'] !== undefined ? stationOverrides['Dissolved Oxygen'] : (station.parameters['Dissolved Oxygen'] ? station.parameters['Dissolved Oxygen'].value : 7.2);
+        const hours = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now (Live)'];
+        const levelBase = stationOverrides['Water Level'] !== undefined ? stationOverrides['Water Level'] : (station.parameters['Water Level'] ? station.parameters['Water Level'].value : 2.5);
+        const phBase = stationOverrides['pH'] !== undefined ? stationOverrides['pH'] : (station.parameters['pH'] ? station.parameters['pH'].value : 7.4);
+        const doBase = stationOverrides['Dissolved Oxygen'] !== undefined ? stationOverrides['Dissolved Oxygen'] : (station.parameters['Dissolved Oxygen'] ? station.parameters['Dissolved Oxygen'].value : 7.2);
 
-            const levelData = hours.map((_, i) => Number((levelBase + (Math.sin(i) * 0.15)).toFixed(2)));
-            const phData = hours.map((_, i) => Number((phBase + (Math.cos(i) * 0.08)).toFixed(2)));
-            const doData = hours.map((_, i) => Number((doBase + (Math.sin(i * 1.5) * 0.25)).toFixed(2)));
+        const levelData = hours.map((_, i) => Number((levelBase + (Math.sin(i) * 0.15)).toFixed(2)));
+        const phData = hours.map((_, i) => Number((phBase + (Math.cos(i) * 0.08)).toFixed(2)));
+        const doData = hours.map((_, i) => Number((doBase + (Math.sin(i * 1.5) * 0.25)).toFixed(2)));
 
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: hours,
-                    datasets: [
-                        {
-                            label: 'Water Level (m MSL)',
-                            data: levelData,
-                            borderColor: '#38bdf8',
-                            backgroundColor: 'rgba(56, 189, 248, 0.15)',
-                            fill: true,
-                            tension: 0.4,
-                            yAxisID: 'yLevel'
-                        },
-                        {
-                            label: 'pH Level',
-                            data: phData,
-                            borderColor: '#10b981',
-                            backgroundColor: 'transparent',
-                            borderDash: [5, 5],
-                            tension: 0.3,
-                            yAxisID: 'yQuality'
-                        },
-                        {
-                            label: 'Dissolved Oxygen (mg/l)',
-                            data: doData,
-                            borderColor: '#f59e0b',
-                            backgroundColor: 'transparent',
-                            tension: 0.4,
-                            yAxisID: 'yQuality'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: {
-                        legend: { labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', weight: '600' } } }
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: hours,
+                datasets: [
+                    {
+                        label: 'Water Level (m MSL)',
+                        data: levelData,
+                        borderColor: '#38bdf8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'yLevel'
                     },
-                    scales: {
-                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                        yLevel: {
-                            type: 'linear', position: 'left',
-                            title: { display: true, text: 'Water Level (m)', color: '#38bdf8' },
-                            ticks: { color: '#38bdf8' }, grid: { color: 'rgba(255,255,255,0.05)' }
-                        },
-                        yQuality: {
-                            type: 'linear', position: 'right',
-                            title: { display: true, text: 'Quality Parameters (pH / DO)', color: '#10b981' },
-                            ticks: { color: '#10b981' }, grid: { drawOnChartArea: false }
-                        }
+                    {
+                        label: 'pH Level',
+                        data: phData,
+                        borderColor: '#10b981',
+                        backgroundColor: 'transparent',
+                        borderDash: [5, 5],
+                        tension: 0.3,
+                        yAxisID: 'yQuality'
+                    },
+                    {
+                        label: 'Dissolved Oxygen (mg/l)',
+                        data: doData,
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'transparent',
+                        tension: 0.4,
+                        yAxisID: 'yQuality'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', weight: '600' } } }
+                },
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    yLevel: {
+                        type: 'linear', position: 'left',
+                        title: { display: true, text: 'Water Level (m)', color: '#38bdf8' },
+                        ticks: { color: '#38bdf8' }, grid: { color: 'rgba(255,255,255,0.05)' }
+                    },
+                    yQuality: {
+                        type: 'linear', position: 'right',
+                        title: { display: true, text: 'Quality Parameters (pH / DO)', color: '#10b981' },
+                        ticks: { color: '#10b981' }, grid: { drawOnChartArea: false }
                     }
                 }
-            });
-        } else {
-            const ph = stationOverrides['pH'] !== undefined ? stationOverrides['pH'] : (station.parameters['pH'] ? station.parameters['pH'].value : 7.5);
-            const doVal = stationOverrides['Dissolved Oxygen'] !== undefined ? stationOverrides['Dissolved Oxygen'] : (station.parameters['Dissolved Oxygen'] ? station.parameters['Dissolved Oxygen'].value : 7.0);
-            const temp = stationOverrides['Water Temperature'] !== undefined ? stationOverrides['Water Temperature'] : (station.parameters['Water Temperature'] ? station.parameters['Water Temperature'].value : 26.0);
-            const bod = stationOverrides['Biochemical Oxygen Demand'] !== undefined ? stationOverrides['Biochemical Oxygen Demand'] : (station.parameters['Biochemical Oxygen Demand'] ? station.parameters['Biochemical Oxygen Demand'].value : 2.4);
-            const turb = stationOverrides['Water Turbidity'] !== undefined ? stationOverrides['Water Turbidity'] : (station.parameters['Water Turbidity'] ? station.parameters['Water Turbidity'].value : 80);
-
-            chartInstance = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['pH Balance', 'Dissolved Oxygen', 'Temperature Normal', 'BOD Safety', 'Turbidity Clarity'],
-                    datasets: [
-                        {
-                            label: 'Current Live Station Spectrum',
-                            data: [ph * 10, doVal * 12, (35 - temp) * 3, (10 - bod) * 10, (200 - turb) / 2],
-                            backgroundColor: 'rgba(56, 189, 248, 0.3)',
-                            borderColor: '#38bdf8',
-                            pointBackgroundColor: '#38bdf8'
-                        },
-                        {
-                            label: 'Standard Optimal Safety Target',
-                            data: [75, 84, 60, 80, 75],
-                            backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                            borderColor: '#10b981',
-                            borderDash: [4, 4]
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', weight: '600' } } }
-                    },
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(255,255,255,0.1)' },
-                            grid: { color: 'rgba(255,255,255,0.1)' },
-                            pointLabels: { color: '#94a3b8', font: { size: 11, weight: '600' } },
-                            ticks: { display: false }
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    // Chart Mode Toggle Buttons
-    if (btnChartTrend) {
-        btnChartTrend.addEventListener('click', () => {
-            currentChartMode = 'trend';
-            btnChartTrend.classList.add('active');
-            if (btnChartRadar) btnChartRadar.classList.remove('active');
-            if (selectedStationId && stationMap[selectedStationId]) renderAnalyticsChart(stationMap[selectedStationId]);
-        });
-    }
-
-    if (btnChartRadar) {
-        btnChartRadar.addEventListener('click', () => {
-            currentChartMode = 'radar';
-            btnChartRadar.classList.add('active');
-            if (btnChartTrend) btnChartTrend.classList.remove('active');
-            if (selectedStationId && stationMap[selectedStationId]) renderAnalyticsChart(stationMap[selectedStationId]);
+            }
         });
     }
 
