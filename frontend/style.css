@@ -39,12 +39,18 @@ body.light-mode {
     box-sizing: border-box;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-primary);
     line-height: 1.5;
-    overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -233,6 +239,7 @@ body.light-mode .brand-text h2 {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    overflow-x: hidden;
 }
 
 /* Hero Banner Section */
@@ -782,8 +789,21 @@ body.light-mode th {
     .filter-divider { display: none; }
 }
 
-/* Smartphones & Mobile Devices (max-width: 768px) PREMIUM 3-TIER CLEAN HEADER */
+/* Smartphones & Mobile Devices (max-width: 768px) PREMIUM 3-TIER CLEAN HEADER & SMOOTH TOUCH SCROLL */
 @media screen and (max-width: 768px) {
+    html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        position: relative !important;
+    }
+
+    /* FIX MOBILE MAP TOUCH SCROLL TRAPPING:
+       single-finger vertical swipes on mobile will scroll page smoothly! */
+    #map, .map-view, .leaflet-container {
+        touch-action: pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
     .navbar {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -875,31 +895,49 @@ body.light-mode th {
     }
 
     .main-wrapper {
-        padding: 12px 10px;
-        gap: 14px;
+        padding: 12px 10px !important;
+        gap: 14px !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
     }
 
     .hero-banner {
-        padding: 16px;
-        border-radius: 16px;
+        padding: 16px !important;
+        border-radius: 16px !important;
     }
 
     .hero-content h1 {
-        font-size: 1.35rem;
+        font-size: 1.35rem !important;
     }
 
     .hero-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        width: 100% !important;
     }
 
     .stat-box {
-        padding: 8px 6px;
+        padding: 8px 4px !important;
+        min-width: 0 !important;
     }
 
-    .stat-num { font-size: 1.2rem; }
-    .stat-label { font-size: 0.65rem; }
+    .stat-num { font-size: 1.1rem !important; }
+    .stat-label { font-size: 0.62rem !important; }
+
+    .glass-filter-bar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 12px !important;
+        width: 100% !important;
+    }
+
+    .filter-group {
+        width: 100% !important;
+    }
+
+    .filter-divider { display: none !important; }
 
     .station-details-bar {
         padding: 10px 14px;
@@ -976,7 +1014,7 @@ body.light-mode th {
     }
 
     .hero-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr) !important;
     }
 }
 
