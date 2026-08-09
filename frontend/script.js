@@ -135,15 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const t = Date.now();
-        const renderBackendUrl = localStorage.getItem('render_backend_url') || '';
-        
         const endpoints = [
-            renderBackendUrl ? `${renderBackendUrl}/api/live-data?t=${t}` : '',
+            `https://smart-river-backend.onrender.com/api/live-data?t=${t}`,
             `/api/live-data?t=${t}`,
             `http://localhost:3000/api/live-data?t=${t}`,
             `https://corsproxy.io/?https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`,
             `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`)}`
-        ].filter(Boolean);
+        ];
 
         let success = false;
         let lastError = null;
@@ -183,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (alertBanner) {
                 alertBanner.style.display = 'block';
-                alertBanner.querySelector('.alert-content').innerHTML = `<strong>System Alert:</strong> Connect Render Backend URL to fetch all live stations.`;
+                alertBanner.querySelector('.alert-content').innerHTML = `<strong>System Alert:</strong> Render backend connection issue.`;
             }
             updateTimestamp();
         }
