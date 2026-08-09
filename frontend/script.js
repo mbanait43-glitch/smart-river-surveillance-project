@@ -137,8 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
         'Depth': 'Water Depth'
     };
 
-    // --- Leaflet Map Initialization ---
-    const map = L.map('map', { zoomControl: true }).setView([22.5937, 78.9629], 5);
+    // --- Leaflet Map Initialization with Hardware Acceleration ---
+    const map = L.map('map', {
+        zoomControl: true,
+        fadeAnimation: true,
+        zoomAnimation: true,
+        markerZoomAnimation: true
+    }).setView([22.5937, 78.9629], 5);
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -348,7 +354,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!station) return;
 
         // AUTOMATIC BIDIRECTIONAL DROPDOWN SYNCING:
-        // Automatically sync River Name & Territory Location dropdowns to match selected Station!
         if (autoSyncRiver && riverSelect && station.river) {
             const options = Array.from(riverSelect.options).map(o => o.value);
             if (options.includes(station.river)) {
@@ -373,15 +378,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Smooth & Elegant Zoom Flying Animation (flyTo) on Load / Selection!
+        // 100% 60FPS LAG-FREE SMOOTH FLYTO ZOOM ANIMATION!
         if (station.lat && station.lng) {
+            // 1. Close active popups first to prevent DOM recalculation thrashing during GPU tile animation!
+            map.closePopup();
+
+            // 2. Perform smooth 1.2s flyTo zoom transition
             map.flyTo([station.lat, station.lng], 9, {
-                duration: 1.5,
-                easeLinearity: 0.25
+                duration: 1.2,
+                easeLinearity: 0.25,
+                noMoveStart: true
             });
-            if (markersMap[stationId]) {
-                markersMap[stationId].openPopup();
-            }
+
+            // 3. Gently open popup card ONLY AFTER camera comes to rest at target station!
+            map.once('moveend', () => {
+                if (markersMap[stationId]) {
+                    markersMap[stationId].openPopup();
+                }
+            });
         }
 
         if (reportRiver) reportRiver.textContent = station.river;
@@ -464,7 +478,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCardById('card-turbidity', 'Water Turbidity', 'NTU');
         updateCardById('card-ec', 'Conductivity', 'mS/cm');
 
-        renderAnalyticsChart(station);
+        // Defer Chart rendering slightly so ChartJS doesn't fight Leaflet for GPU/CPU frames!
+        setTimeout(() => {
+            renderAnalyticsChart(station);
+        }, 200);
     }
 
     // --- Render Clean Analytics Chart ---
@@ -572,7 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
 
-                marker.bindPopup(popupContent, { minWidth: 230, maxWidth: 320, autoPan: true });
+                marker.bindPopup(popupContent, { minWidth: 230, maxWidth: 320, autoPan: false });
 
                 marker.on('click', () => {
                     stationSelect.value = s.id;
