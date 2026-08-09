@@ -373,9 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Instant Center Focus WITHOUT Flying Animation!
+        // Smooth, Gentle Pan Animation (0.5s smooth slide without zooming out/in)!
         if (station.lat && station.lng) {
-            map.panTo([station.lat, station.lng], { animate: false });
+            map.panTo([station.lat, station.lng], { animate: true, duration: 0.5 });
             if (markersMap[stationId]) {
                 markersMap[stationId].openPopup();
             }
