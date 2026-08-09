@@ -609,14 +609,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (printTime) printTime.textContent = now.toLocaleTimeString();
     }
 
+    // --- Browser Print Event Hooks for 100% Unclipped PDF Printing ---
+    window.addEventListener('beforeprint', () => {
+        updateTimestamp();
+        if (map) map.invalidateSize();
+        if (chartInstance) chartInstance.resize();
+    });
+
+    window.addEventListener('afterprint', () => {
+        if (map) map.invalidateSize();
+        if (chartInstance) chartInstance.resize();
+    });
+
     // --- Print / Save A4 PDF Event ---
     if (btnPrintReport) {
         btnPrintReport.addEventListener('click', () => {
             updateTimestamp();
             if (map) map.invalidateSize();
+            if (chartInstance) chartInstance.resize();
             setTimeout(() => {
                 window.print();
-            }, 100);
+            }, 150);
         });
     }
 
