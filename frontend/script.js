@@ -613,7 +613,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPrintReport) {
         btnPrintReport.addEventListener('click', () => {
             updateTimestamp();
-            window.print();
+            if (map) map.invalidateSize();
+            setTimeout(() => {
+                window.print();
+            }, 100);
         });
     }
 
