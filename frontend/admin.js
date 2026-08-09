@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('theme-toggle');
     const body = document.body;
 
-    const savedTheme = localStorage.getItem('theme_preference') || 'dark';
+    const savedTheme = localStorage.getItem('theme_preference') || 'light';
     if (savedTheme === 'light') {
         body.classList.remove('dark-mode');
         body.classList.add('light-mode');
@@ -125,6 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedLat = 21.1458;
     let selectedLng = 79.0882;
 
+    function createAdminMarkerIcon() {
+        const svgHtml = `
+            <div style="position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.7));">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z" fill="#f59e0b" stroke="#ffffff" stroke-width="1.8"/>
+                    <circle cx="12" cy="9" r="3.5" fill="#ffffff"/>
+                </svg>
+            </div>
+        `;
+        return L.divIcon({
+            html: svgHtml,
+            className: 'custom-leaflet-marker-admin',
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -36]
+        });
+    }
+
     function initAdminMapPicker() {
         const mapEl = document.getElementById('admin-map-picker');
         if (!mapEl) return;
@@ -135,8 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(adminPickerMap);
 
-            adminPickerMarker = L.marker([selectedLat, selectedLng], { draggable: true }).addTo(adminPickerMap);
-            adminPickerMarker.bindPopup('<b>Selected River Pin Spot</b><br/>Click anywhere on map or drag pin!').openPopup();
+            adminPickerMarker = L.marker([selectedLat, selectedLng], {
+                draggable: true,
+                icon: createAdminMarkerIcon()
+            }).addTo(adminPickerMap);
+
+            adminPickerMarker.bindPopup('<b>Selected River Pin Spot</b><br/>Click anywhere on map or drag pin!', { minWidth: 200 }).openPopup();
 
             function updatePickedCoords(lat, lng) {
                 selectedLat = Number(lat.toFixed(4));
@@ -194,6 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchLiveData() {
         const t = Date.now();
         const endpoints = [
+            `https://smart-river-backend.onrender.com/api/live-data?t=${t}`,
+            `/api/live-data?t=${t}`,
             `http://localhost:3000/api/live-data?t=${t}`,
             `https://corsproxy.io/?https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`,
             `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`)}`
@@ -503,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `SMART_RIVER_SURVEILLANCE_REPORT_${new Date().toISOString().slice(0,10)}.slice(0,10)}.csv`);
+            link.setAttribute("download", `SMART_RIVER_SURVEILLANCE_REPORT_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
