@@ -145,7 +145,6 @@ body.light-mode .metric-val {
     padding: 4px;
     border-radius: 30px;
     border: 1px solid var(--glass-border);
-    overflow-x: auto;
 }
 
 .nav-link {
@@ -180,8 +179,6 @@ body.light-mode .metric-val {
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
-    overflow-x: auto;
-    max-width: 100%;
 }
 
 .status-pill {
@@ -501,6 +498,25 @@ body.light-mode .metric-val {
 .map-view { height: 360px; width: 100%; background: var(--bg-dark); }
 .panel-body { padding: 18px !important; }
 
+/* FIX 1: DISABLE ALL MAP BLUR ON CLICK & REMOVE TILE SEAM LINES */
+.map-view, #map, #admin-map-picker, .leaflet-container, .leaflet-container:focus, .leaflet-container:active, .leaflet-tile, .leaflet-marker-icon {
+    filter: none !important;
+    backdrop-filter: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-filter: none !important;
+}
+
+.leaflet-tile {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.leaflet-container * {
+    writing-mode: horizontal-tb !important;
+}
+
 /* Print Header */
 .print-only-header { display: none; }
 
@@ -620,36 +636,74 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
     .filter-divider { display: none; }
 }
 
-/* Smartphones & Mobile Devices (max-width: 768px) */
+/* Smartphones & Mobile Devices (max-width: 768px) NO SLIDER / NO SCROLLBAR FIT */
 @media screen and (max-width: 768px) {
     .navbar {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 10px 12px;
-        gap: 8px;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 8px 10px !important;
+        gap: 6px !important;
+        overflow: visible !important;
     }
 
     .nav-brand {
-        width: 100%;
-        justify-content: space-between;
+        width: 100% !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
     }
 
+    .brand-icon {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1rem !important;
+    }
+
+    .brand-text h2 {
+        font-size: 0.82rem !important;
+    }
+
+    /* ALL NAV MENU ITEMS FIT DIRECTLY - NO HORIZONTAL SLIDER */
     .nav-menu {
-        width: 100%;
-        justify-content: flex-start;
-        padding: 4px;
-        overflow-x: auto;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
+        padding: 3px !important;
+        border-radius: 20px !important;
+        overflow: visible !important; /* NO SLIDER */
     }
 
+    .nav-link {
+        flex: 1 !important;
+        justify-content: center !important;
+        padding: 5px 8px !important;
+        font-size: 0.72rem !important;
+        white-space: nowrap !important;
+    }
+
+    /* ALL NAV ACTIONS FIT DIRECTLY - NO HORIZONTAL SLIDER */
     .nav-actions {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 8px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 2px;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
+        overflow: visible !important; /* NO SLIDER */
+    }
+
+    .status-pill {
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+    }
+
+    .primary-pill, .secondary-pill {
+        padding: 5px 10px !important;
+        font-size: 0.72rem !important;
+    }
+
+    .btn-icon {
+        width: 32px !important;
+        height: 32px !important;
     }
 
     .main-wrapper {
@@ -763,7 +817,6 @@ th { background: rgba(255, 255, 255, 0.03); color: var(--cyan-primary); font-wei
 
 /* ==========================================================================
    COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
-   Matches Exact 2-Page Government Inspection PDF Layout
    ========================================================================== */
 @media print {
     @page {
