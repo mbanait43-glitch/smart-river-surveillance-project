@@ -448,6 +448,224 @@ tbody tr:hover { background: rgba(56, 189, 248, 0.04); }
 .admin-login-card p { color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 24px; }
 
 /* ==========================================================================
+   COMPREHENSIVE RESPONSIVE DESIGN SYSTEM (MOBILE, TABLET, DESKTOP ALL-DEVICE FIXES)
+   ========================================================================== */
+
+/* Large Tablets & Small Laptops (max-width: 1024px) */
+@media screen and (max-width: 1024px) {
+    .navbar {
+        padding: 0 20px;
+        height: 70px;
+    }
+
+    .main-wrapper {
+        padding: 20px 16px;
+        gap: 20px;
+    }
+
+    .hero-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 24px;
+    }
+
+    .hero-stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .split-view-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .glass-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding: 16px;
+    }
+
+    .filter-divider {
+        display: none;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+}
+
+/* Mobile Devices & Smartphones (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    .navbar {
+        height: auto;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .nav-brand {
+        gap: 10px;
+    }
+
+    .brand-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+
+    .brand-text h2 {
+        font-size: 0.95rem;
+        line-height: 1.2;
+    }
+
+    .nav-menu {
+        width: 100%;
+        order: 3;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 4px;
+    }
+
+    .nav-link {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+        order: 2;
+    }
+
+    .status-pill span:not(.pulse-dot) {
+        font-size: 0.75rem;
+    }
+
+    .primary-pill, .secondary-pill {
+        padding: 6px 12px;
+        font-size: 0.78rem;
+    }
+
+    .hero-banner {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.35rem;
+    }
+
+    .hero-content p {
+        font-size: 0.85rem;
+    }
+
+    .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .stat-box {
+        padding: 10px 8px;
+    }
+
+    .stat-num {
+        font-size: 1.3rem;
+    }
+
+    .stat-label {
+        font-size: 0.68rem;
+    }
+
+    .station-details-bar {
+        padding: 12px 16px;
+        gap: 10px;
+        font-size: 0.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wqi-score-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 18px 20px;
+    }
+
+    .wqi-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .metric-card {
+        padding: 14px;
+        gap: 10px;
+        border-radius: 16px;
+    }
+
+    .metric-name {
+        font-size: 0.7rem;
+    }
+
+    .metric-val {
+        font-size: 1.4rem;
+    }
+
+    .metric-footer {
+        font-size: 0.7rem;
+        word-break: break-word;
+    }
+
+    .map-view {
+        height: 320px;
+    }
+
+    #analytics-section .panel-body {
+        height: 320px !important;
+        padding: 10px !important;
+    }
+
+    /* Admin Panel Form Grid Mobile Fix */
+    #form-all-in-one-entry > div {
+        padding: 14px !important;
+    }
+
+    #form-all-in-one-entry div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .crud-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 600px;
+    }
+}
+
+/* Extra Small Phones (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
    COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
    ========================================================================== */
 @media print {
