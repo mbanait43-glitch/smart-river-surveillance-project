@@ -3,70 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart River Water Level and Quality Surveillance</title>
+    <title>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</title>
+    
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome & Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom Theme CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
 
-    <!-- Official Government Inspection Print Header -->
+    <!-- Official Inspection Print Header (Only visible on PDF/A4 Print) -->
     <div class="print-only-header">
         <div class="print-logo-row">
-            <h2>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE REPORT</h2>
-            <span class="print-badge">OFFICIAL INSPECTION COPY</span>
+            <h2>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</h2>
+            <span class="print-badge">OFFICIAL RTWQMS SURVEILLANCE REPORT</span>
         </div>
         <div class="print-meta-grid">
-            <div><strong>System Engine:</strong> Central Pollution Control Board (CPCB RTWQMS)</div>
-            <div><strong>Inspection Date:</strong> <span id="print-date">--</span></div>
-            <div><strong>Verification Status:</strong> Verified Active Sensor Data</div>
-            <div><strong>Generation Time:</strong> <span id="print-time">--</span></div>
+            <div><strong>Government Portal:</strong> Central Pollution Control Board (CPCB RTWQMS)</div>
+            <div><strong>Inspection Date:</strong> <span id="print-date">--</span> | <strong>Time:</strong> <span id="print-time">--</span></div>
         </div>
     </div>
 
-    <!-- Top Navigation Bar (Fixed sticky with Theme Toggle) -->
-    <header class="navbar no-print">
+    <!-- Navigation Header -->
+    <nav class="navbar">
         <div class="nav-brand">
-            <div class="brand-icon">
-                <i class="fa-solid fa-water"></i>
-            </div>
+            <div class="brand-icon"><i class="fa-solid fa-water"></i></div>
             <div class="brand-text">
                 <h2>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</h2>
             </div>
         </div>
-
-        <nav class="nav-menu">
-            <a href="#overview" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        
+        <div class="nav-menu">
+            <a href="#overview" class="nav-link active"><i class="fa-solid fa-chart-pie"></i> Overview</a>
             <a href="#map-section" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> GIS Map</a>
-            <a href="#analytics-section" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
-        </nav>
+            <a href="#analytics-section" class="nav-link"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+        </div>
 
         <div class="nav-actions">
-            <div id="system-status" class="status-pill live">
+            <div class="status-pill" id="system-status">
                 <span class="pulse-dot"></span>
-                <span>Connecting...</span>
+                <span>Sensors Operational</span>
             </div>
-            <button id="theme-toggle" class="btn-icon" title="Toggle Theme"><i class="fa-solid fa-sun"></i></button>
-            <button id="btn-refresh" class="btn secondary-pill"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
-            <a href="admin.html" class="btn primary-pill admin-pill" style="text-decoration: none;"><i class="fa-solid fa-user-shield"></i> Admin Login</a>
-        </div>
-    </header>
 
-    <!-- Main Content Wrapper -->
+            <button class="btn-icon" id="theme-toggle" title="Toggle Light/Dark Theme">
+                <i class="fa-solid fa-sun"></i>
+            </button>
+
+            <button class="btn secondary-pill" id="btn-refresh">
+                <i class="fa-solid fa-arrows-rotate"></i> Refresh Data
+            </button>
+
+            <a href="admin.html" class="btn primary-pill" style="text-decoration: none;" title="Open Admin Control Panel">
+                <i class="fa-solid fa-user-shield"></i> Admin Login
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
     <main class="main-wrapper">
 
-        <!-- Hero Section -->
-        <section class="hero-banner no-print">
+        <!-- Restored Hero Banner Section -->
+        <section class="hero-banner">
             <div class="hero-content">
                 <span class="hero-tag"><i class="fa-solid fa-shield-halved"></i> OFFICIAL RTWQMS SURVEILLANCE SYSTEM</span>
                 <h1>SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</h1>
             </div>
-
+            
             <div class="hero-stats">
                 <div class="stat-box">
                     <span class="stat-num">40</span>
@@ -86,9 +95,8 @@
         <!-- Floating Filter Glass Bar -->
         <section class="glass-filter-bar no-print">
             <div class="filter-group">
-                <i class="fa-solid fa-water filter-icon"></i>
                 <div class="select-wrapper">
-                    <label>River Name</label>
+                    <label><i class="fa-solid fa-water filter-icon"></i> River Name</label>
                     <select id="river-select" disabled>
                         <option value="ALL">Loading Rivers...</option>
                     </select>
@@ -98,9 +106,8 @@
             <div class="filter-divider"></div>
 
             <div class="filter-group">
-                <i class="fa-solid fa-location-dot filter-icon"></i>
                 <div class="select-wrapper">
-                    <label>State / Territory Location</label>
+                    <label><i class="fa-solid fa-location-dot filter-icon"></i> State / Territory Location</label>
                     <select id="state-select" disabled>
                         <option value="ALL">Loading Locations...</option>
                     </select>
@@ -110,17 +117,23 @@
             <div class="filter-divider"></div>
 
             <div class="filter-group">
-                <i class="fa-solid fa-satellite-dish filter-icon"></i>
                 <div class="select-wrapper">
-                    <label>Monitoring Station</label>
+                    <label><i class="fa-solid fa-satellite-dish filter-icon"></i> Monitoring Station</label>
                     <select id="station-select" disabled>
                         <option value="">Loading Stations...</option>
                     </select>
                 </div>
             </div>
 
-            <div class="filter-info no-print">
-                <span>Last Updated: <strong id="last-update">Syncing...</strong></span>
+            <div class="filter-divider"></div>
+
+            <div class="filter-group">
+                <div class="select-wrapper">
+                    <label><i class="fa-solid fa-clock filter-icon"></i> Live Data Status</label>
+                    <div class="last-update-box">
+                        <span>Last Updated: <strong id="last-update">Syncing...</strong></span>
+                    </div>
+                </div>
             </div>
         </section>
 

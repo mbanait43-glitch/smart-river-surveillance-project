@@ -336,13 +336,13 @@ body.light-mode .stat-num {
     text-align: center;
 }
 
-/* Glass Filter Bar */
+/* Glass Filter Bar - 4 Equal Symmetrical Columns */
 .glass-filter-bar {
     width: 100%;
     background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 18px;
-    padding: 14px 24px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -358,42 +358,44 @@ body.light-mode .glass-filter-bar {
 
 .filter-group {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 10px;
     flex: 1;
     min-width: 0;
 }
 
+.select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+}
+
+.select-wrapper label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .filter-icon {
-    font-size: 1.15rem;
+    font-size: 0.88rem;
     color: var(--cyan-primary);
     flex-shrink: 0;
-    margin-bottom: 8px;
 }
 
 body.light-mode .filter-icon {
     color: #0284c7;
 }
 
-.select-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+.select-wrapper select, .last-update-box {
     width: 100%;
-    min-width: 0;
-}
-
-.select-wrapper label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    letter-spacing: 0.05em;
-}
-
-.select-wrapper select {
-    width: 100%;
-    max-width: 100%;
+    height: 38px;
     background: var(--bg-dark);
     color: var(--text-primary);
     border: 1px solid var(--glass-border);
@@ -405,51 +407,35 @@ body.light-mode .filter-icon {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 
-body.light-mode .select-wrapper select {
+body.light-mode .select-wrapper select, body.light-mode .last-update-box {
     background: #f8fafc;
     color: #0f172a;
     border: 1px solid #cbd5e1;
 }
 
-.filter-divider {
-    width: 1px;
-    height: 36px;
-    background: var(--glass-border);
-    flex-shrink: 0;
-    align-self: flex-end;
-    margin-bottom: 4px;
-}
-
-body.light-mode .filter-divider {
-    background: #cbd5e1;
-}
-
-/* Last Updated Info Badge Aligned to Select Boxes */
-.filter-info {
-    display: flex;
-    align-items: center;
-    align-self: flex-end;
-    margin-bottom: 8px;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.filter-info strong {
+.last-update-box strong {
     color: var(--cyan-primary);
     font-weight: 700;
     margin-left: 4px;
 }
 
-body.light-mode .filter-info {
-    color: #475569;
+body.light-mode .last-update-box strong {
+    color: #0284c7;
 }
 
-body.light-mode .filter-info strong {
-    color: #0284c7;
+.filter-divider {
+    width: 1px;
+    height: 48px;
+    background: var(--glass-border);
+    flex-shrink: 0;
+}
+
+body.light-mode .filter-divider {
+    background: #cbd5e1;
 }
 
 /* Station Report Details Bar */
