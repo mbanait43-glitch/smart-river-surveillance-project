@@ -418,10 +418,38 @@ body.light-mode .select-wrapper select {
     height: 36px;
     background: var(--glass-border);
     flex-shrink: 0;
+    align-self: flex-end;
+    margin-bottom: 4px;
 }
 
 body.light-mode .filter-divider {
     background: #cbd5e1;
+}
+
+/* Last Updated Info Badge Aligned to Select Boxes */
+.filter-info {
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.filter-info strong {
+    color: var(--cyan-primary);
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+body.light-mode .filter-info {
+    color: #475569;
+}
+
+body.light-mode .filter-info strong {
+    color: #0284c7;
 }
 
 /* Station Report Details Bar */
