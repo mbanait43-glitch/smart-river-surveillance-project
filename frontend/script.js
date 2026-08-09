@@ -128,41 +128,22 @@ document.addEventListener('DOMContentLoaded', () => {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Guaranteed Sample Live Stations Dataset Fallback
-    function getSampleLiveData() {
-        const now = new Date().toISOString();
-        return [
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "River Stage", stationparameter_longname: "River Stage", ts_value: 61.08, ts_unitsymbol: "m" },
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "pH", stationparameter_longname: "pH", ts_value: 7.45, ts_unitsymbol: "" },
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "WT", stationparameter_longname: "WT", ts_value: 25.40, ts_unitsymbol: "°C" },
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "DO", stationparameter_longname: "Oxygen, dissolved", ts_value: 6.85, ts_unitsymbol: "mg/l" },
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "BOD", stationparameter_longname: "BOD", ts_value: 2.10, ts_unitsymbol: "mg/l" },
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "COD", stationparameter_longname: "COD", ts_value: 12.40, ts_unitsymbol: "mg/l" },
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "WTb", stationparameter_longname: "WTb", ts_value: 15.20, ts_unitsymbol: "NTU" },
-            { station_id: "NGP_KANHAN_01", station_no: "NGP_KANHAN_01", station_name: "Kanhan River Intake Station", territory_name: "Nagpur, Maharashtra", station_latitude: 21.1458, station_longitude: 79.0882, timestamp: now, stationparameter_name: "EC", stationparameter_longname: "EC", ts_value: 245.00, ts_unitsymbol: "mS/cm" },
-            
-            { station_id: "BH_PATNA_01", station_no: "BH_PATNA_01", station_name: "Ganga Patna Monitoring Station", territory_name: "Bihar", station_latitude: 25.5941, station_longitude: 85.1376, timestamp: now, stationparameter_name: "River Stage", stationparameter_longname: "River Stage", ts_value: 52.30, ts_unitsymbol: "m" },
-            { station_id: "BH_PATNA_01", station_no: "BH_PATNA_01", station_name: "Ganga Patna Monitoring Station", territory_name: "Bihar", station_latitude: 25.5941, station_longitude: 85.1376, timestamp: now, stationparameter_name: "pH", stationparameter_longname: "pH", ts_value: 7.80, ts_unitsymbol: "" },
-            { station_id: "BH_PATNA_01", station_no: "BH_PATNA_01", station_name: "Ganga Patna Monitoring Station", territory_name: "Bihar", station_latitude: 25.5941, station_longitude: 85.1376, timestamp: now, stationparameter_name: "DO", stationparameter_longname: "Oxygen, dissolved", ts_value: 7.10, ts_unitsymbol: "mg/l" },
-            
-            { station_id: "UP_VNS_01", station_no: "UP_VNS_01", station_name: "Varanasi Ghat Station", territory_name: "Uttar Pradesh", station_latitude: 25.3176, station_longitude: 82.9739, timestamp: now, stationparameter_name: "River Stage", stationparameter_longname: "River Stage", ts_value: 68.12, ts_unitsymbol: "m" },
-            { station_id: "UP_VNS_01", station_no: "UP_VNS_01", station_name: "Varanasi Ghat Station", territory_name: "Uttar Pradesh", station_latitude: 25.3176, station_longitude: 82.9739, timestamp: now, stationparameter_name: "pH", stationparameter_longname: "pH", ts_value: 7.60, ts_unitsymbol: "" },
-            { station_id: "UP_VNS_01", station_no: "UP_VNS_01", station_name: "Varanasi Ghat Station", territory_name: "Uttar Pradesh", station_latitude: 25.3176, station_longitude: 82.9739, timestamp: now, stationparameter_name: "DO", stationparameter_longname: "Oxygen, dissolved", ts_value: 6.90, ts_unitsymbol: "mg/l" }
-        ];
-    }
-
-    // --- Resilient Cache-Busting Fetch Engine ---
+    // --- 4-Tier Resilient Cache-Busting Fetch Engine for All 40+ Live CPCB Stations ---
     async function fetchData() {
         if (statusBadge) {
             statusBadge.innerHTML = '<span class="pulse-dot" style="background:#f59e0b"></span><span>Connecting...</span>';
         }
 
         const t = Date.now();
+        const renderBackendUrl = localStorage.getItem('render_backend_url') || '';
+        
         const endpoints = [
+            renderBackendUrl ? `${renderBackendUrl}/api/live-data?t=${t}` : '',
             `/api/live-data?t=${t}`,
+            `http://localhost:3000/api/live-data?t=${t}`,
             `https://corsproxy.io/?https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`,
             `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`)}`
-        ];
+        ].filter(Boolean);
 
         let success = false;
         let lastError = null;
@@ -183,23 +164,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if (!success || !rawData || rawData.length === 0) {
-            // Guaranteed Operational Fallback Dataset so UI is ALWAYS 100% ONLINE
-            rawData = getSampleLiveData();
-            success = true;
+        if (success && rawData.length > 0) {
+            processRawData(rawData);
+
+            if (statusBadge) {
+                statusBadge.innerHTML = '<span class="pulse-dot"></span><span>Sensors Operational</span>';
+            }
+
+            if (alertBanner) alertBanner.style.display = 'none';
+
+            populateDropdowns();
+            renderMapMarkers();
+            updateTimestamp();
+        } else {
+            console.error('Fetch error:', lastError);
+            if (statusBadge) {
+                statusBadge.innerHTML = '<span class="pulse-dot" style="background:#ef4444"></span><span>Offline</span>';
+            }
+            if (alertBanner) {
+                alertBanner.style.display = 'block';
+                alertBanner.querySelector('.alert-content').innerHTML = `<strong>System Alert:</strong> Connect Render Backend URL to fetch all live stations.`;
+            }
+            updateTimestamp();
         }
-
-        processRawData(rawData);
-
-        if (statusBadge) {
-            statusBadge.innerHTML = '<span class="pulse-dot"></span><span>Sensors Operational</span>';
-        }
-
-        if (alertBanner) alertBanner.style.display = 'none';
-
-        populateDropdowns();
-        renderMapMarkers();
-        updateTimestamp();
     }
 
     // --- Process Raw Data & Infer River Name ---
