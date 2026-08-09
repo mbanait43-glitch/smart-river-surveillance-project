@@ -373,9 +373,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Smooth, Gentle Pan Animation (0.5s smooth slide without zooming out/in)!
+        // Smooth & Elegant Zoom Flying Animation (flyTo) on Load / Selection!
         if (station.lat && station.lng) {
-            map.panTo([station.lat, station.lng], { animate: true, duration: 0.5 });
+            map.flyTo([station.lat, station.lng], 9, {
+                duration: 1.5,
+                easeLinearity: 0.25
+            });
             if (markersMap[stationId]) {
                 markersMap[stationId].openPopup();
             }
