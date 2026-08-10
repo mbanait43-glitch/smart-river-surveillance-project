@@ -774,9 +774,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (printTime) printTime.textContent = now.toLocaleTimeString();
     }
 
-    // --- Browser Print Event Hooks for 100% Unclipped PDF Printing ---
-    window.addEventListener('beforeprint', () => {
+    // --- Mobile & Desktop Viewport Sync for 100% Identical A4 PDF Printing ---
+    function prepareForPrint() {
         updateTimestamp();
+
+        // Switch viewport meta tag to desktop 1024px width for Mobile Chrome & iOS Safari
+        const viewportMeta = document.querySelector('meta[name="viewport"]');
+        if (viewportMeta) {
+            if (!viewportMeta.getAttribute('data-original')) {
+                viewportMeta.setAttribute('data-original', viewportMeta.getAttribute('content'));
+            }
+            viewportMeta.setAttribute('content', 'width=1024, initial-scale=1.0');
+        }
+
+        document.body.classList.add('mobile-print-mode');
+
         if (selectedStationId && stationMap[selectedStationId]) {
             const s = stationMap[selectedStationId];
             if (map) {
@@ -786,29 +798,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         if (chartInstance) chartInstance.resize();
-    });
+    }
 
-    window.addEventListener('afterprint', () => {
+    function cleanupAfterPrint() {
+        const viewportMeta = document.querySelector('meta[name="viewport"]');
+        if (viewportMeta && viewportMeta.getAttribute('data-original')) {
+            viewportMeta.setAttribute('content', viewportMeta.getAttribute('data-original'));
+        }
+        document.body.classList.remove('mobile-print-mode');
         if (map) map.invalidateSize();
         if (chartInstance) chartInstance.resize();
-    });
+    }
+
+    window.addEventListener('beforeprint', prepareForPrint);
+    window.addEventListener('afterprint', cleanupAfterPrint);
 
     // --- Print / Save A4 PDF Event ---
     if (btnPrintReport) {
         btnPrintReport.addEventListener('click', () => {
-            updateTimestamp();
-            if (selectedStationId && stationMap[selectedStationId]) {
-                const s = stationMap[selectedStationId];
-                if (map) {
-                    map.setView([s.lat, s.lng], 10, { animate: false });
-                    map.invalidateSize(true);
-                    if (markersMap[s.id]) markersMap[s.id].openPopup();
-                }
-            }
-            if (chartInstance) chartInstance.resize();
+            prepareForPrint();
             setTimeout(() => {
                 window.print();
-            }, 400);
+                setTimeout(cleanupAfterPrint, 1500);
+            }, 450);
         });
     }
 

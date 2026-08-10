@@ -1116,6 +1116,20 @@ body.light-mode th {
     }
 }
 
+/* Mobile Print Mode Enforcer - Prepares DOM layout for 100% Identical A4 PDF Output on Phones */
+body.mobile-print-mode .main-wrapper {
+    width: 1024px !important;
+    max-width: 1024px !important;
+    margin: 0 auto !important;
+}
+body.mobile-print-mode .metrics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+}
+body.mobile-print-mode .glass-filter-bar {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+}
+
 /* ==========================================================================
    COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
    100% MATCHING USER SCREENSHOT: Full-Width Stacked Panels on Page 2!
