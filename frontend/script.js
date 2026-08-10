@@ -529,7 +529,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let hasOverride = false;
 
-        // Clickable Source Link Renderer (Clean Unit Display Fix - No Duplication!)
+        // CPCB Safety Threshold Evaluator (Green, Red, White)
+        function getParamStatusInfo(paramKey, val) {
+            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: 'Neutral Baseline' };
+            const num = parseFloat(val);
+
+            if (paramKey === 'pH') {
+                if (num >= 6.5 && num <= 8.5) return { color: 'green', label: '🟢 Safe pH Balance' };
+                return { color: 'red', label: '🔴 Acidic/Alkaline Hazard' };
+            }
+            if (paramKey === 'Dissolved Oxygen') {
+                if (num >= 5.0) return { color: 'green', label: '🟢 Healthy Oxygen Level' };
+                if (num < 4.0) return { color: 'red', label: '🔴 Critical Oxygen Depletion' };
+                return { color: 'white', label: '⚪ Moderate Baseline' };
+            }
+            if (paramKey === 'Biochemical Oxygen Demand') {
+                if (num <= 2.0) return { color: 'green', label: '🟢 Low Organic Pollution' };
+                if (num > 3.0) return { color: 'red', label: '🔴 High Organic Pollution' };
+                return { color: 'white', label: '⚪ Moderate Pollution' };
+            }
+            if (paramKey === 'Chemical Oxygen Demand') {
+                if (num <= 10.0) return { color: 'green', label: '🟢 Safe Chemical Level' };
+                if (num > 25.0) return { color: 'red', label: '🔴 Chemical Contamination' };
+                return { color: 'white', label: '⚪ Moderate Level' };
+            }
+            if (paramKey === 'Water Turbidity') {
+                if (num <= 5.0) return { color: 'green', label: '🟢 Clear Water' };
+                if (num > 10.0) return { color: 'red', label: '🔴 High Turbidity / Muddy' };
+                return { color: 'white', label: '⚪ Moderate Turbidity' };
+            }
+            if (paramKey === 'Conductivity') {
+                if (num <= 750) return { color: 'green', label: '🟢 Normal Salinity' };
+                if (num > 2250) return { color: 'red', label: '🔴 High Industrial Salt' };
+                return { color: 'white', label: '⚪ Moderate Baseline' };
+            }
+            if (paramKey === 'Nitrate') {
+                if (num <= 10.0) return { color: 'green', label: '🟢 Safe Nitrate Level' };
+                if (num > 45.0) return { color: 'red', label: '🔴 High Nitrate Risk' };
+                return { color: 'white', label: '⚪ Moderate Level' };
+            }
+            if (paramKey === 'Chloride') {
+                if (num <= 250.0) return { color: 'green', label: '🟢 Normal Chloride' };
+                if (num > 1000.0) return { color: 'red', label: '🔴 High Chloride Content' };
+                return { color: 'white', label: '⚪ Moderate Level' };
+            }
+            if (paramKey === 'Total Organic Carbon') {
+                if (num <= 4.0) return { color: 'green', label: '🟢 Safe Carbon Level' };
+                if (num > 10.0) return { color: 'red', label: '🔴 Organic Carbon Hazard' };
+                return { color: 'white', label: '⚪ Moderate Level' };
+            }
+            if (paramKey === 'Water Depth') {
+                if (num <= 15.0) return { color: 'green', label: '🟢 Normal Stream Depth' };
+                if (num > 25.0) return { color: 'red', label: '🔴 High Depth Alert' };
+                return { color: 'white', label: '⚪ Deep Channel' };
+            }
+            if (paramKey === 'Water Level') {
+                if (num > 15.0) return { color: 'red', label: '🔴 High Stage Alert' };
+                return { color: 'green', label: '🟢 Normal Stage' };
+            }
+            if (paramKey === 'Water Temperature') {
+                return { color: 'white', label: '⚪ Ambient Temp' };
+            }
+            return { color: 'green', label: '🟢 CPCB Compliant' };
+        }
+
+        // Dynamic CPCB Status Color Renderer for Metric Cards (Green, Red, White)
         function updateCardById(cardId, paramKey, fallbackUnit) {
             const card = document.getElementById(cardId);
             if (!card) return;
@@ -538,24 +602,40 @@ document.addEventListener('DOMContentLoaded', () => {
             const unitSpan = card.querySelector('.metric-unit');
             const statusSpan = card.querySelector('.status-indicator');
 
+            let numVal = null;
+            let isCustomOverride = false;
             if (stationOverrides[paramKey] !== undefined) {
                 hasOverride = true;
-                const val = stationOverrides[paramKey];
-                valSpan.textContent = val;
-                if (unitSpan) unitSpan.textContent = fallbackUnit || '';
-                valSpan.style.color = '#38bdf8';
-                statusSpan.innerHTML = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;" title="Open Official Source Link"><i class="fa-solid fa-user-check"></i> Admin Verified (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem; margin-left: 3px;"></i></a>`;
-                return;
+                isCustomOverride = true;
+                numVal = stationOverrides[paramKey];
+            } else if (station.parameters[paramKey] && station.parameters[paramKey].value !== undefined && station.parameters[paramKey].value !== null) {
+                numVal = station.parameters[paramKey].value;
             }
 
-            const param = station.parameters[paramKey];
-            if (param && param.value !== undefined && param.value !== null) {
-                const unitStr = param.unit || fallbackUnit || '';
-                valSpan.textContent = param.value;
+            if (numVal !== null) {
+                const statusInfo = getParamStatusInfo(paramKey, numVal);
+                const unitStr = (station.parameters[paramKey] ? station.parameters[paramKey].unit : '') || fallbackUnit || '';
+
+                valSpan.textContent = numVal;
                 if (unitSpan) unitSpan.textContent = unitStr;
-                valSpan.style.color = '#38bdf8';
-                statusSpan.innerHTML = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;" title="Open Official CPCB RTWQMS Portal"><i class="fa-solid fa-satellite-dish"></i> CPCB RTWQMS Source (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem; margin-left: 3px;"></i></a>`;
+
+                // Apply status color classes to the card
+                card.classList.remove('status-green', 'status-red', 'status-white');
+                card.classList.add(`status-${statusInfo.color}`);
+
+                if (statusInfo.color === 'green') {
+                    valSpan.style.color = '#10b981';
+                } else if (statusInfo.color === 'red') {
+                    valSpan.style.color = '#f43f5e';
+                } else {
+                    valSpan.style.color = 'var(--text-primary)';
+                }
+
+                const sourceTag = isCustomOverride ? `Admin Verified (${station.state})` : `CPCB RTWQMS (${station.state})`;
+                statusSpan.innerHTML = `<span class="badge-status-pill status-${statusInfo.color}">${statusInfo.label}</span> <span style="font-size:0.68rem; color:var(--text-muted); margin-left:3px;">${sourceTag}</span>`;
             } else {
+                card.classList.remove('status-green', 'status-red', 'status-white');
+                card.classList.add('status-white');
                 valSpan.textContent = 'N/A';
                 if (unitSpan) unitSpan.textContent = '';
                 valSpan.style.color = '#64748b';

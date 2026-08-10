@@ -552,6 +552,59 @@ body.light-mode .gauge-bar { background: #e2e8f0; }
 
 .metric-footer { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; word-break: break-word; }
 
+/* Dynamic CPCB Parameter Card Status Colors (Green, Red, White) */
+.metric-card.status-green {
+    border: 1px solid rgba(16, 185, 129, 0.4) !important;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(11, 20, 38, 0.85) 100%);
+}
+body.light-mode .metric-card.status-green {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.06) 0%, #ffffff 100%);
+    border: 1px solid rgba(16, 185, 129, 0.4) !important;
+}
+
+.metric-card.status-red {
+    border: 1px solid rgba(244, 63, 94, 0.5) !important;
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.1) 0%, rgba(11, 20, 38, 0.85) 100%);
+    box-shadow: 0 4px 20px rgba(244, 63, 94, 0.15);
+}
+body.light-mode .metric-card.status-red {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.08) 0%, #ffffff 100%);
+    border: 1px solid rgba(244, 63, 94, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.1);
+}
+
+.metric-card.status-white {
+    border: 1px solid var(--glass-border) !important;
+}
+
+.badge-status-pill {
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: inline-block;
+}
+.badge-status-pill.status-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.badge-status-pill.status-red {
+    background: rgba(244, 63, 94, 0.15);
+    color: #f43f5e;
+    border: 1px solid rgba(244, 63, 94, 0.3);
+}
+.badge-status-pill.status-white {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+}
+body.light-mode .badge-status-pill.status-white {
+    background: #f1f5f9;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+}
+
 /* Split View Panel Grid */
 .split-view-grid {
     width: 100%;
