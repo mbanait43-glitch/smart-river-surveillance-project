@@ -1272,6 +1272,7 @@ body.light-mode th {
 
     .panel-card, #map-section, #analytics-section {
         background: #ffffff !important;
+        background-color: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
         border-radius: 14px !important;
         box-shadow: none !important;
@@ -1315,6 +1316,7 @@ body.light-mode th {
         margin: 0 !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
+        background: #e5e3df !important;
     }
 
     .map-view, canvas, #analyticsChart, #map {
@@ -1326,5 +1328,40 @@ body.light-mode th {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         box-sizing: border-box !important;
+        background: #e5e3df !important;
+        background-color: #e5e3df !important;
+    }
+
+    /* Leaflet Tile & Layer Print Fixes (No Black Areas) */
+    .leaflet-container, .leaflet-tile-pane, .leaflet-layer {
+        background: #e5e3df !important;
+        background-color: #e5e3df !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .leaflet-tile-container img {
+        filter: none !important;
+        max-width: none !important;
+        max-height: none !important;
+    }
+
+    .leaflet-control-zoom {
+        display: block !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+    }
+
+    .leaflet-popup {
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+        border-radius: 8px !important;
     }
 }

@@ -777,7 +777,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Browser Print Event Hooks for 100% Unclipped PDF Printing ---
     window.addEventListener('beforeprint', () => {
         updateTimestamp();
-        if (map) map.invalidateSize();
+        if (selectedStationId && stationMap[selectedStationId]) {
+            const s = stationMap[selectedStationId];
+            if (map) {
+                map.setView([s.lat, s.lng], 10, { animate: false });
+                map.invalidateSize(true);
+                if (markersMap[s.id]) markersMap[s.id].openPopup();
+            }
+        }
         if (chartInstance) chartInstance.resize();
     });
 
@@ -790,11 +797,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPrintReport) {
         btnPrintReport.addEventListener('click', () => {
             updateTimestamp();
-            if (map) map.invalidateSize();
+            if (selectedStationId && stationMap[selectedStationId]) {
+                const s = stationMap[selectedStationId];
+                if (map) {
+                    map.setView([s.lat, s.lng], 10, { animate: false });
+                    map.invalidateSize(true);
+                    if (markersMap[s.id]) markersMap[s.id].openPopup();
+                }
+            }
             if (chartInstance) chartInstance.resize();
             setTimeout(() => {
                 window.print();
-            }, 150);
+            }, 400);
         });
     }
 
