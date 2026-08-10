@@ -123,15 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let chartInstance = null;
     let selectedStationId = null;
 
-    // Strict parameter mapping for all 12 official CPCB Parameters (100% exact CPCB names)
+    // Strict parameter mapping for all 12 official CPCB Parameters (100% exact CPCB names & key matching)
     const parameterMapping = {
-        'River Stage': 'River Stage',
-        'S': 'River Stage',
+        'River Stage': 'Water Level',
+        'Water Level': 'Water Level',
+        'S': 'Water Level',
         'pH': 'pH',
         'WT': 'Water Temperature',
         'Water Temperature': 'Water Temperature',
-        'Oxygen, dissolved': 'Oxygen, dissolved',
-        'DO': 'Oxygen, dissolved',
+        'Oxygen, dissolved': 'Dissolved Oxygen',
+        'Dissolved Oxygen': 'Dissolved Oxygen',
+        'DO': 'Dissolved Oxygen',
         'WTb': 'Water Turbidity',
         'Water Turbidity': 'Water Turbidity',
         'EC': 'Conductivity',
@@ -306,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stationMap[id].parameters[paramName] = {
                 rawName: item.stationparameter_name,
                 value: item.ts_value,
-                unit: rawLongName === 'River Stage' ? 'm (MSL)' : unit
+                unit: (rawLongName === 'River Stage' || rawLongName === 'Water Level') ? 'm above MSL' : unit
             };
         });
     }
