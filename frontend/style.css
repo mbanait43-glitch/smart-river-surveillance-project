@@ -550,7 +550,37 @@ body.light-mode .gauge-bar { background: #e2e8f0; }
 
 .gauge-fill { height: 100%; background: var(--blue-gradient); border-radius: 10px; }
 
-.metric-footer { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; word-break: break-word; }
+.metric-footer {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.card-source-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.68rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.2s;
+}
+.card-source-link:hover {
+    color: var(--cyan-primary);
+}
+body.light-mode .card-source-link {
+    color: #475569;
+}
+body.light-mode .card-source-link:hover {
+    color: #0284c7;
+}
 
 /* Dynamic CPCB Parameter Card Status Colors (Green, Red, White) */
 .metric-card.status-green {
