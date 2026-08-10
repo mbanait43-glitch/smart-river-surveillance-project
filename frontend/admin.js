@@ -397,11 +397,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const riversTbody = document.getElementById('rivers-table-tbody');
 
     function getRivers() {
-        return JSON.parse(localStorage.getItem('admin_custom_rivers') || '["Ganga", "Yamuna", "Gandak"]');
+        const set = new Set();
+        // 1. Live CPCB Rivers
+        if (Array.isArray(rawData) && rawData.length > 0) {
+            rawData.forEach(item => {
+                const stName = item.station_name || '';
+                const riverName = inferRiverName(stName, item.territory_name);
+                set.add(riverName);
+            });
+        } else {
+            // Default 14 rivers list fallback
+            [
+                "Ganga River", "Yamuna River", "Damodar River", "Bhagirathi / Alaknanda", 
+                "Yamuna / Ganga Basin", "Gandak River", "Kosi River", "Hindon River", 
+                "Ramganga River", "Ghaghara River", "Punpun River", "Son River", 
+                "Hooghly River", "Sai River"
+            ].forEach(r => set.add(r));
+        }
+
+        // 2. Custom Admin Rivers
+        const customRivers = JSON.parse(localStorage.getItem('admin_custom_rivers') || '[]');
+        customRivers.forEach(r => set.add(r));
+
+        return Array.from(set);
     }
 
-    function saveRivers(list) {
-        localStorage.setItem('admin_custom_rivers', JSON.stringify(list));
+    function saveRivers(customList) {
+        localStorage.setItem('admin_custom_rivers', JSON.stringify(customList));
         renderRivers();
         updateStatsSummary();
     }
@@ -416,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><strong style="color: var(--cyan-primary);"><i class="fa-solid fa-water" style="margin-right: 8px;"></i> ${river}</strong></td>
                 <td><span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.3);">● Active Surveillance</span></td>
                 <td style="text-align: right;">
-                    <button class="action-btn-sm btn-delete" onclick="deleteRiver(${index})"><i class="fa-solid fa-trash"></i> Delete</button>
+                    <button class="action-btn-sm btn-delete" onclick="deleteRiver('${river.replace(/'/g, "\\'")}')"><i class="fa-solid fa-trash"></i> Delete</button>
                 </td>
             `;
             riversTbody.appendChild(tr);
@@ -428,18 +450,22 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const val = document.getElementById('river-name-input').value.trim();
             if (val) {
-                const list = getRivers();
-                list.push(val);
-                saveRivers(list);
+                const customRivers = JSON.parse(localStorage.getItem('admin_custom_rivers') || '[]');
+                if (!customRivers.includes(val)) {
+                    customRivers.push(val);
+                    saveRivers(customRivers);
+                }
                 document.getElementById('river-name-input').value = '';
             }
         });
     }
 
-    window.deleteRiver = function(index) {
-        const list = getRivers();
-        list.splice(index, 1);
-        saveRivers(list);
+    window.deleteRiver = function(riverName) {
+        const customRivers = JSON.parse(localStorage.getItem('admin_custom_rivers') || '[]');
+        const updated = customRivers.filter(r => r !== riverName);
+        localStorage.setItem('admin_custom_rivers', JSON.stringify(updated));
+        renderRivers();
+        updateStatsSummary();
     };
 
     // ==========================================================================
