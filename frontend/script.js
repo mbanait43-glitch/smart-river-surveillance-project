@@ -363,29 +363,64 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStationList();
     }
 
-    function updateStationList(fromRiverChange = false, fromStateChange = false) {
-        const selectedRiver = riverSelect ? riverSelect.value : 'ALL';
-        let selectedState = stateSelect ? stateSelect.value : 'ALL';
+    function updateStationList(trigger = 'INIT') {
+        const allStations = Object.values(stationMap);
+        if (allStations.length === 0) return;
 
-        let filtered = Object.values(stationMap);
+        let curRiver = riverSelect ? riverSelect.value : 'ALL';
+        let curState = stateSelect ? stateSelect.value : 'ALL';
 
-        // 1. If River is selected, filter by River and auto-select matching State
-        if (selectedRiver && selectedRiver !== 'ALL') {
-            filtered = filtered.filter(s => s.river === selectedRiver);
-            if (fromRiverChange && filtered.length > 0 && stateSelect) {
-                selectedState = filtered[0].state;
-                stateSelect.value = selectedState;
+        if (trigger === 'RIVER') {
+            // User selected a River: ensure selected State actually contains this River
+            if (curRiver !== 'ALL') {
+                const riverStations = allStations.filter(s => s.river === curRiver);
+                const validStatesForRiver = new Set(riverStations.map(s => s.state));
+                if (!validStatesForRiver.has(curState)) {
+                    curState = riverStations[0].state;
+                    if (stateSelect) stateSelect.value = curState;
+                }
+            }
+        } else if (trigger === 'STATE') {
+            // User selected a State: ensure selected River actually exists in this State
+            if (curState !== 'ALL') {
+                const stateStations = allStations.filter(s => s.state === curState);
+                const validRiversForState = new Set(stateStations.map(s => s.river));
+                if (!validRiversForState.has(curRiver)) {
+                    curRiver = stateStations[0].river;
+                    if (riverSelect) riverSelect.value = curRiver;
+                }
             }
         }
 
-        // 2. If State is selected, filter by State and auto-select matching River
-        if (selectedState && selectedState !== 'ALL') {
-            filtered = filtered.filter(s => s.state === selectedState);
-            if (fromStateChange && filtered.length > 0 && riverSelect && selectedRiver === 'ALL') {
-                riverSelect.value = filtered[0].river;
+        // Filter stations matching both curRiver and curState
+        let filtered = allStations;
+        if (curRiver && curRiver !== 'ALL') {
+            filtered = filtered.filter(s => s.river === curRiver);
+        }
+        if (curState && curState !== 'ALL') {
+            filtered = filtered.filter(s => s.state === curState);
+        }
+
+        // Safety fallback: if filtered is still empty, reset to curRiver or curState
+        if (filtered.length === 0) {
+            if (trigger === 'RIVER' && curRiver !== 'ALL') {
+                filtered = allStations.filter(s => s.river === curRiver);
+                if (filtered.length > 0 && stateSelect) {
+                    curState = filtered[0].state;
+                    stateSelect.value = curState;
+                }
+            } else if (trigger === 'STATE' && curState !== 'ALL') {
+                filtered = allStations.filter(s => s.state === curState);
+                if (filtered.length > 0 && riverSelect) {
+                    curRiver = filtered[0].river;
+                    riverSelect.value = curRiver;
+                }
+            } else {
+                filtered = allStations;
             }
         }
 
+        // Populate station dropdown
         stationSelect.disabled = false;
         stationSelect.innerHTML = '<option value="">-- Select Monitoring Station --</option>';
 
@@ -396,10 +431,11 @@ document.addEventListener('DOMContentLoaded', () => {
             stationSelect.appendChild(opt);
         });
 
+        // Automatically select and display the 1st station in filtered list
         if (filtered.length > 0) {
-            const targetStationId = filtered[0].id;
-            stationSelect.value = targetStationId;
-            displayStationData(targetStationId, false);
+            const targetId = filtered[0].id;
+            stationSelect.value = targetId;
+            displayStationData(targetId, true);
         }
     }
 
@@ -736,8 +772,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event Listeners
     if (btnRefresh) btnRefresh.addEventListener('click', fetchData);
-    if (riverSelect) riverSelect.addEventListener('change', () => updateStationList(true, false));
-    if (stateSelect) stateSelect.addEventListener('change', () => updateStationList(false, true));
+    if (riverSelect) riverSelect.addEventListener('change', () => updateStationList('RIVER'));
+    if (stateSelect) stateSelect.addEventListener('change', () => updateStationList('STATE'));
     if (stationSelect) stationSelect.addEventListener('change', (e) => displayStationData(e.target.value, true));
 
     // --- Initial Auto Start ---
