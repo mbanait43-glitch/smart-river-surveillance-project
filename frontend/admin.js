@@ -379,14 +379,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
             if (!overrides[stationCode]) overrides[stationCode] = {};
 
-            overrides[stationCode]['Water Level'] = parseFloat(document.getElementById('all-param-level').value);
-            overrides[stationCode]['pH'] = parseFloat(document.getElementById('all-param-ph').value);
-            overrides[stationCode]['Water Temperature'] = parseFloat(document.getElementById('all-param-temp').value);
-            overrides[stationCode]['Dissolved Oxygen'] = parseFloat(document.getElementById('all-param-do').value);
-            overrides[stationCode]['Biochemical Oxygen Demand'] = parseFloat(document.getElementById('all-param-bod').value);
-            overrides[stationCode]['Chemical Oxygen Demand'] = parseFloat(document.getElementById('all-param-cod').value);
-            overrides[stationCode]['Water Turbidity'] = parseFloat(document.getElementById('all-param-turb').value);
-            overrides[stationCode]['Conductivity'] = parseFloat(document.getElementById('all-param-ec').value);
+            const paramMap = [
+                { id: 'all-param-level', key: 'Water Level' },
+                { id: 'all-param-ph', key: 'pH' },
+                { id: 'all-param-temp', key: 'Water Temperature' },
+                { id: 'all-param-do', key: 'Dissolved Oxygen' },
+                { id: 'all-param-bod', key: 'Biochemical Oxygen Demand' },
+                { id: 'all-param-cod', key: 'Chemical Oxygen Demand' },
+                { id: 'all-param-turb', key: 'Water Turbidity' },
+                { id: 'all-param-ec', key: 'Conductivity' },
+                { id: 'all-param-nitrate', key: 'Nitrate' },
+                { id: 'all-param-chloride', key: 'Chloride' },
+                { id: 'all-param-toc', key: 'Total Organic Carbon' },
+                { id: 'all-param-depth', key: 'Depth' }
+            ];
+
+            paramMap.forEach(item => {
+                const inputEl = document.getElementById(item.id);
+                if (inputEl && inputEl.value !== '') {
+                    const parsed = parseFloat(inputEl.value);
+                    if (!isNaN(parsed)) {
+                        overrides[stationCode][item.key] = parsed;
+                    }
+                }
+            });
 
             localStorage.setItem('admin_overrides', JSON.stringify(overrides));
 

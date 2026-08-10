@@ -148,42 +148,58 @@
                         </div>
                     </div>
 
-                    <!-- 8 Tested Parameters Entry Grid -->
+                    <!-- 12 Tested CPCB Parameters Entry Grid -->
                     <div class="form-section-card" style="padding: 20px; border-radius: 16px; margin-bottom: 24px;">
-                        <h4 style="color: #0284c7; font-size: 0.95rem; margin-bottom: 14px;"><i class="fa-solid fa-vial-circle-check"></i> Tested Water Quality & Level Readings</h4>
+                        <h4 style="color: #0284c7; font-size: 0.95rem; margin-bottom: 14px;"><i class="fa-solid fa-vial-circle-check"></i> Tested Water Quality & Level Readings (12 CPCB Parameters)</h4>
                         
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Water Level (m MSL)</label>
-                                <input type="number" step="0.01" id="all-param-level" placeholder="e.g. 2.85" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Water Level (m above MSL)</label>
+                                <input type="number" step="0.01" id="all-param-level" placeholder="e.g. 60.94">
                             </div>
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">pH Level (6.5 - 8.5)</label>
-                                <input type="number" step="0.01" id="all-param-ph" placeholder="e.g. 7.40" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">pH (pH)</label>
+                                <input type="number" step="0.01" id="all-param-ph" placeholder="e.g. 7.53">
                             </div>
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Water Temp (°C)</label>
-                                <input type="number" step="0.01" id="all-param-temp" placeholder="e.g. 24.50" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Water Temperature (°C)</label>
+                                <input type="number" step="0.01" id="all-param-temp" placeholder="e.g. 30.80">
                             </div>
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Dissolved Oxygen DO (mg/l)</label>
-                                <input type="number" step="0.01" id="all-param-do" placeholder="e.g. 6.80" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Dissolved Oxygen (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-do" placeholder="e.g. 7.30">
                             </div>
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">BOD Pollution Load (mg/l)</label>
-                                <input type="number" step="0.01" id="all-param-bod" placeholder="e.g. 2.10" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Biochemical Oxygen Demand (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-bod" placeholder="e.g. 2.30">
                             </div>
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">COD Oxygen Demand (mg/l)</label>
-                                <input type="number" step="0.01" id="all-param-cod" placeholder="e.g. 12.50" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Chemical Oxygen Demand (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-cod" placeholder="e.g. 10.35">
                             </div>
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Turbidity Clarity (NTU)</label>
-                                <input type="number" step="0.01" id="all-param-turb" placeholder="e.g. 14.00" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Water Turbidity (NTU)</label>
+                                <input type="number" step="0.01" id="all-param-turb" placeholder="e.g. 69.05">
                             </div>
                             <div>
-                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Conductivity EC (mS/cm)</label>
-                                <input type="number" step="0.01" id="all-param-ec" placeholder="e.g. 240.00" required>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Conductivity (uS/cm)</label>
+                                <input type="number" step="0.01" id="all-param-ec" placeholder="e.g. 369.12">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Nitrate (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-nitrate" placeholder="e.g. 0.30">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Chloride (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-chloride" placeholder="e.g. 28.44">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Total Organic Carbon (mg/l)</label>
+                                <input type="number" step="0.01" id="all-param-toc" placeholder="e.g. 4.60">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.78rem; font-weight: 700; display: block; margin-bottom: 4px;">Depth (m)</label>
+                                <input type="number" step="0.01" id="all-param-depth" placeholder="e.g. 0.69">
                             </div>
                         </div>
                     </div>
