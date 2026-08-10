@@ -1123,13 +1123,18 @@ body.light-mode th {
 @media print {
     @page {
         size: A4 portrait;
-        margin: 8mm 10mm 8mm 10mm;
+        margin: 6mm 8mm 6mm 8mm;
     }
 
-    body {
+    html, body {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: #ffffff !important;
         color: #0f172a !important;
-        font-size: 9pt;
+        font-size: 8.5pt !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
@@ -1142,58 +1147,69 @@ body.light-mode th {
     /* Official Government Inspection Print Header */
     .print-only-header {
         display: block !important;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         border-bottom: 2px solid #0284c7;
-        padding-bottom: 6px;
+        padding-bottom: 4px;
     }
 
     .print-logo-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 4px;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 2px;
     }
 
     .print-logo-row h2 {
-        font-size: 11pt;
-        color: #0284c7;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: -0.02em;
+        font-size: 10.5pt !important;
+        color: #0284c7 !important;
+        font-weight: 900 !important;
+        text-transform: uppercase !important;
+        letter-spacing: -0.02em !important;
+        margin: 0 !important;
     }
 
     .print-badge {
-        background: #0284c7;
-        color: #ffffff;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-weight: 700;
-        font-size: 7.5pt;
+        background: #0284c7 !important;
+        color: #ffffff !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+        font-weight: 700 !important;
+        font-size: 7.5pt !important;
     }
 
     .print-meta-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2px;
-        font-size: 7.5pt;
-        color: #334155;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 2px !important;
+        font-size: 7.5pt !important;
+        color: #334155 !important;
     }
 
     .main-wrapper {
         padding: 0 !important;
         max-width: 100% !important;
-        gap: 8px !important;
+        gap: 6px !important;
         margin: 0 !important;
     }
 
-    /* Filter Bar Box */
+    /* Filter Bar Box - Force Horizontal Row on both Mobile & PC Print */
     .glass-filter-bar {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
         box-shadow: none !important;
-        border-radius: 8px !important;
-        padding: 6px 10px !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+        display: flex !important;
         flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .filter-item {
+        margin: 0 !important;
+        flex: 1 !important;
     }
 
     .select-wrapper select, .last-update-box {
@@ -1204,12 +1220,14 @@ body.light-mode th {
         font-size: 8pt !important;
         height: auto !important;
         padding: 0 !important;
+        width: auto !important;
     }
 
     .filter-divider {
         display: block !important;
         background: #cbd5e1 !important;
-        height: 20px !important;
+        height: 18px !important;
+        width: 1px !important;
     }
 
     /* Station Details Bar */
@@ -1217,8 +1235,13 @@ body.light-mode th {
         background: #f0f9ff !important;
         border: 1px solid #bae6fd !important;
         border-radius: 6px !important;
-        padding: 6px 10px !important;
+        padding: 4px 8px !important;
         font-size: 7.5pt !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: space-between !important;
     }
 
     .detail-pill strong { color: #0284c7 !important; }
@@ -1227,18 +1250,19 @@ body.light-mode th {
     .wqi-score-card {
         background: #f0fdf4 !important;
         border: 1px solid #bbf7d0 !important;
-        border-radius: 8px !important;
-        padding: 8px 12px !important;
+        border-radius: 6px !important;
+        padding: 6px 10px !important;
     }
 
-    .wqi-score-num { color: #16a34a !important; font-size: 16pt !important; }
+    .wqi-score-num { color: #16a34a !important; font-size: 15pt !important; }
     .wqi-status-tag { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; }
 
-    /* 8 Metrics 2-Column Grid on Page 1 */
+    /* 12 Metrics 2-Column Grid on Page 1 (Identical on Mobile & PC) */
     .metrics-grid {
         display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 6px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 5px !important;
+        width: 100% !important;
         page-break-after: always !important;
         break-after: page !important;
     }
@@ -1246,22 +1270,41 @@ body.light-mode th {
     .metric-card {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 8px !important;
-        padding: 8px 10px !important;
+        border-radius: 6px !important;
+        padding: 6px 8px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    .metric-name { color: #475569 !important; font-size: 7pt !important; }
-    .metric-val { color: #0284c7 !important; font-size: 12pt !important; }
-    .metric-unit { color: #64748b !important; }
+    .metric-name { color: #475569 !important; font-size: 7.5pt !important; font-weight: 700 !important; }
+    .metric-val { color: #0284c7 !important; font-size: 12pt !important; font-weight: 800 !important; }
+    .metric-unit { color: #64748b !important; font-size: 8pt !important; }
+
+    .metric-footer {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 2px !important;
+        margin-top: 2px !important;
+    }
+
+    .card-source-link {
+        color: #475569 !important;
+        font-size: 6.5pt !important;
+        font-weight: 600 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+    }
 
     /* Page 2: Stacked Full-Width Live GIS Station Map (Top) & Analytics Panel (Bottom) */
     .split-view-grid {
         display: flex !important;
         flex-direction: column !important;
-        gap: 14px !important;
+        gap: 12px !important;
         page-break-before: always !important;
         break-before: page !important;
         page-break-inside: avoid !important;
@@ -1274,7 +1317,7 @@ body.light-mode th {
         background: #ffffff !important;
         background-color: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 14px !important;
+        border-radius: 10px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
@@ -1286,8 +1329,8 @@ body.light-mode th {
     .panel-header {
         background: #f8fafc !important;
         border-bottom: 1px solid #e2e8f0 !important;
-        padding: 10px 16px !important;
-        height: 38px !important;
+        padding: 8px 12px !important;
+        height: 34px !important;
         box-sizing: border-box !important;
         display: flex !important;
         justify-content: space-between !important;
@@ -1296,15 +1339,16 @@ body.light-mode th {
 
     .panel-header h3 {
         color: #0284c7 !important;
-        font-size: 10pt !important;
+        font-size: 9.5pt !important;
         font-weight: 800 !important;
         line-height: 1 !important;
+        margin: 0 !important;
     }
 
     .panel-tag {
         display: inline-block !important;
         color: #64748b !important;
-        font-size: 8.5pt !important;
+        font-size: 8pt !important;
         font-weight: 600 !important;
     }
 
@@ -1312,7 +1356,7 @@ body.light-mode th {
         height: 310px !important;
         max-height: 310px !important;
         min-height: 310px !important;
-        padding: 8px !important;
+        padding: 6px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
@@ -1320,9 +1364,9 @@ body.light-mode th {
     }
 
     .map-view, canvas, #analyticsChart, #map {
-        height: 294px !important;
-        max-height: 294px !important;
-        min-height: 294px !important;
+        height: 298px !important;
+        max-height: 298px !important;
+        min-height: 298px !important;
         width: 100% !important;
         display: block !important;
         page-break-inside: avoid !important;
