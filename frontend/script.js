@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let chartInstance = null;
     let selectedStationId = null;
 
-    // Strict parameter mapping
+    // Strict parameter mapping for all 12 official CPCB Parameters
     const parameterMapping = {
         'River Stage': 'Water Level',
         'Oxygen, dissolved': 'Dissolved Oxygen',
@@ -133,8 +133,13 @@ document.addEventListener('DOMContentLoaded', () => {
         'BOD': 'Biochemical Oxygen Demand',
         'COD': 'Chemical Oxygen Demand',
         'NO3': 'Nitrate',
+        'Nitrate': 'Nitrate',
         'CL': 'Chloride',
-        'Depth': 'Water Depth'
+        'Chloride': 'Chloride',
+        'TOC': 'Total Organic Carbon',
+        'Total Organic Carbon': 'Total Organic Carbon',
+        'Depth': 'Water Depth',
+        'Water Depth': 'Water Depth'
     };
 
     // --- Leaflet Map Initialization with Hardware Acceleration ---
@@ -572,6 +577,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCardById('card-cod', 'Chemical Oxygen Demand', 'mg/l');
         updateCardById('card-turbidity', 'Water Turbidity', 'NTU');
         updateCardById('card-ec', 'Conductivity', 'mS/cm');
+        updateCardById('card-nitrate', 'Nitrate', 'mg/l');
+        updateCardById('card-chloride', 'Chloride', 'mg/l');
+        updateCardById('card-toc', 'Total Organic Carbon', 'mg/l');
+        updateCardById('card-depth', 'Water Depth', 'm');
 
         // Defer Chart rendering slightly so ChartJS doesn't fight Leaflet for GPU/CPU frames!
         setTimeout(() => {
