@@ -120,11 +120,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             if (loginError) {
                 loginError.style.display = 'block';
-                loginError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Incorrect Username or Password! (Default: admin / admin123)';
+                loginError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Incorrect Username or Password! Please try again.';
             }
         }
         return false;
     }
+
+    // Auto-hide login error box when typing
+    ['admin-username', 'admin-password'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => {
+                if (loginError) loginError.style.display = 'none';
+            });
+        }
+    });
 
     if (loginForm) {
         loginForm.addEventListener('submit', performAdminLogin);
