@@ -1149,8 +1149,8 @@ body.mobile-print-mode .metrics-grid {
         print-color-adjust: exact !important;
     }
 
-    /* Hide Web Navigation, Interactive Dropdown Filter Bar & Web Buttons on PDF */
-    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .glass-filter-bar {
+    /* Hide Web Navigation, Interactive Dropdown Filter Bar, Map Section & Analytics Chart on PDF */
+    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .glass-filter-bar, .split-view-grid, #map-section, #analytics-section {
         display: none !important;
     }
 
@@ -1172,7 +1172,7 @@ body.mobile-print-mode .metrics-grid {
     }
 
     .print-logo-row h2 {
-        font-size: 10pt !important;
+        font-size: 10.5pt !important;
         color: #0284c7 !important;
         font-weight: 900 !important;
         text-transform: uppercase !important;
@@ -1228,15 +1228,15 @@ body.mobile-print-mode .metrics-grid {
     .wqi-score-num { color: #16a34a !important; font-size: 14pt !important; font-weight: 900 !important; }
     .wqi-status-tag { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; padding: 2px 6px !important; font-size: 7pt !important; border-radius: 4px !important; }
 
-    /* 12 Metrics 2-Column Grid on Page 1 */
+    /* 12 Metrics 2-Column Grid on Single Page PDF */
     .metrics-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 5px !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        page-break-after: always !important;
-        break-after: page !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
     }
 
     .metric-card {
@@ -1271,115 +1271,4 @@ body.mobile-print-mode .metrics-grid {
 
     .badge-status-pill { font-size: 6.5pt !important; padding: 1px 4px !important; }
     .card-source-link { color: #475569 !important; font-size: 6pt !important; font-weight: 600 !important; }
-
-    /* Page 2: Stacked Full-Width Live GIS Station Map & Analytics Panel */
-    .split-view-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 10px !important;
-        page-break-before: always !important;
-        break-before: page !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 0 !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    .panel-card, #map-section, #analytics-section {
-        background: #ffffff !important;
-        background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 8px !important;
-        box-shadow: none !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        overflow: hidden !important;
-        height: auto !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    .panel-header {
-        background: #f8fafc !important;
-        border-bottom: 1px solid #e2e8f0 !important;
-        padding: 6px 10px !important;
-        height: 30px !important;
-        box-sizing: border-box !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-    }
-
-    .panel-header h3 {
-        color: #0284c7 !important;
-        font-size: 9pt !important;
-        font-weight: 800 !important;
-        line-height: 1 !important;
-        margin: 0 !important;
-    }
-
-    .panel-tag {
-        display: inline-block !important;
-        color: #64748b !important;
-        font-size: 8pt !important;
-        font-weight: 600 !important;
-    }
-
-    #analytics-section .panel-body, #map-section .panel-body {
-        height: 310px !important;
-        max-height: 310px !important;
-        min-height: 310px !important;
-        padding: 6px !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-        background: #e5e3df !important;
-    }
-
-    .map-view, canvas, #analyticsChart, #map {
-        height: 298px !important;
-        max-height: 298px !important;
-        min-height: 298px !important;
-        width: 100% !important;
-        display: block !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        box-sizing: border-box !important;
-        background: #e5e3df !important;
-        background-color: #e5e3df !important;
-    }
-
-    /* Leaflet Tile & Layer Print Fixes (No Black Areas) */
-    .leaflet-container, .leaflet-tile-pane, .leaflet-layer {
-        background: #e5e3df !important;
-        background-color: #e5e3df !important;
-        width: 100% !important;
-        height: 100% !important;
-    }
-
-    .leaflet-tile-container img {
-        filter: none !important;
-        max-width: none !important;
-        max-height: none !important;
-    }
-
-    .leaflet-control-zoom {
-        display: block !important;
-        border: 1px solid #cbd5e1 !important;
-        background: #ffffff !important;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
-    }
-
-    .leaflet-popup {
-        display: block !important;
-        opacity: 1 !important;
-    }
-
-    .leaflet-popup-content-wrapper {
-        background: #ffffff !important;
-        color: #0f172a !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
-        border-radius: 8px !important;
-    }
 }
