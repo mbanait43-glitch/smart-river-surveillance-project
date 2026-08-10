@@ -1121,6 +1121,201 @@ body.mobile-print-mode .main-wrapper {
     width: 794px !important;
     max-width: 794px !important;
     margin: 0 auto !important;
+        justify-content: center !important;
+        padding: 6px 3px !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+    }
+
+    /* ROW 3: STATUS & ACTIONS BAR - 100% UNCLIPPED & FIT */
+    .nav-actions {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    /* Status Pill Badge: Fits 100% without cutting on narrow phone screens! */
+    .status-pill {
+        padding: 4px 8px !important;
+        font-size: 0.68rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+    }
+
+    .primary-pill, .secondary-pill {
+        padding: 5px 8px !important;
+        font-size: 0.68rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    #btn-logout {
+        flex-shrink: 0 !important;
+    }
+
+    .btn-icon {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 8px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .main-wrapper {
+        padding: 12px 10px !important;
+        gap: 14px !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    .hero-banner {
+        padding: 16px !important;
+        border-radius: 16px !important;
+    }
+
+    .hero-content h1 {
+        font-size: 1.35rem !important;
+    }
+
+    .hero-stats {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }
+
+    .stat-box {
+        padding: 8px 4px !important;
+        min-width: 0 !important;
+    }
+
+    .stat-num { font-size: 1.1rem !important; }
+    .stat-label { font-size: 0.62rem !important; }
+
+    .glass-filter-bar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 12px !important;
+        width: 100% !important;
+    }
+
+    .filter-group {
+        width: 100% !important;
+    }
+
+    .filter-divider { display: none !important; }
+
+    .station-details-bar {
+        padding: 10px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .wqi-score-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+
+    .wqi-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+    }
+
+    .metric-card {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .metric-val { font-size: 1.3rem; }
+
+    .map-view { height: 280px; }
+
+    #analytics-section .panel-body {
+        height: 280px !important;
+        padding: 8px !important;
+    }
+
+    /* Admin Form Grid Mobile Fix */
+    #form-all-in-one-entry > div {
+        padding: 12px !important;
+    }
+
+    #form-all-in-one-entry div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    /* Report Bottom Action Bar Mobile Fix */
+    #report-actions-bottom .panel-body {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px !important;
+    }
+
+    #report-actions-bottom div[style*="display: flex; gap: 14px;"] {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px !important;
+    }
+
+    #report-actions-bottom button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Extra Narrow Screen Phones (max-width: 400px) */
+@media screen and (max-width: 400px) {
+    .nav-actions {
+        gap: 2px !important;
+    }
+
+    .status-pill {
+        padding: 4px 6px !important;
+        font-size: 0.64rem !important;
+    }
+
+    .primary-pill, .secondary-pill {
+        padding: 4px 6px !important;
+        font-size: 0.64rem !important;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Mobile Print Mode Enforcer - Prepares DOM layout for 100% Identical A4 PDF Output on Phones */
+body.mobile-print-mode .main-wrapper {
+    width: 794px !important;
+    max-width: 794px !important;
+    margin: 0 auto !important;
 }
 body.mobile-print-mode .metrics-grid {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -1128,12 +1323,12 @@ body.mobile-print-mode .metrics-grid {
 
 /* ==========================================================================
    COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
-   100% UNCLIPPED & ELEGANT 2-PAGE EXECUTIVE REPORT
+   100% MATCHING USER ATTACHED REFERENCE IMAGE!
    ========================================================================== */
 @media print {
     @page {
         size: A4 portrait;
-        margin: 5mm 8mm 5mm 8mm;
+        margin: 8mm 10mm 8mm 10mm;
     }
 
     html, body, .mobile-print-mode {
@@ -1144,7 +1339,7 @@ body.mobile-print-mode .metrics-grid {
         padding: 0 !important;
         background: #ffffff !important;
         color: #0f172a !important;
-        font-size: 8pt !important;
+        font-size: 9pt !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
@@ -1157,9 +1352,9 @@ body.mobile-print-mode .metrics-grid {
     /* Print Header */
     .print-only-header {
         display: block !important;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         border-bottom: 2px solid #0284c7;
-        padding-bottom: 4px;
+        padding-bottom: 5px;
         width: 100% !important;
         box-sizing: border-box !important;
     }
@@ -1172,7 +1367,7 @@ body.mobile-print-mode .metrics-grid {
     }
 
     .print-logo-row h2 {
-        font-size: 10.5pt !important;
+        font-size: 11pt !important;
         color: #0284c7 !important;
         font-weight: 900 !important;
         text-transform: uppercase !important;
@@ -1184,7 +1379,7 @@ body.mobile-print-mode .metrics-grid {
         padding: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
-        gap: 6px !important;
+        gap: 8px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
     }
@@ -1195,44 +1390,91 @@ body.mobile-print-mode .metrics-grid {
         flex-direction: row !important;
         flex-wrap: wrap !important;
         justify-content: space-between !important;
-        gap: 6px 12px !important;
+        gap: 6px 14px !important;
         background: #f0f9ff !important;
         border: 1px solid #bae6fd !important;
-        border-radius: 6px !important;
-        padding: 6px 10px !important;
-        font-size: 7.5pt !important;
+        border-radius: 8px !important;
+        padding: 6px 12px !important;
+        font-size: 8pt !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
 
     .detail-pill strong { color: #0284c7 !important; }
 
-    /* WQI Banner Card */
+    /* WQI Score Card - Exactly Matching User Image */
     .wqi-score-card {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
         background: #f0fdf4 !important;
         border: 1px solid #bbf7d0 !important;
-        border-radius: 6px !important;
-        padding: 6px 10px !important;
+        border-radius: 12px !important;
+        padding: 8px 14px !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        margin-bottom: 2px !important;
     }
 
-    .wqi-left { display: flex !important; align-items: center !important; gap: 8px !important; }
-    .wqi-left h3 { font-size: 9pt !important; color: #0f172a !important; font-weight: 800 !important; margin: 0 !important; }
-    .wqi-left p { font-size: 7.5pt !important; color: #475569 !important; margin: 0 !important; }
+    .wqi-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
 
-    .wqi-right { display: flex !important; align-items: center !important; gap: 8px !important; }
-    .wqi-score-num { color: #16a34a !important; font-size: 14pt !important; font-weight: 900 !important; }
-    .wqi-status-tag { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; padding: 2px 6px !important; font-size: 7pt !important; border-radius: 4px !important; }
+    .wqi-badge-icon {
+        width: 32px !important;
+        height: 32px !important;
+        background: #10b981 !important;
+        color: #ffffff !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 13px !important;
+    }
 
-    /* 12 Metrics 2-Column Grid on Single Page PDF */
+    .wqi-left h3 {
+        font-size: 9.5pt !important;
+        color: #0f172a !important;
+        font-weight: 800 !important;
+        margin: 0 0 2px 0 !important;
+    }
+
+    .wqi-left p {
+        font-size: 7.5pt !important;
+        color: #475569 !important;
+        margin: 0 !important;
+    }
+
+    .wqi-right {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    .wqi-score-num {
+        color: #16a34a !important;
+        font-size: 16pt !important;
+        font-weight: 900 !important;
+    }
+
+    .wqi-status-tag {
+        background: #dcfce7 !important;
+        color: #15803d !important;
+        border: 1px solid #86efac !important;
+        padding: 3px 8px !important;
+        font-size: 7.5pt !important;
+        font-weight: 700 !important;
+        border-radius: 12px !important;
+        text-transform: uppercase !important;
+    }
+
+    /* 12 Metrics 2-Column Grid - Exactly Matching User Image */
     .metrics-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 5px !important;
+        gap: 8px 10px !important;
         width: 100% !important;
         box-sizing: border-box !important;
         page-break-after: avoid !important;
@@ -1242,33 +1484,112 @@ body.mobile-print-mode .metrics-grid {
     .metric-card {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 6px !important;
-        padding: 5px 8px !important;
+        border-radius: 10px !important;
+        padding: 7px 12px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
     }
 
-    .metric-header { display: flex !important; justify-content: space-between !important; align-items: center !important; }
-    .metric-name { color: #475569 !important; font-size: 7pt !important; font-weight: 700 !important; }
-    .metric-icon { color: #0284c7 !important; font-size: 8pt !important; }
+    .metric-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 2px !important;
+    }
 
-    .metric-body { display: flex !important; align-items: baseline !important; gap: 4px !important; margin: 2px 0 !important; }
-    .metric-val { color: #0284c7 !important; font-size: 11pt !important; font-weight: 800 !important; }
-    .metric-unit { color: #64748b !important; font-size: 7.5pt !important; }
+    .metric-name {
+        color: #334155 !important;
+        font-size: 7.5pt !important;
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.02em !important;
+    }
 
-    .gauge-bar { display: block !important; height: 3px !important; background: #e2e8f0 !important; border-radius: 3px !important; margin: 2px 0 !important; }
+    .metric-icon {
+        color: #0284c7 !important;
+        font-size: 9.5pt !important;
+    }
+
+    .metric-body {
+        display: flex !important;
+        align-items: baseline !important;
+        gap: 5px !important;
+        margin: 2px 0 3px 0 !important;
+    }
+
+    .metric-val {
+        color: #0284c7 !important;
+        font-size: 13pt !important;
+        font-weight: 800 !important;
+    }
+
+    .metric-unit {
+        color: #64748b !important;
+        font-size: 8pt !important;
+        font-weight: 500 !important;
+    }
+
+    .gauge-bar {
+        display: block !important;
+        height: 4px !important;
+        background: #e2e8f0 !important;
+        border-radius: 4px !important;
+        margin: 3px 0 4px 0 !important;
+        overflow: hidden !important;
+    }
+
+    .gauge-fill {
+        height: 100% !important;
+        background: #0284c7 !important;
+        border-radius: 4px !important;
+    }
 
     .metric-footer {
         display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
         gap: 2px !important;
-        margin-top: 2px !important;
+        margin-top: 1px !important;
     }
 
-    .badge-status-pill { font-size: 6.5pt !important; padding: 1px 4px !important; }
-    .card-source-link { color: #475569 !important; font-size: 6pt !important; font-weight: 600 !important; }
+    .badge-status-pill {
+        font-size: 6.8pt !important;
+        padding: 2px 6px !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+    }
+
+    .badge-status-pill.status-green {
+        background: #dcfce7 !important;
+        color: #15803d !important;
+        border: 1px solid #86efac !important;
+    }
+
+    .badge-status-pill.status-red {
+        background: #ffe4e6 !important;
+        color: #e11d48 !important;
+        border: 1px solid #fda4af !important;
+    }
+
+    .badge-status-pill.status-white {
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    .card-source-link {
+        color: #475569 !important;
+        font-size: 6.5pt !important;
+        font-weight: 600 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+        text-decoration: none !important;
+    }
 }
