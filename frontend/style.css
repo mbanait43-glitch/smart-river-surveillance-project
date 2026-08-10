@@ -1116,50 +1116,41 @@ body.light-mode th {
     }
 }
 
-/* Mobile Print Mode Enforcer - Prepares DOM layout for 100% Identical A4 PDF Output on Phones */
-body.mobile-print-mode .main-wrapper {
-    width: 794px !important;
-    max-width: 794px !important;
-    margin: 0 auto !important;
-}
-body.mobile-print-mode .metrics-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-}
-
 /* ==========================================================================
    COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
-   100% MATCHING USER ATTACHED REFERENCE IMAGE!
+   100% MATCHING USER ATTACHED FULL PAGE REFERENCE IMAGE ON 1 SINGLE PAGE!
    ========================================================================== */
 @media print {
     @page {
         size: A4 portrait;
-        margin: 8mm 10mm 8mm 10mm;
+        margin: 3mm 6mm 3mm 6mm;
     }
 
     html, body, .mobile-print-mode {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 100% !important;
+        height: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
         color: #0f172a !important;
-        font-size: 9pt !important;
+        font-size: 7.5pt !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
-    /* Hide Web Navigation, Interactive Dropdown Filter Bar, Map Section & Analytics Chart on PDF */
-    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .glass-filter-bar, .split-view-grid, #map-section, #analytics-section {
+    /* Hide Web Navigation, Map Section & Analytics Chart on PDF */
+    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .split-view-grid, #map-section, #analytics-section {
         display: none !important;
     }
 
-    /* Print Header */
+    /* Top Official Print Header */
     .print-only-header {
         display: block !important;
-        margin-bottom: 8px;
-        border-bottom: 2px solid #0284c7;
-        padding-bottom: 5px;
+        margin-bottom: 4px !important;
+        border-bottom: 1.5px solid #0284c7 !important;
+        padding-bottom: 3px !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
@@ -1169,10 +1160,11 @@ body.mobile-print-mode .metrics-grid {
         justify-content: space-between !important;
         align-items: center !important;
         width: 100% !important;
+        margin-bottom: 2px !important;
     }
 
     .print-logo-row h2 {
-        font-size: 11pt !important;
+        font-size: 9.5pt !important;
         color: #0284c7 !important;
         font-weight: 900 !important;
         text-transform: uppercase !important;
@@ -1180,29 +1172,101 @@ body.mobile-print-mode .metrics-grid {
         margin: 0 !important;
     }
 
+    .print-badge {
+        background: #0284c7 !important;
+        color: #ffffff !important;
+        padding: 1.5px 6px !important;
+        border-radius: 4px !important;
+        font-weight: 700 !important;
+        font-size: 6.5pt !important;
+    }
+
+    .print-meta-grid {
+        display: flex !important;
+        justify-content: space-between !important;
+        font-size: 6.5pt !important;
+        color: #334155 !important;
+    }
+
     .main-wrapper {
         padding: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
-        gap: 8px !important;
+        gap: 3px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
     }
 
-    /* Clean Station Details Box on PDF Header */
+    /* Glass Filter Bar (Show on PDF Header as in User Image) */
+    .glass-filter-bar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 3px 8px !important;
+        font-size: 7pt !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-bottom: 2px !important;
+    }
+
+    .filter-group {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 6px !important;
+        align-items: center !important;
+        flex: 1 !important;
+    }
+
+    .filter-item {
+        margin: 0 !important;
+        flex: 1 !important;
+    }
+
+    .filter-label {
+        font-size: 6pt !important;
+        font-weight: 700 !important;
+        color: #64748b !important;
+        margin-bottom: 1px !important;
+    }
+
+    .select-wrapper select, .last-update-box {
+        background: transparent !important;
+        color: #0f172a !important;
+        border: none !important;
+        font-weight: 700 !important;
+        font-size: 7.5pt !important;
+        height: auto !important;
+        padding: 0 !important;
+        width: auto !important;
+    }
+
+    .filter-divider {
+        display: block !important;
+        background: #cbd5e1 !important;
+        height: 14px !important;
+        width: 1px !important;
+    }
+
+    /* Station Details Header Bar */
     .station-details-bar {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: wrap !important;
         justify-content: space-between !important;
-        gap: 6px 14px !important;
+        gap: 4px 10px !important;
         background: #f0f9ff !important;
         border: 1px solid #bae6fd !important;
-        border-radius: 8px !important;
-        padding: 6px 12px !important;
-        font-size: 8pt !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+        font-size: 7pt !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        margin-bottom: 2px !important;
     }
 
     .detail-pill strong { color: #0284c7 !important; }
@@ -1214,8 +1278,8 @@ body.mobile-print-mode .metrics-grid {
         align-items: center !important;
         background: #f0fdf4 !important;
         border: 1px solid #bbf7d0 !important;
-        border-radius: 12px !important;
-        padding: 8px 14px !important;
+        border-radius: 8px !important;
+        padding: 5px 10px !important;
         width: 100% !important;
         box-sizing: border-box !important;
         margin-bottom: 2px !important;
@@ -1224,30 +1288,30 @@ body.mobile-print-mode .metrics-grid {
     .wqi-left {
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
+        gap: 8px !important;
     }
 
     .wqi-badge-icon {
-        width: 32px !important;
-        height: 32px !important;
+        width: 26px !important;
+        height: 26px !important;
         background: #10b981 !important;
         color: #ffffff !important;
         border-radius: 50% !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 13px !important;
+        font-size: 11px !important;
     }
 
     .wqi-left h3 {
-        font-size: 9.5pt !important;
+        font-size: 8.5pt !important;
         color: #0f172a !important;
         font-weight: 800 !important;
-        margin: 0 0 2px 0 !important;
+        margin: 0 0 1px 0 !important;
     }
 
     .wqi-left p {
-        font-size: 7.5pt !important;
+        font-size: 7pt !important;
         color: #475569 !important;
         margin: 0 !important;
     }
@@ -1255,12 +1319,12 @@ body.mobile-print-mode .metrics-grid {
     .wqi-right {
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
+        gap: 8px !important;
     }
 
     .wqi-score-num {
         color: #16a34a !important;
-        font-size: 16pt !important;
+        font-size: 13.5pt !important;
         font-weight: 900 !important;
     }
 
@@ -1268,10 +1332,10 @@ body.mobile-print-mode .metrics-grid {
         background: #dcfce7 !important;
         color: #15803d !important;
         border: 1px solid #86efac !important;
-        padding: 3px 8px !important;
-        font-size: 7.5pt !important;
+        padding: 2px 6px !important;
+        font-size: 6.8pt !important;
         font-weight: 700 !important;
-        border-radius: 12px !important;
+        border-radius: 10px !important;
         text-transform: uppercase !important;
     }
 
@@ -1279,18 +1343,20 @@ body.mobile-print-mode .metrics-grid {
     .metrics-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px 10px !important;
+        gap: 4px 8px !important;
         width: 100% !important;
         box-sizing: border-box !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 
     .metric-card {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 10px !important;
-        padding: 7px 12px !important;
+        border-radius: 8px !important;
+        padding: 4px 8px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
@@ -1305,68 +1371,68 @@ body.mobile-print-mode .metrics-grid {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 1px !important;
     }
 
     .metric-name {
         color: #334155 !important;
-        font-size: 7.5pt !important;
+        font-size: 6.8pt !important;
         font-weight: 800 !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.02em !important;
+        letter-spacing: 0.01em !important;
     }
 
     .metric-icon {
         color: #0284c7 !important;
-        font-size: 9.5pt !important;
+        font-size: 8.5pt !important;
     }
 
     .metric-body {
         display: flex !important;
         align-items: baseline !important;
-        gap: 5px !important;
-        margin: 2px 0 3px 0 !important;
+        gap: 4px !important;
+        margin: 1px 0 2px 0 !important;
     }
 
     .metric-val {
         color: #0284c7 !important;
-        font-size: 13pt !important;
+        font-size: 11.5pt !important;
         font-weight: 800 !important;
     }
 
     .metric-unit {
         color: #64748b !important;
-        font-size: 8pt !important;
+        font-size: 7.5pt !important;
         font-weight: 500 !important;
     }
 
     .gauge-bar {
         display: block !important;
-        height: 4px !important;
+        height: 3px !important;
         background: #e2e8f0 !important;
-        border-radius: 4px !important;
-        margin: 3px 0 4px 0 !important;
+        border-radius: 3px !important;
+        margin: 2px 0 3px 0 !important;
         overflow: hidden !important;
     }
 
     .gauge-fill {
         height: 100% !important;
         background: #0284c7 !important;
-        border-radius: 4px !important;
+        border-radius: 3px !important;
     }
 
     .metric-footer {
         display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 2px !important;
+        gap: 1.5px !important;
         margin-top: 1px !important;
     }
 
     .badge-status-pill {
-        font-size: 6.8pt !important;
-        padding: 2px 6px !important;
-        border-radius: 10px !important;
+        font-size: 6.2pt !important;
+        padding: 1.5px 5px !important;
+        border-radius: 8px !important;
         font-weight: 700 !important;
     }
 
@@ -1390,11 +1456,11 @@ body.mobile-print-mode .metrics-grid {
 
     .card-source-link {
         color: #475569 !important;
-        font-size: 6.5pt !important;
+        font-size: 6pt !important;
         font-weight: 600 !important;
         display: inline-flex !important;
         align-items: center !important;
-        gap: 3px !important;
+        gap: 2px !important;
         text-decoration: none !important;
     }
 }
