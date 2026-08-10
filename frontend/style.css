@@ -1086,41 +1086,41 @@ body.light-mode th {
     }
 
     #report-actions-bottom button {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-/* Extra Narrow Screen Phones (max-width: 400px) */
-@media screen and (max-width: 400px) {
-    .nav-actions {
-        gap: 2px !important;
+        gap: 6px !important;
+        overflow: visible !important;
     }
 
-    .status-pill {
-        padding: 4px 6px !important;
-        font-size: 0.64rem !important;
+    /* ROW 1: BRAND TITLE */
+    .nav-brand {
+        width: 100% !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
     }
 
-    .primary-pill, .secondary-pill {
-        padding: 4px 6px !important;
-        font-size: 0.64rem !important;
+    .brand-icon {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.95rem !important;
     }
 
-    .metrics-grid {
-        grid-template-columns: 1fr;
+    .brand-text h2 {
+        font-size: 0.78rem !important;
+        line-height: 1.2 !important;
     }
 
-    .hero-stats {
-        grid-template-columns: repeat(3, 1fr) !important;
+    /* ROW 2: MAIN TABS BAR (Equal 3-Pill Segmented Control) */
+    .nav-menu {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
+        padding: 4px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
     }
-}
 
-/* Mobile Print Mode Enforcer - Prepares DOM layout for 100% Identical A4 PDF Output on Phones */
-body.mobile-print-mode .main-wrapper {
-    width: 794px !important;
-    max-width: 794px !important;
-    margin: 0 auto !important;
+    .nav-link {
+        flex: 1 !important;
         justify-content: center !important;
         padding: 6px 3px !important;
         font-size: 0.72rem !important;
