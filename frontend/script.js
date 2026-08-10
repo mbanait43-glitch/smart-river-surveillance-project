@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const sourceText = isCustomOverride 
                     ? `Admin Verified (${station.state})` 
-                    : `CPCB RTWQMS Network (${station.state})`;
+                    : `CPCB RTWQMS (${station.state})`;
 
                 const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.68rem; margin-left: 4px; display: inline-flex; align-items: center; gap: 3px;" title="Open Official CPCB RTWQMS Govt Portal">${sourceText} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
 
@@ -619,7 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (unitSpan) unitSpan.textContent = '';
                 valSpan.style.color = '#64748b';
 
-                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.68rem; margin-left: 4px; display: inline-flex; align-items: center; gap: 3px;" title="Open Official CPCB RTWQMS Govt Portal">CPCB RTWQMS Network (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
+                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.68rem; margin-left: 4px; display: inline-flex; align-items: center; gap: 3px;" title="Open Official CPCB RTWQMS Govt Portal">CPCB RTWQMS (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
 
                 statusSpan.innerHTML = `<span class="badge-status-pill status-white">⚪ Not Monitored</span> ${sourceLinkHtml}`;
             }
