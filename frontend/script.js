@@ -208,6 +208,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Helper Function: Smart River Inferencing Engine ---
+    function inferRiverName(name, state) {
+        const n = (name || '').toLowerCase();
+        
+        // 1. Direct Keyword Matching for 30+ Major & Regional Indian Rivers
+        if (n.includes('yamuna') || n.includes('sonipat') || n.includes('mathura') || n.includes('gokul') || n.includes('mohana')) return 'Yamuna River';
+        if (n.includes('hindon')) return 'Hindon River';
+        if (n.includes('ramganga')) return 'Ramganga River';
+        if (n.includes('damodar') || n.includes('durgapur') || n.includes('raghunathpur')) return 'Damodar River';
+        if (n.includes('ghagra') || n.includes('ghaghara')) return 'Ghaghara River';
+        if (n.includes('gandak')) return 'Gandak River';
+        if (n.includes('kosi')) return 'Kosi River';
+        if (/\bson\b|\bsone\b/i.test(n)) return 'Son River';
+        if (n.includes('punpun')) return 'Punpun River';
+        if (n.includes('hooghly')) return 'Hooghly River';
+        if (n.includes('godavari')) return 'Godavari River';
+        if (n.includes('kaveri') || n.includes('cauvery')) return 'Kaveri River';
+        if (n.includes('kanhan')) return 'Kanhan River';
+        if (n.includes('nag river') || n.includes('nagpur')) return 'Nag River';
+        if (n.includes('narmada')) return 'Narmada River';
+        if (n.includes('krishna')) return 'Krishna River';
+        if (n.includes('mahanadi')) return 'Mahanadi River';
+        if (n.includes('brahmaputra')) return 'Brahmaputra River';
+        if (n.includes('sabarmati')) return 'Sabarmati River';
+        if (n.includes('tapi') || n.includes('tapti')) return 'Tapi River';
+        if (n.includes('beas')) return 'Beas River';
+        if (n.includes('sutlej')) return 'Sutlej River';
+        if (n.includes('chambal')) return 'Chambal River';
+        if (n.includes('betwa')) return 'Betwa River';
+        if (n.includes('subarnarekha')) return 'Subarnarekha River';
+        if (n.includes('periyar')) return 'Periyar River';
+        if (n.includes('vaigai')) return 'Vaigai River';
+        
+        // 2. Specific Geographical Landmark Mapping
+        if (n.includes('tehri') || n.includes('dhari') || n.includes('srinagar')) return 'Bhagirathi / Alaknanda';
+        if (n.includes('pratapgarh')) return 'Sai River';
+        if (n.includes('fatehpur') || n.includes('auraiya')) return 'Yamuna / Ganga Basin';
+        if (n.includes('haridwar') || n.includes('rishikesh') || n.includes('fafamau') || n.includes('chunar') || n.includes('sahebganj') || n.includes('rajmahal') || n.includes('nabadwip') || n.includes('farakka') || n.includes('khurji') || n.includes('ganga')) return 'Ganga River';
+
+        // 3. Dynamic Regex Extraction for "River X" or "X River"
+        const match = (name || '').match(/River\s+([A-Za-z]+)|([A-Za-z]+)\s+River/i);
+        if (match) {
+            const extracted = match[1] || match[2];
+            if (extracted && !['stage', 'water', 'intake', 'bank', 'bridge', 'near', 'on', 'at', 'the', 'main'].includes(extracted.toLowerCase())) {
+                return extracted.charAt(0).toUpperCase() + extracted.slice(1).toLowerCase() + ' River';
+            }
+        }
+
+        // 4. Default to Clean "Regional River Basin" instead of forcing "Ganga"
+        return 'Regional River Basin';
+    }
+
     // --- Process Raw Data & Infer River Name ---
     function processRawData(dataArray) {
         stationMap = {};
@@ -216,13 +268,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = item.station_id || item.station_no;
             if (!id) return;
 
-            let riverName = "Ganga";
             const name = item.station_name || '';
-            if (name.includes('Yamuna')) riverName = 'Yamuna';
-            else if (name.includes('Gandak')) riverName = 'Gandak';
-            else if (name.includes('Godavari')) riverName = 'Godavari';
-            else if (name.includes('Kanhan')) riverName = 'Kanhan River';
-            else if (name.includes('Kaveri')) riverName = 'Kaveri';
+            const state = item.territory_name || 'General';
+            const riverName = inferRiverName(name, state);
 
             if (!stationMap[id]) {
                 stationMap[id] = {
@@ -230,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     stationNo: item.station_no,
                     name: name || 'Unknown Station',
                     river: riverName,
-                    state: item.territory_name || 'General',
+                    state: state,
                     lat: item.station_latitude,
                     lng: item.station_longitude,
                     lastTimestamp: item.timestamp,
