@@ -529,62 +529,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let hasOverride = false;
 
-        // 100% CPCB Official Water Quality Standards Threshold Evaluator (Green, Red, White)
+        // 100% Exact CPCB Portal Status Evaluator (Green, Red, White)
         function getParamStatusInfo(paramKey, val) {
-            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: 'Neutral Baseline' };
+            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: '⚪ Not Monitored' };
             const num = parseFloat(val);
 
-            if (paramKey === 'pH') {
-                if (num >= 6.5 && num <= 8.5) return { color: 'green', label: '🟢 Safe pH Balance' };
-                return { color: 'red', label: '🔴 Acidic/Alkaline Hazard' };
-            }
-            if (paramKey === 'Dissolved Oxygen') {
-                if (num >= 5.0) return { color: 'green', label: '🟢 Healthy Oxygen Level' };
-                if (num < 4.0) return { color: 'red', label: '🔴 Critical Oxygen Depletion' };
-                return { color: 'white', label: '⚪ Moderate Baseline' };
-            }
-            if (paramKey === 'Biochemical Oxygen Demand') {
-                if (num <= 3.0) return { color: 'green', label: '🟢 Low Organic Pollution' };
-                return { color: 'red', label: '🔴 High Organic Pollution' };
-            }
-            if (paramKey === 'Chemical Oxygen Demand') {
-                if (num <= 250.0) return { color: 'green', label: '🟢 Safe Chemical Level' };
-                return { color: 'red', label: '🔴 Chemical Contamination' };
-            }
-            if (paramKey === 'Water Turbidity') {
-                if (num <= 10.0) return { color: 'green', label: '🟢 Clear Water' };
-                if (num > 50.0) return { color: 'red', label: '🔴 High Turbidity / Muddy' };
-                return { color: 'white', label: '⚪ Moderate Turbidity' };
-            }
-            if (paramKey === 'Conductivity') {
-                if (num <= 2250.0) return { color: 'green', label: '🟢 Normal Salinity' };
-                return { color: 'red', label: '🔴 High Industrial Salt' };
-            }
-            if (paramKey === 'Nitrate') {
-                if (num <= 45.0) return { color: 'green', label: '🟢 Safe Nitrate Level' };
-                return { color: 'red', label: '🔴 High Nitrate Risk' };
-            }
-            if (paramKey === 'Chloride') {
-                if (num <= 250.0) return { color: 'green', label: '🟢 Normal Chloride' };
-                if (num > 1000.0) return { color: 'red', label: '🔴 High Chloride Content' };
-                return { color: 'white', label: '⚪ Moderate Level' };
-            }
-            if (paramKey === 'Total Organic Carbon') {
-                if (num <= 10.0) return { color: 'green', label: '🟢 Safe Carbon Level' };
-                return { color: 'red', label: '🔴 Organic Carbon Hazard' };
-            }
-            if (paramKey === 'Water Depth') {
-                if (num <= 25.0) return { color: 'green', label: '🟢 Normal Stream Depth' };
-                return { color: 'red', label: '🔴 High Depth Alert' };
-            }
-            if (paramKey === 'Water Level') {
-                if (num > 50.0) return { color: 'red', label: '🔴 High Stage Alert' };
-                return { color: 'green', label: '🟢 Normal Stage' };
-            }
+            // Water Temperature is ALWAYS White (Baseline Informational)
             if (paramKey === 'Water Temperature') {
                 return { color: 'white', label: '⚪ Ambient Temp' };
             }
-            return { color: 'green', label: '🟢 CPCB Compliant' };
+
+            // pH Level: Green if 6.5 to 8.5, Red if outside
+            if (paramKey === 'pH') {
+                if (num < 6.5 || num > 8.5) return { color: 'red', label: '🔴 pH Hazard' };
+                return { color: 'green', label: '🟢 Safe pH' };
+            }
+
+            // Dissolved Oxygen (DO): Red if < 4.0 mg/l, Green if >= 4.0 mg/l
+            if (paramKey === 'Dissolved Oxygen') {
+                if (num < 4.0) return { color: 'red', label: '🔴 Critical DO Risk' };
+                return { color: 'green', label: '🟢 Healthy DO' };
+            }
+
+            // BOD: Red if > 3.0 mg/l, Green if <= 3.0 mg/l
+            if (paramKey === 'Biochemical Oxygen Demand') {
+                if (num > 3.0) return { color: 'red', label: '🔴 High Organic Pollution' };
+                return { color: 'green', label: '🟢 Safe BOD' };
+            }
+
+            // COD: Red if > 250.0 mg/l, Green if <= 250.0 mg/l
+            if (paramKey === 'Chemical Oxygen Demand') {
+                if (num > 250.0) return { color: 'red', label: '🔴 Chemical Hazard' };
+                return { color: 'green', label: '🟢 Safe COD' };
+            }
+
+            // Water Turbidity (WTb): Red if > 50.0 NTU, Green if <= 50.0 NTU
+            if (paramKey === 'Water Turbidity') {
+                if (num > 50.0) return { color: 'red', label: '🔴 High Turbidity' };
+                return { color: 'green', label: '🟢 Clear Water' };
+            }
+
+            // Conductivity (EC): Red if > 2250.0 uS/cm, Green if <= 2250.0 uS/cm
+            if (paramKey === 'Conductivity') {
+                if (num > 2250.0) return { color: 'red', label: '🔴 High Salinity' };
+                return { color: 'green', label: '🟢 Normal EC' };
+            }
+
+            // Nitrate (NO3): Red if > 45.0 mg/l, Green if <= 45.0 mg/l
+            if (paramKey === 'Nitrate') {
+                if (num > 45.0) return { color: 'red', label: '🔴 High Nitrate' };
+                return { color: 'green', label: '🟢 Safe Nitrate' };
+            }
+
+            // Chloride (CL): Red if > 1000.0 mg/l, Green if <= 1000.0 mg/l
+            if (paramKey === 'Chloride') {
+                if (num > 1000.0) return { color: 'red', label: '🔴 High Chloride' };
+                return { color: 'green', label: '🟢 Normal Chloride' };
+            }
+
+            // Total Organic Carbon (TOC): Red if > 10.0 mg/l, Green if <= 10.0 mg/l
+            if (paramKey === 'Total Organic Carbon') {
+                if (num > 10.0) return { color: 'red', label: '🔴 High Carbon' };
+                return { color: 'green', label: '🟢 Safe TOC' };
+            }
+
+            // Water Depth & Level
+            if (paramKey === 'Water Depth' || paramKey === 'Water Level') {
+                return { color: 'green', label: '🟢 Normal Stream' };
+            }
+
+            return { color: 'green', label: '🟢 Valid Data' };
         }
 
         // Dynamic CPCB Status Color Renderer for Metric Cards (Green, Red, White)
@@ -633,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 valSpan.textContent = 'N/A';
                 if (unitSpan) unitSpan.textContent = '';
                 valSpan.style.color = '#64748b';
-                statusSpan.innerHTML = '<span style="color: #64748b;">Not Reported</span>';
+                statusSpan.innerHTML = `<span class="badge-status-pill status-white">⚪ Not Monitored</span> <span style="font-size:0.68rem; color:var(--text-muted); margin-left:3px;">CPCB Portal (${station.state})</span>`;
             }
         }
 
