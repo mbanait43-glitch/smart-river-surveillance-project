@@ -123,23 +123,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let chartInstance = null;
     let selectedStationId = null;
 
-    // Strict parameter mapping for all 12 official CPCB Parameters
+    // Strict parameter mapping for all 12 official CPCB Parameters (100% exact CPCB names)
     const parameterMapping = {
-        'River Stage': 'Water Level',
-        'Oxygen, dissolved': 'Dissolved Oxygen',
+        'River Stage': 'River Stage',
+        'S': 'River Stage',
+        'pH': 'pH',
         'WT': 'Water Temperature',
+        'Water Temperature': 'Water Temperature',
+        'Oxygen, dissolved': 'Oxygen, dissolved',
+        'DO': 'Oxygen, dissolved',
         'WTb': 'Water Turbidity',
+        'Water Turbidity': 'Water Turbidity',
         'EC': 'Conductivity',
+        'Conductivity': 'Conductivity',
         'BOD': 'Biochemical Oxygen Demand',
+        'Biochemical Oxygen Demand': 'Biochemical Oxygen Demand',
         'COD': 'Chemical Oxygen Demand',
+        'Chemical Oxygen Demand': 'Chemical Oxygen Demand',
         'NO3': 'Nitrate',
         'Nitrate': 'Nitrate',
         'CL': 'Chloride',
         'Chloride': 'Chloride',
         'TOC': 'Total Organic Carbon',
         'Total Organic Carbon': 'Total Organic Carbon',
-        'Depth': 'Water Depth',
-        'Water Depth': 'Water Depth'
+        'Depth': 'Depth',
+        'Water Depth': 'Depth'
     };
 
     // --- Leaflet Map Initialization with Hardware Acceleration ---
@@ -541,13 +549,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // 2. BOD: CPCB Max < 3.0 -> Green if num < 3.0, else Red
-            if (paramKey === 'Biochemical Oxygen Demand') {
+            if (paramKey === 'Biochemical Oxygen Demand' || paramKey === 'BOD') {
                 if (num < 3.0) return { color: 'green', label: '🟢 Safe BOD' };
                 return { color: 'red', label: '🔴 High BOD Hazard' };
             }
 
             // 3. Dissolved Oxygen (DO): CPCB Min >= 5.0 -> Green if num >= 5.0, else Red
-            if (paramKey === 'Dissolved Oxygen') {
+            if (paramKey === 'Oxygen, dissolved' || paramKey === 'Dissolved Oxygen' || paramKey === 'DO') {
                 if (num >= 5.0) return { color: 'green', label: '🟢 Healthy DO' };
                 return { color: 'red', label: '🔴 Critical DO Risk' };
             }
@@ -613,18 +621,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">● CPCB Live Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
         }
 
-        updateCardById('card-level', 'Water Level', 'm (MSL)');
-        updateCardById('card-ph', 'pH', 'pH');
+        updateCardById('card-level', 'River Stage', 'm');
+        updateCardById('card-ph', 'pH', '---');
         updateCardById('card-temp', 'Water Temperature', '°C');
-        updateCardById('card-do', 'Dissolved Oxygen', 'mg/l');
+        updateCardById('card-do', 'Oxygen, dissolved', 'mg/l');
         updateCardById('card-bod', 'Biochemical Oxygen Demand', 'mg/l');
         updateCardById('card-cod', 'Chemical Oxygen Demand', 'mg/l');
         updateCardById('card-turbidity', 'Water Turbidity', 'NTU');
-        updateCardById('card-ec', 'Conductivity', 'mS/cm');
+        updateCardById('card-ec', 'Conductivity', 'uS/cm');
         updateCardById('card-nitrate', 'Nitrate', 'mg/l');
         updateCardById('card-chloride', 'Chloride', 'mg/l');
         updateCardById('card-toc', 'Total Organic Carbon', 'mg/l');
-        updateCardById('card-depth', 'Water Depth', 'm');
+        updateCardById('card-depth', 'Depth', 'm');
 
         // Defer Chart rendering slightly so ChartJS doesn't fight Leaflet for GPU/CPU frames!
         setTimeout(() => {
