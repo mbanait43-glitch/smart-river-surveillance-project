@@ -778,13 +778,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function prepareForPrint() {
         updateTimestamp();
 
-        // Switch viewport meta tag to desktop 1024px width for Mobile Chrome & iOS Safari
+        // Switch viewport meta tag to standard A4 printable width 794px for Mobile Chrome & iOS Safari
         const viewportMeta = document.querySelector('meta[name="viewport"]');
         if (viewportMeta) {
             if (!viewportMeta.getAttribute('data-original')) {
                 viewportMeta.setAttribute('data-original', viewportMeta.getAttribute('content'));
             }
-            viewportMeta.setAttribute('content', 'width=1024, initial-scale=1.0');
+            viewportMeta.setAttribute('content', 'width=794, initial-scale=1.0');
         }
 
         document.body.classList.add('mobile-print-mode');

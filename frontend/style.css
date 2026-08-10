@@ -1118,29 +1118,25 @@ body.light-mode th {
 
 /* Mobile Print Mode Enforcer - Prepares DOM layout for 100% Identical A4 PDF Output on Phones */
 body.mobile-print-mode .main-wrapper {
-    width: 1024px !important;
-    max-width: 1024px !important;
+    width: 794px !important;
+    max-width: 794px !important;
     margin: 0 auto !important;
 }
 body.mobile-print-mode .metrics-grid {
     grid-template-columns: repeat(2, 1fr) !important;
 }
-body.mobile-print-mode .glass-filter-bar {
-    flex-direction: row !important;
-    justify-content: space-between !important;
-}
 
 /* ==========================================================================
    COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
-   100% MATCHING USER SCREENSHOT: Full-Width Stacked Panels on Page 2!
+   100% UNCLIPPED & ELEGANT 2-PAGE EXECUTIVE REPORT
    ========================================================================== */
 @media print {
     @page {
         size: A4 portrait;
-        margin: 6mm 8mm 6mm 8mm;
+        margin: 5mm 8mm 5mm 8mm;
     }
 
-    html, body {
+    html, body, .mobile-print-mode {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 100% !important;
@@ -1148,135 +1144,97 @@ body.mobile-print-mode .glass-filter-bar {
         padding: 0 !important;
         background: #ffffff !important;
         color: #0f172a !important;
-        font-size: 8.5pt !important;
+        font-size: 8pt !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
-    /* Hide Web Navigation & Buttons */
-    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print {
+    /* Hide Web Navigation, Interactive Dropdown Filter Bar & Web Buttons on PDF */
+    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .glass-filter-bar {
         display: none !important;
     }
 
-    /* Official Government Inspection Print Header */
+    /* Print Header */
     .print-only-header {
         display: block !important;
         margin-bottom: 6px;
         border-bottom: 2px solid #0284c7;
         padding-bottom: 4px;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .print-logo-row {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        margin-bottom: 2px;
+        width: 100% !important;
     }
 
     .print-logo-row h2 {
-        font-size: 10.5pt !important;
+        font-size: 10pt !important;
         color: #0284c7 !important;
         font-weight: 900 !important;
         text-transform: uppercase !important;
-        letter-spacing: -0.02em !important;
+        letter-spacing: -0.01em !important;
         margin: 0 !important;
-    }
-
-    .print-badge {
-        background: #0284c7 !important;
-        color: #ffffff !important;
-        padding: 2px 6px !important;
-        border-radius: 4px !important;
-        font-weight: 700 !important;
-        font-size: 7.5pt !important;
-    }
-
-    .print-meta-grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 2px !important;
-        font-size: 7.5pt !important;
-        color: #334155 !important;
     }
 
     .main-wrapper {
         padding: 0 !important;
+        width: 100% !important;
         max-width: 100% !important;
         gap: 6px !important;
         margin: 0 !important;
+        box-sizing: border-box !important;
     }
 
-    /* Filter Bar Box - Force Horizontal Row on both Mobile & PC Print */
-    .glass-filter-bar {
-        background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        box-shadow: none !important;
-        border-radius: 6px !important;
-        padding: 4px 8px !important;
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        gap: 8px !important;
-    }
-
-    .filter-item {
-        margin: 0 !important;
-        flex: 1 !important;
-    }
-
-    .select-wrapper select, .last-update-box {
-        background: transparent !important;
-        color: #0f172a !important;
-        border: none !important;
-        font-weight: 700 !important;
-        font-size: 8pt !important;
-        height: auto !important;
-        padding: 0 !important;
-        width: auto !important;
-    }
-
-    .filter-divider {
-        display: block !important;
-        background: #cbd5e1 !important;
-        height: 18px !important;
-        width: 1px !important;
-    }
-
-    /* Station Details Bar */
+    /* Clean Station Details Box on PDF Header */
     .station-details-bar {
-        background: #f0f9ff !important;
-        border: 1px solid #bae6fd !important;
-        border-radius: 6px !important;
-        padding: 4px 8px !important;
-        font-size: 7.5pt !important;
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: wrap !important;
-        gap: 8px !important;
         justify-content: space-between !important;
+        gap: 6px 12px !important;
+        background: #f0f9ff !important;
+        border: 1px solid #bae6fd !important;
+        border-radius: 6px !important;
+        padding: 6px 10px !important;
+        font-size: 7.5pt !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .detail-pill strong { color: #0284c7 !important; }
 
     /* WQI Banner Card */
     .wqi-score-card {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
         background: #f0fdf4 !important;
         border: 1px solid #bbf7d0 !important;
         border-radius: 6px !important;
         padding: 6px 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
-    .wqi-score-num { color: #16a34a !important; font-size: 15pt !important; }
-    .wqi-status-tag { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; }
+    .wqi-left { display: flex !important; align-items: center !important; gap: 8px !important; }
+    .wqi-left h3 { font-size: 9pt !important; color: #0f172a !important; font-weight: 800 !important; margin: 0 !important; }
+    .wqi-left p { font-size: 7.5pt !important; color: #475569 !important; margin: 0 !important; }
 
-    /* 12 Metrics 2-Column Grid on Page 1 (Identical on Mobile & PC) */
+    .wqi-right { display: flex !important; align-items: center !important; gap: 8px !important; }
+    .wqi-score-num { color: #16a34a !important; font-size: 14pt !important; font-weight: 900 !important; }
+    .wqi-status-tag { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; padding: 2px 6px !important; font-size: 7pt !important; border-radius: 4px !important; }
+
+    /* 12 Metrics 2-Column Grid on Page 1 */
     .metrics-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 5px !important;
         width: 100% !important;
+        box-sizing: border-box !important;
         page-break-after: always !important;
         break-after: page !important;
     }
@@ -1285,7 +1243,7 @@ body.mobile-print-mode .glass-filter-bar {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
         border-radius: 6px !important;
-        padding: 6px 8px !important;
+        padding: 5px 8px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
@@ -1293,9 +1251,15 @@ body.mobile-print-mode .glass-filter-bar {
         box-sizing: border-box !important;
     }
 
-    .metric-name { color: #475569 !important; font-size: 7.5pt !important; font-weight: 700 !important; }
-    .metric-val { color: #0284c7 !important; font-size: 12pt !important; font-weight: 800 !important; }
-    .metric-unit { color: #64748b !important; font-size: 8pt !important; }
+    .metric-header { display: flex !important; justify-content: space-between !important; align-items: center !important; }
+    .metric-name { color: #475569 !important; font-size: 7pt !important; font-weight: 700 !important; }
+    .metric-icon { color: #0284c7 !important; font-size: 8pt !important; }
+
+    .metric-body { display: flex !important; align-items: baseline !important; gap: 4px !important; margin: 2px 0 !important; }
+    .metric-val { color: #0284c7 !important; font-size: 11pt !important; font-weight: 800 !important; }
+    .metric-unit { color: #64748b !important; font-size: 7.5pt !important; }
+
+    .gauge-bar { display: block !important; height: 3px !important; background: #e2e8f0 !important; border-radius: 3px !important; margin: 2px 0 !important; }
 
     .metric-footer {
         display: flex !important;
@@ -1305,46 +1269,42 @@ body.mobile-print-mode .glass-filter-bar {
         margin-top: 2px !important;
     }
 
-    .card-source-link {
-        color: #475569 !important;
-        font-size: 6.5pt !important;
-        font-weight: 600 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 3px !important;
-    }
+    .badge-status-pill { font-size: 6.5pt !important; padding: 1px 4px !important; }
+    .card-source-link { color: #475569 !important; font-size: 6pt !important; font-weight: 600 !important; }
 
-    /* Page 2: Stacked Full-Width Live GIS Station Map (Top) & Analytics Panel (Bottom) */
+    /* Page 2: Stacked Full-Width Live GIS Station Map & Analytics Panel */
     .split-view-grid {
         display: flex !important;
         flex-direction: column !important;
-        gap: 12px !important;
+        gap: 10px !important;
         page-break-before: always !important;
         break-before: page !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         margin-top: 0 !important;
         width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .panel-card, #map-section, #analytics-section {
         background: #ffffff !important;
         background-color: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 10px !important;
+        border-radius: 8px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         overflow: hidden !important;
         height: auto !important;
         width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .panel-header {
         background: #f8fafc !important;
         border-bottom: 1px solid #e2e8f0 !important;
-        padding: 8px 12px !important;
-        height: 34px !important;
+        padding: 6px 10px !important;
+        height: 30px !important;
         box-sizing: border-box !important;
         display: flex !important;
         justify-content: space-between !important;
@@ -1353,7 +1313,7 @@ body.mobile-print-mode .glass-filter-bar {
 
     .panel-header h3 {
         color: #0284c7 !important;
-        font-size: 9.5pt !important;
+        font-size: 9pt !important;
         font-weight: 800 !important;
         line-height: 1 !important;
         margin: 0 !important;
