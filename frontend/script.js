@@ -605,15 +605,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     valSpan.style.color = 'var(--text-primary)';
                 }
 
-                const sourceTag = isCustomOverride ? `Admin Verified (${station.state})` : `CPCB RTWQMS (${station.state})`;
-                statusSpan.innerHTML = `<span class="badge-status-pill status-${statusInfo.color}">${statusInfo.label}</span> <span style="font-size:0.68rem; color:var(--text-muted); margin-left:3px;">${sourceTag}</span>`;
+                const sourceText = isCustomOverride 
+                    ? `Admin Verified (${station.state})` 
+                    : `CPCB RTWQMS Network (${station.state})`;
+
+                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.68rem; margin-left: 4px; display: inline-flex; align-items: center; gap: 3px;" title="Open Official CPCB RTWQMS Govt Portal">${sourceText} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
+
+                statusSpan.innerHTML = `<span class="badge-status-pill status-${statusInfo.color}">${statusInfo.label}</span> ${sourceLinkHtml}`;
             } else {
                 card.classList.remove('status-green', 'status-red', 'status-white');
                 card.classList.add('status-white');
                 valSpan.textContent = 'N/A';
                 if (unitSpan) unitSpan.textContent = '';
                 valSpan.style.color = '#64748b';
-                statusSpan.innerHTML = `<span class="badge-status-pill status-white">⚪ Not Monitored</span> <span style="font-size:0.68rem; color:var(--text-muted); margin-left:3px;">CPCB Portal (${station.state})</span>`;
+
+                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.68rem; margin-left: 4px; display: inline-flex; align-items: center; gap: 3px;" title="Open Official CPCB RTWQMS Govt Portal">CPCB RTWQMS Network (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
+
+                statusSpan.innerHTML = `<span class="badge-status-pill status-white">⚪ Not Monitored</span> ${sourceLinkHtml}`;
             }
         }
 
