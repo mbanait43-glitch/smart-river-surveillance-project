@@ -621,10 +621,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">● CPCB Live Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
         }
 
-        updateCardById('card-level', 'River Stage', 'm');
-        updateCardById('card-ph', 'pH', '---');
+        updateCardById('card-level', 'Water Level', 'm above MSL');
+        updateCardById('card-ph', 'pH', 'pH');
         updateCardById('card-temp', 'Water Temperature', '°C');
-        updateCardById('card-do', 'Oxygen, dissolved', 'mg/l');
+        updateCardById('card-do', 'Dissolved Oxygen', 'mg/l');
         updateCardById('card-bod', 'Biochemical Oxygen Demand', 'mg/l');
         updateCardById('card-cod', 'Chemical Oxygen Demand', 'mg/l');
         updateCardById('card-turbidity', 'Water Turbidity', 'NTU');
