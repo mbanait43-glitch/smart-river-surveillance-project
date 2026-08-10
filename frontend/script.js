@@ -514,26 +514,194 @@ document.addEventListener('DOMContentLoaded', () => {
         const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
         const stationOverrides = overrides[stationId] || {};
 
-        let wqiScore = 88;
-        const ph = stationOverrides['pH'] !== undefined ? stationOverrides['pH'] : (station.parameters['pH'] ? station.parameters['pH'].value : 7.5);
-        const doVal = stationOverrides['Dissolved Oxygen'] !== undefined ? stationOverrides['Dissolved Oxygen'] : (station.parameters['Dissolved Oxygen'] ? station.parameters['Dissolved Oxygen'].value : 7.0);
+        // --- SCIENTIFIC CPCB / NSF WATER QUALITY INDEX (WQI) ENGINE ---
+        function calculateStationWQI(stationObj, stOverrides) {
+            function getVal(key, fallback) {
+                if (stOverrides[key] !== undefined && !isNaN(parseFloat(stOverrides[key]))) {
+                    return parseFloat(stOverrides[key]);
+                }
+                if (stationObj.parameters[key] && stationObj.parameters[key].value !== undefined && stationObj.parameters[key].value !== null) {
+                    const parsed = parseFloat(stationObj.parameters[key].value);
+                    if (!isNaN(parsed)) return parsed;
+                }
+                return fallback;
+            }
 
-        if (ph < 6.5 || ph > 8.5) wqiScore -= 20;
-        if (doVal < 4.0) wqiScore -= 30;
-        wqiScore = Math.max(15, Math.min(100, Math.round(wqiScore)));
+            const ph = getVal('pH', null);
+            const doVal = getVal('Dissolved Oxygen', getVal('Oxygen, dissolved', null));
+            const bod = getVal('Biochemical Oxygen Demand', getVal('BOD', null));
+            const cod = getVal('Chemical Oxygen Demand', null);
+            const turb = getVal('Water Turbidity', null);
+            const ec = getVal('Conductivity', null);
+            const nitrate = getVal('Nitrate', null);
+            const chloride = getVal('Chloride', null);
+            const toc = getVal('Total Organic Carbon', null);
+
+            let totalWeight = 0;
+            let weightedSubIndexSum = 0;
+
+            // 1. pH Sub-Index (Weight: 0.15)
+            if (ph !== null) {
+                const w = 0.15;
+                let q = 100;
+                if (ph >= 6.5 && ph <= 8.5) {
+                    q = 100 - Math.abs(ph - 7.0) * 13.3;
+                } else if (ph < 6.5) {
+                    q = Math.max(0, 100 - (6.5 - ph) * 35);
+                } else {
+                    q = Math.max(0, 100 - (ph - 8.5) * 35);
+                }
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 2. Dissolved Oxygen DO (Weight: 0.25)
+            if (doVal !== null) {
+                const w = 0.25;
+                let q = 100;
+                if (doVal >= 7.0) {
+                    q = 100;
+                } else if (doVal >= 5.0) {
+                    q = 70 + (doVal - 5.0) * 15;
+                } else if (doVal >= 3.0) {
+                    q = 35 + (doVal - 3.0) * 17.5;
+                } else {
+                    q = Math.max(0, doVal * 11);
+                }
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 3. Biochemical Oxygen Demand BOD (Weight: 0.20)
+            if (bod !== null) {
+                const w = 0.20;
+                let q = 100;
+                if (bod <= 2.0) {
+                    q = 100;
+                } else if (bod <= 3.0) {
+                    q = 85 - (bod - 2.0) * 15;
+                } else if (bod <= 6.0) {
+                    q = 70 - (bod - 3.0) * 10;
+                } else {
+                    q = Math.max(5, 40 - (bod - 6.0) * 5);
+                }
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 4. Chemical Oxygen Demand COD (Weight: 0.10)
+            if (cod !== null) {
+                const w = 0.10;
+                let q = 100;
+                if (cod <= 10.0) {
+                    q = 100;
+                } else if (cod <= 25.0) {
+                    q = 90 - (cod - 10.0) * 2;
+                } else {
+                    q = Math.max(10, 60 - (cod - 25.0) * 1.5);
+                }
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 5. Water Turbidity (Weight: 0.08)
+            if (turb !== null) {
+                const w = 0.08;
+                let q = 100;
+                if (turb <= 5.0) {
+                    q = 100;
+                } else if (turb <= 25.0) {
+                    q = 90 - (turb - 5.0) * 1.5;
+                } else {
+                    q = Math.max(15, 60 - (turb - 25.0) * 0.5);
+                }
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 6. Conductivity EC (Weight: 0.07)
+            if (ec !== null) {
+                const w = 0.07;
+                let q = 100;
+                if (ec <= 300) {
+                    q = 100;
+                } else if (ec <= 750) {
+                    q = 90 - (ec - 300) * 0.08;
+                } else {
+                    q = Math.max(15, 54 - (ec - 750) * 0.03);
+                }
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 7. Nitrate (Weight: 0.05)
+            if (nitrate !== null) {
+                const w = 0.05;
+                let q = (nitrate <= 1.0) ? 100 : Math.max(10, 90 - (nitrate - 1.0) * 3);
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 8. Chloride (Weight: 0.05)
+            if (chloride !== null) {
+                const w = 0.05;
+                let q = (chloride <= 50) ? 100 : Math.max(15, 90 - (chloride - 50) * 0.15);
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            // 9. Total Organic Carbon TOC (Weight: 0.05)
+            if (toc !== null) {
+                const w = 0.05;
+                let q = (toc <= 3.0) ? 100 : Math.max(15, 90 - (toc - 3.0) * 4);
+                weightedSubIndexSum += (w * q);
+                totalWeight += w;
+            }
+
+            if (totalWeight === 0) return 88;
+            const score = Math.round(weightedSubIndexSum / totalWeight);
+            return Math.max(15, Math.min(100, score));
+        }
+
+        const wqiScore = calculateStationWQI(station, stationOverrides);
 
         if (wqiScoreVal) wqiScoreVal.textContent = `${wqiScore}/100`;
+
+        const wqiCard = document.querySelector('.wqi-score-card');
 
         if (wqiStatusTag) {
             if (wqiScore >= 80) {
                 wqiStatusTag.textContent = 'GOOD WATER QUALITY';
                 wqiStatusTag.className = 'wqi-status-tag good';
+                if (wqiCard) {
+                    wqiCard.style.background = '#f0fdf4';
+                    wqiCard.style.borderColor = '#bbf7d0';
+                }
+                if (wqiScoreVal) wqiScoreVal.style.color = '#16a34a';
             } else if (wqiScore >= 60) {
                 wqiStatusTag.textContent = 'MODERATE WATER QUALITY';
                 wqiStatusTag.className = 'wqi-status-tag warn';
+                if (wqiCard) {
+                    wqiCard.style.background = '#fffbeb';
+                    wqiCard.style.borderColor = '#fef3c7';
+                }
+                if (wqiScoreVal) wqiScoreVal.style.color = '#d97706';
+            } else if (wqiScore >= 40) {
+                wqiStatusTag.textContent = 'POOR WATER QUALITY';
+                wqiStatusTag.className = 'wqi-status-tag warn';
+                if (wqiCard) {
+                    wqiCard.style.background = '#fff7ed';
+                    wqiCard.style.borderColor = '#ffedd5';
+                }
+                if (wqiScoreVal) wqiScoreVal.style.color = '#ea580c';
             } else {
                 wqiStatusTag.textContent = 'CRITICAL / HAZARDOUS';
                 wqiStatusTag.className = 'wqi-status-tag alert';
+                if (wqiCard) {
+                    wqiCard.style.background = '#ffe4e6';
+                    wqiCard.style.borderColor = '#fda4af';
+                }
+                if (wqiScoreVal) wqiScoreVal.style.color = '#e11d48';
             }
         }
 
