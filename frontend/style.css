@@ -1035,6 +1035,7 @@ body.light-mode th {
 
 /* ==========================================================================
    COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
+   100% MATCHING USER SCREENSHOT: Full-Width Stacked Panels on Page 2!
    ========================================================================== */
 @media print {
     @page {
@@ -1173,11 +1174,11 @@ body.light-mode th {
     .metric-val { color: #0284c7 !important; font-size: 12pt !important; }
     .metric-unit { color: #64748b !important; }
 
-    /* Page 2: Clean Full Side-by-Side GIS Map & Analytics Panel */
+    /* Page 2: Stacked Full-Width Live GIS Station Map (Top) & Analytics Panel (Bottom) */
     .split-view-grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
         page-break-before: always !important;
         break-before: page !important;
         page-break-inside: avoid !important;
@@ -1189,7 +1190,7 @@ body.light-mode th {
     .panel-card, #map-section, #analytics-section {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 10px !important;
+        border-radius: 14px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
@@ -1201,31 +1202,42 @@ body.light-mode th {
     .panel-header {
         background: #f8fafc !important;
         border-bottom: 1px solid #e2e8f0 !important;
-        padding: 8px 12px !important;
-        height: 32px !important;
+        padding: 10px 16px !important;
+        height: 38px !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
     }
 
     .panel-header h3 {
         color: #0284c7 !important;
-        font-size: 9pt !important;
+        font-size: 10pt !important;
+        font-weight: 800 !important;
         line-height: 1 !important;
     }
 
+    .panel-tag {
+        display: inline-block !important;
+        color: #64748b !important;
+        font-size: 8.5pt !important;
+        font-weight: 600 !important;
+    }
+
     #analytics-section .panel-body, #map-section .panel-body {
-        height: 340px !important;
-        max-height: 340px !important;
-        min-height: 340px !important;
-        padding: 6px !important;
+        height: 310px !important;
+        max-height: 310px !important;
+        min-height: 310px !important;
+        padding: 8px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
     }
 
     .map-view, canvas, #analyticsChart, #map {
-        height: 328px !important;
-        max-height: 328px !important;
-        min-height: 328px !important;
+        height: 294px !important;
+        max-height: 294px !important;
+        min-height: 294px !important;
         width: 100% !important;
         display: block !important;
         page-break-inside: avoid !important;
