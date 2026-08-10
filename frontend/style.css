@@ -1140,8 +1140,8 @@ body.light-mode th {
         print-color-adjust: exact !important;
     }
 
-    /* Hide Web Navigation, Map Section & Analytics Chart on PDF */
-    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .split-view-grid, #map-section, #analytics-section {
+    /* Hide Web Navigation, Interactive Dropdown Filter Bar, Map Section & Analytics Chart on PDF */
+    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .split-view-grid, #map-section, #analytics-section, .glass-filter-bar {
         display: none !important;
     }
 
@@ -1192,64 +1192,9 @@ body.light-mode th {
         padding: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
-        gap: 3px !important;
+        gap: 4px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
-    }
-
-    /* Glass Filter Bar (Show on PDF Header as in User Image) */
-    .glass-filter-bar {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 6px !important;
-        padding: 3px 8px !important;
-        font-size: 7pt !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        margin-bottom: 2px !important;
-    }
-
-    .filter-group {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 6px !important;
-        align-items: center !important;
-        flex: 1 !important;
-    }
-
-    .filter-item {
-        margin: 0 !important;
-        flex: 1 !important;
-    }
-
-    .filter-label {
-        font-size: 6pt !important;
-        font-weight: 700 !important;
-        color: #64748b !important;
-        margin-bottom: 1px !important;
-    }
-
-    .select-wrapper select, .last-update-box {
-        background: transparent !important;
-        color: #0f172a !important;
-        border: none !important;
-        font-weight: 700 !important;
-        font-size: 7.5pt !important;
-        height: auto !important;
-        padding: 0 !important;
-        width: auto !important;
-    }
-
-    .filter-divider {
-        display: block !important;
-        background: #cbd5e1 !important;
-        height: 14px !important;
-        width: 1px !important;
     }
 
     /* Station Details Header Bar */
@@ -1262,11 +1207,11 @@ body.light-mode th {
         background: #f0f9ff !important;
         border: 1px solid #bae6fd !important;
         border-radius: 6px !important;
-        padding: 4px 8px !important;
-        font-size: 7pt !important;
+        padding: 5px 10px !important;
+        font-size: 7.5pt !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 3px !important;
     }
 
     .detail-pill strong { color: #0284c7 !important; }
