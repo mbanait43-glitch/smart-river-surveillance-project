@@ -531,66 +531,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // CPCB Safety Threshold Evaluator (Green, Red, White)
         function getParamStatusInfo(paramKey, val) {
-            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: 'Neutral Baseline' };
+            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: '● Neutral Baseline' };
             const num = parseFloat(val);
 
             if (paramKey === 'pH') {
-                if (num >= 6.5 && num <= 8.5) return { color: 'green', label: '🟢 Safe pH Balance' };
-                return { color: 'red', label: '🔴 Acidic/Alkaline Hazard' };
+                if (num >= 6.5 && num <= 8.5) return { color: 'green', label: '● Safe pH Balance' };
+                return { color: 'red', label: '● Acidic/Alkaline Hazard' };
             }
             if (paramKey === 'Dissolved Oxygen') {
-                if (num >= 5.0) return { color: 'green', label: '🟢 Healthy Oxygen Level' };
-                if (num < 4.0) return { color: 'red', label: '🔴 Critical Oxygen Depletion' };
-                return { color: 'white', label: '⚪ Moderate Baseline' };
+                if (num >= 5.0) return { color: 'green', label: '● Healthy Oxygen Level' };
+                if (num < 4.0) return { color: 'red', label: '● Critical Oxygen Depletion' };
+                return { color: 'white', label: '● Moderate Baseline' };
             }
             if (paramKey === 'Biochemical Oxygen Demand') {
-                if (num <= 2.0) return { color: 'green', label: '🟢 Low Organic Pollution' };
-                if (num > 3.0) return { color: 'red', label: '🔴 High Organic Pollution' };
-                return { color: 'white', label: '⚪ Moderate Pollution' };
+                if (num <= 2.0) return { color: 'green', label: '● Low Organic Pollution' };
+                if (num > 3.0) return { color: 'red', label: '● High Organic Pollution' };
+                return { color: 'white', label: '● Moderate Pollution' };
             }
             if (paramKey === 'Chemical Oxygen Demand') {
-                if (num <= 10.0) return { color: 'green', label: '🟢 Safe Chemical Level' };
-                if (num > 25.0) return { color: 'red', label: '🔴 Chemical Contamination' };
-                return { color: 'white', label: '⚪ Moderate Level' };
+                if (num <= 10.0) return { color: 'green', label: '● Safe Chemical Level' };
+                if (num > 25.0) return { color: 'red', label: '● Chemical Contamination' };
+                return { color: 'white', label: '● Moderate Level' };
             }
             if (paramKey === 'Water Turbidity') {
-                if (num <= 5.0) return { color: 'green', label: '🟢 Clear Water' };
-                if (num > 10.0) return { color: 'red', label: '🔴 High Turbidity / Muddy' };
-                return { color: 'white', label: '⚪ Moderate Turbidity' };
+                if (num <= 5.0) return { color: 'green', label: '● Clear Water' };
+                if (num > 10.0) return { color: 'red', label: '● High Turbidity / Muddy' };
+                return { color: 'white', label: '● Moderate Turbidity' };
             }
             if (paramKey === 'Conductivity') {
-                if (num <= 750) return { color: 'green', label: '🟢 Normal Salinity' };
-                if (num > 2250) return { color: 'red', label: '🔴 High Industrial Salt' };
-                return { color: 'white', label: '⚪ Moderate Baseline' };
+                if (num <= 750) return { color: 'green', label: '● Normal Salinity' };
+                if (num > 2250) return { color: 'red', label: '● High Industrial Salt' };
+                return { color: 'white', label: '● Moderate Baseline' };
             }
             if (paramKey === 'Nitrate') {
-                if (num <= 10.0) return { color: 'green', label: '🟢 Safe Nitrate Level' };
-                if (num > 45.0) return { color: 'red', label: '🔴 High Nitrate Risk' };
-                return { color: 'white', label: '⚪ Moderate Level' };
+                if (num <= 10.0) return { color: 'green', label: '● Safe Nitrate Level' };
+                if (num > 45.0) return { color: 'red', label: '● High Nitrate Risk' };
+                return { color: 'white', label: '● Moderate Level' };
             }
             if (paramKey === 'Chloride') {
-                if (num <= 250.0) return { color: 'green', label: '🟢 Normal Chloride' };
-                if (num > 1000.0) return { color: 'red', label: '🔴 High Chloride Content' };
-                return { color: 'white', label: '⚪ Moderate Level' };
+                if (num <= 250.0) return { color: 'green', label: '● Normal Chloride' };
+                if (num > 1000.0) return { color: 'red', label: '● High Chloride Content' };
+                return { color: 'white', label: '● Moderate Level' };
             }
             if (paramKey === 'Total Organic Carbon') {
-                if (num <= 4.0) return { color: 'green', label: '🟢 Safe Carbon Level' };
-                if (num > 10.0) return { color: 'red', label: '🔴 Organic Carbon Hazard' };
-                return { color: 'white', label: '⚪ Moderate Level' };
+                if (num <= 4.0) return { color: 'green', label: '● Safe Carbon Level' };
+                if (num > 10.0) return { color: 'red', label: '● Organic Carbon Hazard' };
+                return { color: 'white', label: '● Moderate Level' };
             }
             if (paramKey === 'Water Depth') {
-                if (num <= 15.0) return { color: 'green', label: '🟢 Normal Stream Depth' };
-                if (num > 25.0) return { color: 'red', label: '🔴 High Depth Alert' };
-                return { color: 'white', label: '⚪ Deep Channel' };
+                if (num <= 15.0) return { color: 'green', label: '● Normal Stream Depth' };
+                if (num > 25.0) return { color: 'red', label: '● High Depth Alert' };
+                return { color: 'white', label: '● Deep Channel' };
             }
             if (paramKey === 'Water Level') {
-                if (num > 15.0) return { color: 'red', label: '🔴 High Stage Alert' };
-                return { color: 'green', label: '🟢 Normal Stage' };
+                if (num > 15.0) return { color: 'red', label: '● High Stage Alert' };
+                return { color: 'green', label: '● Normal Stage' };
             }
             if (paramKey === 'Water Temperature') {
-                return { color: 'white', label: '⚪ Ambient Temp' };
+                return { color: 'white', label: '● Ambient Temp' };
             }
-            return { color: 'green', label: '🟢 CPCB Compliant' };
+            return { color: 'green', label: '● CPCB Compliant' };
         }
 
         // Dynamic CPCB Status Color Renderer for Metric Cards (Green, Red, White)
