@@ -467,23 +467,77 @@ body.light-mode .station-details-bar {
 .detail-pill strong { color: var(--cyan-primary); }
 body.light-mode .detail-pill strong { color: #0284c7; }
 
-/* WQI Banner Card */
+/* WQI Banner Card Theme & High-Contrast Rules */
 .wqi-score-card {
     width: 100%;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.08));
-    border: 1px solid rgba(16, 185, 129, 0.3);
     border-radius: 18px;
     padding: 18px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    transition: all 0.3s ease;
 }
 
-body.light-mode .wqi-score-card {
-    background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
-    border: 1px solid #bbf7d0;
+/* 1. GOOD WATER QUALITY (Score >= 80) */
+.wqi-score-card.wqi-good {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(6, 182, 212, 0.12));
+    border: 1px solid rgba(16, 185, 129, 0.4);
 }
+.wqi-score-card.wqi-good .wqi-left h3 { color: #ffffff !important; font-weight: 800; }
+.wqi-score-card.wqi-good .wqi-left p { color: #a7f3d0 !important; }
+
+body.light-mode .wqi-score-card.wqi-good {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 1px solid #a7f3d0;
+}
+body.light-mode .wqi-score-card.wqi-good .wqi-left h3 { color: #064e3b !important; font-weight: 800; }
+body.light-mode .wqi-score-card.wqi-good .wqi-left p { color: #047857 !important; }
+
+/* 2. MODERATE WATER QUALITY (Score >= 60) */
+.wqi-score-card.wqi-moderate {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.12));
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+.wqi-score-card.wqi-moderate .wqi-left h3 { color: #ffffff !important; font-weight: 800; }
+.wqi-score-card.wqi-moderate .wqi-left p { color: #fde68a !important; }
+
+body.light-mode .wqi-score-card.wqi-moderate {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1px solid #fde68a;
+}
+body.light-mode .wqi-score-card.wqi-moderate .wqi-left h3 { color: #78350f !important; font-weight: 800; }
+body.light-mode .wqi-score-card.wqi-moderate .wqi-left p { color: #b45309 !important; }
+
+/* 3. POOR WATER QUALITY (Score >= 40) */
+.wqi-score-card.wqi-poor {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.18), rgba(234, 88, 12, 0.12));
+    border: 1px solid rgba(249, 115, 22, 0.4);
+}
+.wqi-score-card.wqi-poor .wqi-left h3 { color: #ffffff !important; font-weight: 800; }
+.wqi-score-card.wqi-poor .wqi-left p { color: #fed7aa !important; }
+
+body.light-mode .wqi-score-card.wqi-poor {
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    border: 1px solid #fed7aa;
+}
+body.light-mode .wqi-score-card.wqi-poor .wqi-left h3 { color: #7c2d12 !important; font-weight: 800; }
+body.light-mode .wqi-score-card.wqi-poor .wqi-left p { color: #c2410c !important; }
+
+/* 4. CRITICAL WATER QUALITY (Score < 40) */
+.wqi-score-card.wqi-critical {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.18), rgba(225, 29, 72, 0.12));
+    border: 1px solid rgba(244, 63, 94, 0.4);
+}
+.wqi-score-card.wqi-critical .wqi-left h3 { color: #ffffff !important; font-weight: 800; }
+.wqi-score-card.wqi-critical .wqi-left p { color: #fecdd3 !important; }
+
+body.light-mode .wqi-score-card.wqi-critical {
+    background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+    border: 1px solid #fda4af;
+}
+body.light-mode .wqi-score-card.wqi-critical .wqi-left h3 { color: #881337 !important; font-weight: 800; }
+body.light-mode .wqi-score-card.wqi-critical .wqi-left p { color: #be123c !important; }
 
 .wqi-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
 
@@ -500,8 +554,8 @@ body.light-mode .wqi-score-card {
     flex-shrink: 0;
 }
 
-.wqi-left h3 { font-size: 1rem; color: var(--text-primary); }
-.wqi-left p { font-size: 0.8rem; color: var(--text-secondary); word-break: break-word; }
+.wqi-left h3 { font-size: 1rem; }
+.wqi-left p { font-size: 0.8rem; word-break: break-word; }
 
 .wqi-right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
 .wqi-score-num { font-size: 2rem; font-weight: 900; color: #10b981; }

@@ -663,34 +663,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 wqiStatusTag.textContent = 'GOOD WATER QUALITY';
                 wqiStatusTag.className = 'wqi-status-tag good';
                 if (wqiCard) {
-                    wqiCard.style.background = '#f0fdf4';
-                    wqiCard.style.borderColor = '#bbf7d0';
+                    wqiCard.className = 'wqi-score-card wqi-good';
+                    wqiCard.style.background = '';
+                    wqiCard.style.borderColor = '';
                 }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#16a34a';
+                if (wqiScoreVal) wqiScoreVal.style.color = '#10b981';
             } else if (wqiScore >= 60) {
                 wqiStatusTag.textContent = 'MODERATE WATER QUALITY';
                 wqiStatusTag.className = 'wqi-status-tag warn';
                 if (wqiCard) {
-                    wqiCard.style.background = '#fffbeb';
-                    wqiCard.style.borderColor = '#fef3c7';
+                    wqiCard.className = 'wqi-score-card wqi-moderate';
+                    wqiCard.style.background = '';
+                    wqiCard.style.borderColor = '';
                 }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#d97706';
+                if (wqiScoreVal) wqiScoreVal.style.color = '#f59e0b';
             } else if (wqiScore >= 40) {
                 wqiStatusTag.textContent = 'POOR WATER QUALITY';
                 wqiStatusTag.className = 'wqi-status-tag warn';
                 if (wqiCard) {
-                    wqiCard.style.background = '#fff7ed';
-                    wqiCard.style.borderColor = '#ffedd5';
+                    wqiCard.className = 'wqi-score-card wqi-poor';
+                    wqiCard.style.background = '';
+                    wqiCard.style.borderColor = '';
                 }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#ea580c';
+                if (wqiScoreVal) wqiScoreVal.style.color = '#f97316';
             } else {
                 wqiStatusTag.textContent = 'CRITICAL / HAZARDOUS';
                 wqiStatusTag.className = 'wqi-status-tag alert';
                 if (wqiCard) {
-                    wqiCard.style.background = '#ffe4e6';
-                    wqiCard.style.borderColor = '#fda4af';
+                    wqiCard.className = 'wqi-score-card wqi-critical';
+                    wqiCard.style.background = '';
+                    wqiCard.style.borderColor = '';
                 }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#e11d48';
+                if (wqiScoreVal) wqiScoreVal.style.color = '#f43f5e';
             }
         }
 
