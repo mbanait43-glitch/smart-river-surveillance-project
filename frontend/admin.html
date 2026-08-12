@@ -138,6 +138,30 @@
                             </div>
                         </div>
 
+                        <!-- Live Station Monitoring Photo Upload Section -->
+                        <div style="margin-bottom: 16px; padding: 14px; background: rgba(2, 132, 199, 0.05); border: 1px dashed rgba(2, 132, 199, 0.3); border-radius: 12px;">
+                            <label style="font-size: 0.78rem; font-weight: 800; color: #0284c7; text-transform: uppercase; display: block; margin-bottom: 8px;">
+                                <i class="fa-solid fa-camera" style="margin-right: 4px;"></i> Live Station Monitoring Photo Upload
+                            </label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: center;">
+                                <div>
+                                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Option A: Upload Image File (PNG/JPG)</span>
+                                    <input type="file" id="all-station-photo-file" accept="image/*" style="font-size: 0.8rem; width: 100%; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-card);">
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Option B: Enter Web Image URL</span>
+                                    <input type="url" id="all-station-photo-url-input" placeholder="https://example.com/station_photo.jpg" style="font-size: 0.8rem;">
+                                </div>
+                            </div>
+                            <div id="photo-preview-container" style="display: none; margin-top: 10px; align-items: center; gap: 12px; padding: 8px 12px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--glass-border);">
+                                <img id="photo-preview-img" src="" alt="Photo Preview" style="height: 55px; width: 80px; object-fit: cover; border-radius: 6px; border: 1px solid #0284c7;">
+                                <div>
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: #10b981;"><i class="fa-solid fa-circle-check"></i> Live Station Photo Selected & Ready</div>
+                                    <div id="photo-file-info" style="font-size: 0.72rem; color: var(--text-muted);">Image attached for dashboard photo stream</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Interactive Click-To-Pin Map Container -->
                         <div style="margin-top: 10px;">
                             <label style="font-size: 0.78rem; font-weight: 700; color: #0284c7; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">

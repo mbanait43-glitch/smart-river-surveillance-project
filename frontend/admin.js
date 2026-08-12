@@ -330,6 +330,42 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStatsSummary();
     }
 
+    // --- Live Station Monitoring Photo File & URL Reader Handlers ---
+    let selectedPhotoData = null;
+    const photoFileInput = document.getElementById('all-station-photo-file');
+    const photoUrlInput = document.getElementById('all-station-photo-url-input');
+    const photoPreviewContainer = document.getElementById('photo-preview-container');
+    const photoPreviewImg = document.getElementById('photo-preview-img');
+    const photoFileInfo = document.getElementById('photo-file-info');
+
+    if (photoFileInput) {
+        photoFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    selectedPhotoData = event.target.result;
+                    if (photoPreviewImg) photoPreviewImg.src = selectedPhotoData;
+                    if (photoPreviewContainer) photoPreviewContainer.style.display = 'flex';
+                    if (photoFileInfo) photoFileInfo.textContent = `Attached File: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (photoUrlInput) {
+        photoUrlInput.addEventListener('input', () => {
+            const url = photoUrlInput.value.trim();
+            if (url) {
+                selectedPhotoData = url;
+                if (photoPreviewImg) photoPreviewImg.src = selectedPhotoData;
+                if (photoPreviewContainer) photoPreviewContainer.style.display = 'flex';
+                if (photoFileInfo) photoFileInfo.textContent = `Web Image URL Attached`;
+            }
+        });
+    }
+
     // ==========================================================================
     // FEATURED SINGLE-STEP ALL-INDIA RIVER WATER TEST ENTRY FORM (DIRECT MAP PICKER)
     // ==========================================================================
@@ -357,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('admin_custom_locations', JSON.stringify(locations));
             }
 
-            // 3. Add Station if not exists with exact picked Lat / Lng
+            // 3. Add Station if not exists with exact picked Lat / Lng & Photo
             const stations = getStations();
             const existingIdx = stations.findIndex(s => s.code === stationCode);
             const newStation = {
@@ -366,7 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 river: riverName,
                 location: locationName,
                 lat: selectedLat,
-                lng: selectedLng
+                lng: selectedLng,
+                photo: selectedPhotoData || null
             };
             if (existingIdx >= 0) {
                 stations[existingIdx] = newStation;
@@ -375,7 +412,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             localStorage.setItem('admin_custom_stations', JSON.stringify(stations));
 
-            // 4. Save all 8 parameter overrides for this station!
+            // 4. Save Photo in dedicated station photo dictionary
+            if (selectedPhotoData) {
+                const photos = JSON.parse(localStorage.getItem('admin_station_photos') || '{}');
+                photos[stationCode] = selectedPhotoData;
+                localStorage.setItem('admin_station_photos', JSON.stringify(photos));
+            }
+
+            // 5. Save all 12 parameter overrides for this station!
             const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
             if (!overrides[stationCode]) overrides[stationCode] = {};
 
@@ -412,7 +456,10 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStatsSummary();
 
             formAllInOne.reset();
-            alert(`✅ Tested River Data & GIS Map Pin for "${riverName} (${stationName})" Successfully Published to Live Dashboard!`);
+            selectedPhotoData = null;
+            if (photoPreviewContainer) photoPreviewContainer.style.display = 'none';
+
+            alert(`✅ Tested River Data, Station Photo & GIS Map Pin for "${riverName} (${stationName})" Successfully Published to Live Dashboard!`);
         });
     }
 

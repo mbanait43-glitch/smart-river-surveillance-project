@@ -812,10 +812,24 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStationLivePhoto(station);
     }
 
-    // Helper: Construct Official CPCB Server Station Image URL
+    // Helper: Construct Official CPCB Server Station Image URL (Supports Admin Custom Uploads)
     function getCpcbStationPhotoUrl(station) {
         if (!station) return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
+
+        // 1. Check for Admin Uploaded Custom Station Photo (Base64 Data URL or Web URL)
+        const adminPhotos = JSON.parse(localStorage.getItem('admin_station_photos') || '{}');
         const stNo = station.stationNo || station.id || '';
+        if (stNo && adminPhotos[stNo]) {
+            return adminPhotos[stNo];
+        }
+        if (station.id && adminPhotos[station.id]) {
+            return adminPhotos[station.id];
+        }
+        if (station.photo) {
+            return station.photo;
+        }
+
+        // 2. Default Official CPCB Server Station Image URL
         if (stNo) {
             return `https://rtwqmsdb1.cpcb.gov.in/images/stations/${stNo}_image.jpg`;
         }
