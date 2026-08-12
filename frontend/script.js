@@ -450,7 +450,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filtered.length > 0) {
             const targetId = filtered[0].id;
             stationSelect.value = targetId;
-            displayStationData(targetId, true);
+            // Only auto-sync dropdowns if triggered from MAP click or STATION dropdown selection
+            displayStationData(targetId, (trigger === 'MAP' || trigger === 'STATION'));
         }
     }
 
@@ -460,15 +461,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const station = stationMap[stationId];
         if (!station) return;
 
-        // AUTOMATIC BIDIRECTIONAL DROPDOWN SYNCING:
+        // AUTOMATIC BIDIRECTIONAL DROPDOWN SYNCING (Preserve ALL selection when active):
         if (autoSyncDropdowns) {
-            if (riverSelect && station.river) {
+            if (riverSelect && station.river && riverSelect.value !== 'ALL') {
                 const options = Array.from(riverSelect.options).map(o => o.value);
                 if (options.includes(station.river)) {
                     riverSelect.value = station.river;
                 }
             }
-            if (stateSelect && station.state) {
+            if (stateSelect && station.state && stateSelect.value !== 'ALL') {
                 const stateOpts = Array.from(stateSelect.options).map(o => o.value);
                 if (stateOpts.includes(station.state)) {
                     stateSelect.value = station.state;
@@ -504,8 +505,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        if (reportRiver) reportRiver.textContent = station.river;
-        if (reportLocation) reportLocation.textContent = station.state;
+        const curRiverVal = riverSelect ? riverSelect.value : 'ALL';
+        const curStateVal = stateSelect ? stateSelect.value : 'ALL';
+
+        if (reportRiver) reportRiver.textContent = (curRiverVal === 'ALL') ? 'All Rivers' : station.river;
+        if (reportLocation) reportLocation.textContent = (curStateVal === 'ALL') ? 'All Locations' : station.state;
         if (reportStation) reportStation.textContent = station.name;
         if (reportStationCode) reportStationCode.textContent = station.id;
 
