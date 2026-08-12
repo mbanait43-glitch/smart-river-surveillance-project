@@ -1129,6 +1129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnHomeReset = document.getElementById('btn-home-reset');
 
     function resetHomeDefault() {
+        selectedStationId = null;
         if (riverSelect) riverSelect.value = 'ALL';
         if (stateSelect) stateSelect.value = 'ALL';
         updateStationList('INIT');
