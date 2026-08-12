@@ -812,13 +812,52 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCardById('card-toc', 'Total Organic Carbon', 'mg/l');
         updateCardById('card-depth', 'Depth', 'm');
 
-        // Defer Chart rendering slightly so ChartJS doesn't fight Leaflet for GPU/CPU frames!
-        setTimeout(() => {
-            renderAnalyticsChart(station);
-        }, 200);
+        // Update Live CPCB Station Surveillance Camera Photo & Info Panel!
+        updateStationLivePhoto(station);
     }
 
-    // --- Render Clean Analytics Chart ---
+    // Helper: Construct Official CPCB Server Station Image URL
+    function getCpcbStationPhotoUrl(station) {
+        if (!station) return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
+        const stNo = station.stationNo || station.id || '';
+        if (stNo) {
+            return `https://rtwqmsdb1.cpcb.gov.in/images/stations/${stNo}_image.jpg`;
+        }
+        return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
+    }
+
+    // --- Live CPCB Station Surveillance & Camera Photo Updater ---
+    function updateStationLivePhoto(station) {
+        const imgEl = document.getElementById('station-live-image');
+        const nameEl = document.getElementById('camera-station-name');
+        const locEl = document.getElementById('camera-location-river');
+        const codeEl = document.getElementById('camera-station-code');
+        const timeEl = document.getElementById('camera-timestamp');
+
+        if (!station) return;
+
+        if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
+        if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'} Territory Location`;
+        if (codeEl) codeEl.textContent = station.stationNo || station.id || '--';
+        if (timeEl) timeEl.textContent = station.lastTimestamp ? station.lastTimestamp.split(' ')[1] || 'Live Stream' : 'Just Now';
+
+        const photoUrl = getCpcbStationPhotoUrl(station);
+
+        if (imgEl) {
+            imgEl.style.opacity = '0.4';
+            imgEl.onerror = function() {
+                this.onerror = null;
+                this.src = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
+                this.style.opacity = '1';
+            };
+            setTimeout(() => {
+                imgEl.src = photoUrl;
+                imgEl.style.opacity = '1';
+            }, 150);
+        }
+    }
+
+    // --- Render Clean Analytics Chart (Fallback) ---
     function renderAnalyticsChart(station) {
         const ctx = document.getElementById('analyticsChart');
         if (!ctx) return;
@@ -915,15 +954,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const phVal = stOverrides['pH'] !== undefined ? `${stOverrides['pH']}` : (s.parameters['pH'] ? `${s.parameters['pH'].value}` : '7.40');
                 const doVal = stOverrides['Dissolved Oxygen'] !== undefined ? `${stOverrides['Dissolved Oxygen']} mg/l` : (s.parameters['Dissolved Oxygen'] ? `${s.parameters['Dissolved Oxygen'].value} mg/l` : '6.80 mg/l');
 
+                const photoUrl = getCpcbStationPhotoUrl(s);
                 const popupContent = `
-                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #0f172a; min-width: 220px; max-width: 300px; line-height: 1.4; display: block; text-align: left;">
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #0f172a; min-width: 240px; max-width: 300px; line-height: 1.4; display: block; text-align: left;">
+                        <div style="width: 100%; height: 110px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; position: relative; background: #0f172a;">
+                            <img src="${photoUrl}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'" style="width: 100%; height: 100%; object-fit: cover;">
+                            <span style="position: absolute; top: 6px; left: 6px; background: rgba(15, 23, 42, 0.85); color: #10b981; font-size: 0.65rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.4);">● CPCB KIOSK PHOTO</span>
+                        </div>
                         <div style="font-size: 14px; font-weight: 800; color: #0284c7; margin-bottom: 4px; display: block; white-space: normal; word-break: normal;">${s.name}</div>
                         <div style="font-size: 12px; color: #475569; margin-bottom: 6px; display: block;"><b>River:</b> ${s.river} | <b>Location:</b> ${s.state}</div>
                         <div style="font-size: 12px; color: #0f172a; display: block;"><b>pH Level:</b> ${phVal} &nbsp;|&nbsp; <b>DO:</b> ${doVal}</div>
                     </div>
                 `;
 
-                marker.bindPopup(popupContent, { minWidth: 230, maxWidth: 320, autoPan: false });
+                marker.bindPopup(popupContent, { minWidth: 240, maxWidth: 320, autoPan: false });
 
                 marker.on('click', () => {
                     stationSelect.value = s.id;
