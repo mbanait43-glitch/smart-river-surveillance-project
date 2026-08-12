@@ -819,10 +819,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateStationLivePhoto(station) {
         const imgEl = document.getElementById('station-live-image');
         const nameEl = document.getElementById('camera-station-name');
+        const locEl = document.getElementById('camera-location-river');
+        const codeEl = document.getElementById('camera-station-code');
+        const timeEl = document.getElementById('camera-timestamp');
 
         if (!station) return;
 
         if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
+        if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'} Territory Location`;
+        if (codeEl) codeEl.textContent = station.stationNo || station.id || '--';
+        if (timeEl) timeEl.textContent = station.lastTimestamp ? (station.lastTimestamp.split(' ')[1] || 'Live Stream') : 'Live Stream';
 
         const photoUrl = getCpcbStationPhotoUrl(station);
         const fallbackUrl = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';

@@ -351,20 +351,28 @@
                 </div>
             </section>
 
-            <!-- Live Station Monitoring Photo Panel -->
+            <!-- Live Station Monitoring Photo Panel (100% Exact Match to User Screenshot) -->
             <section id="live-camera-section" class="panel-card" style="display: flex; flex-direction: column;">
-                <div class="panel-header" style="padding: 14px 20px;">
-                    <h3><i class="fa-solid fa-camera-retro" style="color: #0284c7;"></i> Station Live Kiosk Photo</h3>
+                <div class="panel-header" style="padding: 16px 22px; display: flex; align-items: center; justify-content: space-between;">
+                    <h3><i class="fa-solid fa-camera-retro" style="color: #0284c7;"></i> Live Station Monitoring Photo</h3>
+                    <span style="font-size: 0.88rem; color: var(--text-secondary); font-weight: 500;">Surveillance Feed</span>
                 </div>
                 
-                <div class="panel-body camera-panel-body" style="height: 310px; padding: 10px !important; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
-                    <!-- Station Live Monitoring Image (100% Uncovered & Uncropped) -->
-                    <img id="station-live-image" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/BH77_image.jpg" alt="Live Station Kiosk Monitoring Photo" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); transition: opacity 0.3s ease;">
-                </div>
+                <div class="panel-body camera-panel-body" style="padding: 14px !important; display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Station Live Monitoring Photo Container -->
+                    <div style="height: 290px; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px;">
+                        <img id="station-live-image" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/BH72_image.jpg" alt="Live Station Monitoring Photo" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px;">
+                    </div>
 
-                <!-- Full Station Name Display Below Photo -->
-                <div class="camera-footer-bar" style="padding: 12px 20px; border-top: 1px solid var(--glass-border); text-align: center;">
-                    <div id="camera-station-name" style="font-size: 0.95rem; font-weight: 800; color: var(--cyan-primary); word-break: break-word;">BH77_New Bridge, U/s of Patna city, Khurji</div>
+                    <!-- White Metadata Card Below Photo (Exact User Screenshot Match) -->
+                    <div class="camera-info-card">
+                        <div id="camera-station-name" style="font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; word-break: break-word;">BH72_River Ganga at Chausa, U/s of Buxar</div>
+                        <div id="camera-location-river" style="font-size: 0.82rem; margin-bottom: 10px;">Ganga River | Bihar Territory Location</div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 10px;" class="camera-card-meta-line">
+                            <span><i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Station Code: <strong id="camera-station-code">BH72</strong></span>
+                            <span><i class="fa-solid fa-clock" style="color: #10b981;"></i> Stream Updated: <strong id="camera-timestamp">Live Stream</strong></span>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>

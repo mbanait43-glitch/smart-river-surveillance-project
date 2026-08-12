@@ -689,23 +689,58 @@ body.light-mode .panel-header h3 { color: #0284c7; }
 .map-view { height: 380px; width: 100%; background: var(--bg-dark); }
 .panel-body { padding: 18px !important; }
 
-/* Live Station Surveillance & Camera Feed Styling (CPCB Clean Zero-Overlay Match) */
+/* Live Station Surveillance & Camera Feed Styling (100% Mock Screenshot Match) */
 .camera-panel-body {
     background: #090f1e;
-    border-radius: 0;
+    border-radius: 0 0 16px 16px;
 }
 body.light-mode .camera-panel-body {
     background: #f1f5f9;
 }
 
-.camera-footer-bar {
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text-muted);
+.camera-info-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
 }
-body.light-mode .camera-footer-bar {
-    background: #f8fafc;
+body.light-mode .camera-info-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    color: #0f172a;
+}
+
+#camera-station-name {
+    color: #ffffff;
+}
+body.light-mode #camera-station-name {
+    color: #0f172a;
+}
+
+#camera-location-river {
+    color: #94a3b8;
+}
+body.light-mode #camera-location-river {
+    color: #64748b;
+}
+
+.camera-card-meta-line {
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #94a3b8;
+}
+body.light-mode .camera-card-meta-line {
+    border-top: 1px solid #f1f5f9 !important;
     color: #475569;
-    border-top: 1px solid #e2e8f0 !important;
+}
+
+.camera-card-meta-line strong {
+    color: #ffffff;
+}
+body.light-mode .camera-card-meta-line strong {
+    color: #0f172a;
 }
 
 /* FIX 1: DISABLE ALL MAP BLUR ON CLICK & REMOVE TILE SEAM LINES */
