@@ -386,28 +386,28 @@ document.addEventListener('DOMContentLoaded', () => {
         let curState = stateSelect ? stateSelect.value : 'ALL';
 
         if (trigger === 'RIVER') {
-            // User selected a River: ensure selected State actually contains this River
-            if (curRiver !== 'ALL') {
+            // User selected a River: if specific state doesn't have this river, reset state to ALL
+            if (curRiver !== 'ALL' && curState !== 'ALL') {
                 const riverStations = allStations.filter(s => s.river === curRiver);
                 const validStatesForRiver = new Set(riverStations.map(s => s.state));
                 if (!validStatesForRiver.has(curState)) {
-                    curState = riverStations[0].state;
-                    if (stateSelect) stateSelect.value = curState;
+                    curState = 'ALL';
+                    if (stateSelect) stateSelect.value = 'ALL';
                 }
             }
         } else if (trigger === 'STATE') {
-            // User selected a State: ensure selected River actually exists in this State
-            if (curState !== 'ALL') {
+            // User selected a State: if specific river doesn't exist in this state, reset river to ALL
+            if (curState !== 'ALL' && curRiver !== 'ALL') {
                 const stateStations = allStations.filter(s => s.state === curState);
                 const validRiversForState = new Set(stateStations.map(s => s.river));
                 if (!validRiversForState.has(curRiver)) {
-                    curRiver = stateStations[0].river;
-                    if (riverSelect) riverSelect.value = curRiver;
+                    curRiver = 'ALL';
+                    if (riverSelect) riverSelect.value = 'ALL';
                 }
             }
         }
 
-        // Filter stations matching both curRiver and curState
+        // Filter stations matching curRiver and curState
         let filtered = allStations;
         if (curRiver && curRiver !== 'ALL') {
             filtered = filtered.filter(s => s.river === curRiver);
@@ -416,23 +416,11 @@ document.addEventListener('DOMContentLoaded', () => {
             filtered = filtered.filter(s => s.state === curState);
         }
 
-        // Safety fallback: if filtered is still empty, reset to curRiver or curState
+        // Safety fallback: if filtered is empty, reset filters
         if (filtered.length === 0) {
-            if (trigger === 'RIVER' && curRiver !== 'ALL') {
-                filtered = allStations.filter(s => s.river === curRiver);
-                if (filtered.length > 0 && stateSelect) {
-                    curState = filtered[0].state;
-                    stateSelect.value = curState;
-                }
-            } else if (trigger === 'STATE' && curState !== 'ALL') {
-                filtered = allStations.filter(s => s.state === curState);
-                if (filtered.length > 0 && riverSelect) {
-                    curRiver = filtered[0].river;
-                    riverSelect.value = curRiver;
-                }
-            } else {
-                filtered = allStations;
-            }
+            filtered = allStations;
+            if (riverSelect) riverSelect.value = 'ALL';
+            if (stateSelect) stateSelect.value = 'ALL';
         }
 
         // Populate station dropdown
@@ -450,8 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filtered.length > 0) {
             const targetId = filtered[0].id;
             stationSelect.value = targetId;
-            // Only auto-sync dropdowns if triggered from MAP click or STATION dropdown selection
-            displayStationData(targetId, (trigger === 'MAP' || trigger === 'STATION'));
+            displayStationData(targetId, false);
         }
     }
 
@@ -461,15 +448,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const station = stationMap[stationId];
         if (!station) return;
 
-        // AUTOMATIC BIDIRECTIONAL DROPDOWN SYNCING (Preserve ALL selection when active):
+        // AUTOMATIC BIDIRECTIONAL DROPDOWN SYNCING (When user picks from station dropdown or clicks map):
         if (autoSyncDropdowns) {
-            if (riverSelect && station.river && riverSelect.value !== 'ALL') {
+            if (riverSelect && station.river) {
                 const options = Array.from(riverSelect.options).map(o => o.value);
                 if (options.includes(station.river)) {
                     riverSelect.value = station.river;
                 }
             }
-            if (stateSelect && station.state && stateSelect.value !== 'ALL') {
+            if (stateSelect && station.state) {
                 const stateOpts = Array.from(stateSelect.options).map(o => o.value);
                 if (stateOpts.includes(station.state)) {
                     stateSelect.value = station.state;
@@ -505,11 +492,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        const curRiverVal = riverSelect ? riverSelect.value : 'ALL';
-        const curStateVal = stateSelect ? stateSelect.value : 'ALL';
-
-        if (reportRiver) reportRiver.textContent = (curRiverVal === 'ALL') ? 'All Rivers' : station.river;
-        if (reportLocation) reportLocation.textContent = (curStateVal === 'ALL') ? 'All Locations' : station.state;
+        // ALWAYS DISPLAY THE TRUE METADATA OF THE ACTIVE STATION!
+        if (reportRiver) reportRiver.textContent = station.river || 'Regional River';
+        if (reportLocation) reportLocation.textContent = station.state || 'Territory Location';
         if (reportStation) reportStation.textContent = station.name;
         if (reportStationCode) reportStationCode.textContent = station.id;
 
