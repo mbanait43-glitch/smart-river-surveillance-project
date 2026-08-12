@@ -959,7 +959,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #0f172a; min-width: 240px; max-width: 300px; line-height: 1.4; display: block; text-align: left;">
                         <div style="width: 100%; height: 110px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; position: relative; background: #0f172a;">
                             <img src="${photoUrl}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'" style="width: 100%; height: 100%; object-fit: cover;">
-                            <span style="position: absolute; top: 6px; left: 6px; background: rgba(15, 23, 42, 0.85); color: #10b981; font-size: 0.65rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.4);">● CPCB KIOSK PHOTO</span>
                         </div>
                         <div style="font-size: 14px; font-weight: 800; color: #0284c7; margin-bottom: 4px; display: block; white-space: normal; word-break: normal;">${s.name}</div>
                         <div style="font-size: 12px; color: #475569; margin-bottom: 6px; display: block;"><b>River:</b> ${s.river} | <b>Location:</b> ${s.state}</div>

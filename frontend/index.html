@@ -351,35 +351,28 @@
                 </div>
             </section>
 
-            <!-- CPCB Official Live Station Surveillance Photo Panel -->
+            <!-- Live Station Monitoring Photo Panel -->
             <section id="live-camera-section" class="panel-card">
                 <div class="panel-header">
-                    <h3><i class="fa-solid fa-camera-retro" style="color: #0284c7;"></i> Live Station Surveillance & CPCB Kiosk Photo</h3>
-                    <span class="panel-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700;">● Official CPCB Kiosk Stream</span>
+                    <h3><i class="fa-solid fa-camera-retro" style="color: #0284c7;"></i> Live Station Monitoring Photo</h3>
+                    <span class="panel-tag">Surveillance Feed</span>
                 </div>
-                <div class="panel-body p-0" style="position: relative; overflow: hidden; height: 380px; background: #0f172a;">
-                    <!-- Live Camera Feed Badge -->
-                    <div class="camera-live-badge">
-                        <span class="pulse-dot"></span>
-                        <span>REAL CPCB KIOSK PHOTO</span>
-                    </div>
-
+                <div class="panel-body p-0 camera-panel-body" style="position: relative; overflow: hidden; height: 380px;">
                     <!-- Station Live Surveillance Image -->
                     <div class="station-photo-wrapper" style="width: 100%; height: 100%; position: relative;">
-                        <img id="station-live-image" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/UK51_image.jpg" alt="Live CPCB Station Monitoring Photo" style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease;">
+                        <img id="station-live-image" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/UK51_image.jpg" alt="Live Station Monitoring Photo" style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease;">
                         <div class="camera-gradient-overlay"></div>
                     </div>
 
                     <!-- Station Info Overlay Card -->
                     <div class="camera-info-overlay">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                            <h4 id="camera-station-name" style="font-size: 0.95rem; font-weight: 800; color: #ffffff; margin: 0;">UK51_Dhari Devi Temple</h4>
-                            <span style="font-size: 0.7rem; background: rgba(2, 132, 199, 0.9); color: #fff; padding: 2px 8px; border-radius: 6px; font-weight: 700;">CPCB Monitored</span>
+                        <div style="margin-bottom: 4px;">
+                            <h4 id="camera-station-name" class="camera-station-title">UK51_Dhari Devi Temple</h4>
                         </div>
-                        <p id="camera-location-river" style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 6px 0;">Ganga / Alaknanda Basin | Uttarakhand Territory Location</p>
-                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; color: #cbd5e1;">
-                            <span><i class="fa-solid fa-satellite-dish" style="color: #38bdf8;"></i> Station Code: <strong id="camera-station-code" style="color: #ffffff;">UK51</strong></span>
-                            <span><i class="fa-solid fa-clock" style="color: #10b981;"></i> Stream Updated: <strong id="camera-timestamp" style="color: #ffffff;">Just Now</strong></span>
+                        <p id="camera-location-river" class="camera-location-sub">Ganga / Alaknanda Basin | Uttarakhand Territory Location</p>
+                        <div class="camera-meta-footer" style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem;">
+                            <span><i class="fa-solid fa-satellite-dish" style="color: #38bdf8;"></i> Station Code: <strong id="camera-station-code">UK51</strong></span>
+                            <span><i class="fa-solid fa-clock" style="color: #10b981;"></i> Stream Updated: <strong id="camera-timestamp">Live Stream</strong></span>
                         </div>
                     </div>
                 </div>
