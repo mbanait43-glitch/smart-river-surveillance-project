@@ -351,36 +351,20 @@
                 </div>
             </section>
 
-            <!-- Professional Live Station Surveillance Photo & Metadata Panel -->
+            <!-- Live Station Monitoring Photo Panel -->
             <section id="live-camera-section" class="panel-card" style="display: flex; flex-direction: column;">
                 <div class="panel-header" style="padding: 14px 20px;">
                     <h3><i class="fa-solid fa-camera-retro" style="color: #0284c7;"></i> Station Live Kiosk Photo</h3>
-                    <span class="panel-tag" style="background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700;">● Live Kiosk Telemetry</span>
                 </div>
                 
-                <div class="panel-body camera-panel-body" style="height: 290px; padding: 10px !important; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                <div class="panel-body camera-panel-body" style="height: 310px; padding: 10px !important; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
                     <!-- Station Live Monitoring Image (100% Uncovered & Uncropped) -->
                     <img id="station-live-image" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/BH77_image.jpg" alt="Live Station Kiosk Monitoring Photo" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); transition: opacity 0.3s ease;">
                 </div>
 
-                <!-- Structured Station Metadata Box Below Photo -->
-                <div class="camera-metadata-grid" style="padding: 14px 20px; border-top: 1px solid var(--glass-border); display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; font-size: 0.78rem;">
-                    <div>
-                        <span style="color: var(--text-muted); display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">Station Name</span>
-                        <strong id="camera-station-name" style="color: var(--cyan-primary); font-size: 0.82rem; word-break: break-word;">BH77_New Bridge, U/s of Patna city, Khurji</strong>
-                    </div>
-                    <div>
-                        <span style="color: var(--text-muted); display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">River & Territory</span>
-                        <strong id="camera-location-river" style="color: var(--text-primary); font-size: 0.82rem;">Ganga River | Bihar</strong>
-                    </div>
-                    <div>
-                        <span style="color: var(--text-muted); display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">Station Code & ID</span>
-                        <strong id="camera-station-code" style="color: var(--text-primary); font-size: 0.82rem;">BH77 (11807)</strong>
-                    </div>
-                    <div>
-                        <span style="color: var(--text-muted); display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">GPS Coordinates</span>
-                        <strong id="camera-gps-coords" style="color: var(--text-primary); font-size: 0.82rem;">Lat 25.6261, Lng 85.1189</strong>
-                    </div>
+                <!-- Full Station Name Display Below Photo -->
+                <div class="camera-footer-bar" style="padding: 12px 20px; border-top: 1px solid var(--glass-border); text-align: center;">
+                    <div id="camera-station-name" style="font-size: 0.95rem; font-weight: 800; color: var(--cyan-primary); word-break: break-word;">BH77_New Bridge, U/s of Patna city, Khurji</div>
                 </div>
             </section>
         </div>

@@ -819,21 +819,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateStationLivePhoto(station) {
         const imgEl = document.getElementById('station-live-image');
         const nameEl = document.getElementById('camera-station-name');
-        const locEl = document.getElementById('camera-location-river');
-        const codeEl = document.getElementById('camera-station-code');
-        const gpsEl = document.getElementById('camera-gps-coords');
 
         if (!station) return;
 
         if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
-        if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'Territory'}`;
-        
-        const stCodeStr = station.stationNo ? `${station.stationNo} (ID: ${station.id})` : (station.id || '--');
-        if (codeEl) codeEl.textContent = stCodeStr;
-
-        if (gpsEl && station.lat && station.lng) {
-            gpsEl.textContent = `Lat ${Number(station.lat).toFixed(4)}°, Lng ${Number(station.lng).toFixed(4)}°`;
-        }
 
         const photoUrl = getCpcbStationPhotoUrl(station);
         const fallbackUrl = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
