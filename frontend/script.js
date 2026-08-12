@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStationList();
     }
 
-    function updateStationList(trigger = 'INIT') {
+    function updateStationList(trigger = 'INIT', forceStationId = null) {
         const allStations = Object.values(stationMap);
         if (allStations.length === 0) return;
 
@@ -434,8 +434,11 @@ document.addEventListener('DOMContentLoaded', () => {
             stationSelect.appendChild(opt);
         });
 
-        // Automatically select and display the 1st station in filtered list
-        if (filtered.length > 0) {
+        // Automatically select target station or 1st station in filtered list
+        if (forceStationId && filtered.some(s => s.id === forceStationId)) {
+            stationSelect.value = forceStationId;
+            displayStationData(forceStationId, false);
+        } else if (filtered.length > 0) {
             const targetId = filtered[0].id;
             stationSelect.value = targetId;
             displayStationData(targetId, false);
@@ -961,8 +964,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 marker.bindPopup(popupContent, { minWidth: 230, maxWidth: 320, autoPan: false });
 
                 marker.on('click', () => {
-                    stationSelect.value = s.id;
-                    displayStationData(s.id, true);
+                    // Sync riverSelect and stateSelect filters to match clicked station
+                    if (riverSelect && s.river) {
+                        const rOptions = Array.from(riverSelect.options).map(o => o.value);
+                        if (rOptions.includes(s.river)) {
+                            riverSelect.value = s.river;
+                        } else {
+                            riverSelect.value = 'ALL';
+                        }
+                    }
+
+                    if (stateSelect && s.state) {
+                        const sOptions = Array.from(stateSelect.options).map(o => o.value);
+                        if (sOptions.includes(s.state)) {
+                            stateSelect.value = s.state;
+                        } else {
+                            stateSelect.value = 'ALL';
+                        }
+                    }
+
+                    updateStationList('MAP', s.id);
                 });
 
                 markersMap[s.id] = marker;
