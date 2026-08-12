@@ -1120,9 +1120,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Home Reset Button Listener (Top Logo & Overview Reset) ---
+    // --- Home Reset Button Listener (Top Logo Reset Only) ---
     const btnHomeReset = document.getElementById('btn-home-reset');
-    const navOverview = document.querySelector('a[href="#overview"]');
 
     function resetHomeDefault() {
         if (riverSelect) riverSelect.value = 'ALL';
@@ -1138,10 +1137,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnHomeReset) btnHomeReset.addEventListener('click', resetHomeDefault);
-    if (navOverview) navOverview.addEventListener('click', (e) => {
-        e.preventDefault();
-        resetHomeDefault();
-    });
 
     // Event Listeners
     if (btnRefresh) btnRefresh.addEventListener('click', fetchData);
