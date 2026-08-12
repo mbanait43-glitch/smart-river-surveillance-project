@@ -836,7 +836,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
     }
 
-    // --- Live CPCB Station Surveillance & Camera Photo Updater ---
+    let photoLoadToken = 0;
+
+    // --- Live CPCB Station Surveillance & Camera Photo Updater (100% Instant Mobile Optimized) ---
     function updateStationLivePhoto(station) {
         const imgEl = document.getElementById('station-live-image');
         const nameEl = document.getElementById('camera-station-name');
@@ -859,18 +861,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const fallbackUrl = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
 
         if (imgEl) {
-            imgEl.style.opacity = '0.3';
+            const currentToken = ++photoLoadToken;
+            
+            // 1. Direct instant assignment for zero-delay switching
+            imgEl.src = photoUrl;
+            imgEl.style.opacity = '1';
 
-            imgEl.onerror = function() {
-                this.onerror = null;
-                this.src = fallbackUrl;
-                this.style.opacity = '1';
+            // 2. Pre-loader verification for smooth fallback if mobile network drops
+            const preloader = new Image();
+            preloader.onload = () => {
+                if (currentToken === photoLoadToken) {
+                    imgEl.src = photoUrl;
+                    imgEl.style.opacity = '1';
+                }
             };
-
-            setTimeout(() => {
-                imgEl.src = photoUrl;
-                imgEl.style.opacity = '1';
-            }, 120);
+            preloader.onerror = () => {
+                if (currentToken === photoLoadToken) {
+                    imgEl.src = fallbackUrl;
+                    imgEl.style.opacity = '1';
+                }
+            };
+            preloader.src = photoUrl;
         }
     }
 
