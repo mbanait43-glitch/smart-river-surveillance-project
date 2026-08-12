@@ -829,6 +829,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Live CPCB Station Surveillance & Camera Photo Updater ---
     function updateStationLivePhoto(station) {
         const imgEl = document.getElementById('station-live-image');
+        const blurEl = document.getElementById('station-blur-bg');
         const nameEl = document.getElementById('camera-station-name');
         const locEl = document.getElementById('camera-location-river');
         const codeEl = document.getElementById('camera-station-code');
@@ -842,17 +843,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (timeEl) timeEl.textContent = station.lastTimestamp ? station.lastTimestamp.split(' ')[1] || 'Live Stream' : 'Just Now';
 
         const photoUrl = getCpcbStationPhotoUrl(station);
+        const fallbackUrl = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
 
         if (imgEl) {
             imgEl.style.opacity = '0.4';
+            if (blurEl) blurEl.style.opacity = '0.1';
+
             imgEl.onerror = function() {
                 this.onerror = null;
-                this.src = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
+                this.src = fallbackUrl;
+                if (blurEl) blurEl.src = fallbackUrl;
                 this.style.opacity = '1';
+                if (blurEl) blurEl.style.opacity = document.body.classList.contains('light-mode') ? '0.22' : '0.35';
             };
+
             setTimeout(() => {
                 imgEl.src = photoUrl;
+                if (blurEl) blurEl.src = photoUrl;
                 imgEl.style.opacity = '1';
+                if (blurEl) blurEl.style.opacity = document.body.classList.contains('light-mode') ? '0.22' : '0.35';
             }, 150);
         }
     }

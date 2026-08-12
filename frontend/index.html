@@ -358,9 +358,10 @@
                     <span class="panel-tag">Surveillance Feed</span>
                 </div>
                 <div class="panel-body p-0 camera-panel-body" style="position: relative; overflow: hidden; height: 380px;">
-                    <!-- Station Live Surveillance Image -->
-                    <div class="station-photo-wrapper" style="width: 100%; height: 100%; position: relative;">
-                        <img id="station-live-image" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/UK51_image.jpg" alt="Live Station Monitoring Photo" style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease;">
+                    <!-- Station Live Surveillance Image (100% Uncropped Fit with Ambient Blur Fill) -->
+                    <div class="station-photo-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+                        <img id="station-blur-bg" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/UK51_image.jpg" alt="Ambient Background" class="camera-blur-bg">
+                        <img id="station-live-image" src="https://rtwqmsdb1.cpcb.gov.in/images/stations/UK51_image.jpg" alt="Live Station Monitoring Photo" class="camera-main-img">
                         <div class="camera-gradient-overlay"></div>
                     </div>
 
