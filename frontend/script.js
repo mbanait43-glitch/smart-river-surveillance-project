@@ -826,7 +826,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!station) return;
 
         if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
-        if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'} Territory Location`;
+        if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'}`;
         if (codeEl) codeEl.textContent = station.stationNo || station.id || '--';
         if (timeEl) timeEl.textContent = station.lastTimestamp ? (station.lastTimestamp.split(' ')[1] || 'Live Stream') : 'Live Stream';
 
