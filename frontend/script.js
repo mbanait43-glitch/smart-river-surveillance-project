@@ -834,7 +834,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
         if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'}`;
-        if (codeEl) codeEl.textContent = station.stationNo || station.id || '--';
+        if (codeEl) {
+            const stNo = station.stationNo || station.id || '--';
+            const stId = (station.id && station.id !== stNo) ? ` (ID: ${station.id})` : '';
+            codeEl.textContent = `${stNo}${stId}`;
+        }
         if (timeEl) timeEl.textContent = station.lastTimestamp ? (station.lastTimestamp.split(' ')[1] || 'Live Stream') : 'Live Stream';
 
         const photoUrl = getCpcbStationPhotoUrl(station);
