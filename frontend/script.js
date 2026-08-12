@@ -1120,6 +1120,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Home Reset Button Listener (Top Logo & Overview Reset) ---
+    const btnHomeReset = document.getElementById('btn-home-reset');
+    const navOverview = document.querySelector('a[href="#overview"]');
+
+    function resetHomeDefault() {
+        if (riverSelect) riverSelect.value = 'ALL';
+        if (stateSelect) stateSelect.value = 'ALL';
+        updateStationList('INIT');
+        if (map) {
+            map.flyTo([22.5937, 78.9629], 5, {
+                duration: 1.2,
+                easeLinearity: 0.25
+            });
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    if (btnHomeReset) btnHomeReset.addEventListener('click', resetHomeDefault);
+    if (navOverview) navOverview.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetHomeDefault();
+    });
+
     // Event Listeners
     if (btnRefresh) btnRefresh.addEventListener('click', fetchData);
     if (riverSelect) riverSelect.addEventListener('change', () => updateStationList('RIVER'));
