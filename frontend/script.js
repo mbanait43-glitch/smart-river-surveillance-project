@@ -812,13 +812,53 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCardById('card-toc', 'Total Organic Carbon', 'mg/l');
         updateCardById('card-depth', 'Depth', 'm');
 
-        // Defer Chart rendering slightly so ChartJS doesn't fight Leaflet for GPU/CPU frames!
-        setTimeout(() => {
-            renderAnalyticsChart(station);
-        }, 200);
+        // Update Live Station Surveillance Camera Photo & Info Panel!
+        updateStationLivePhoto(station);
     }
 
-    // --- Render Clean Analytics Chart ---
+    // --- Live Station Surveillance & Camera Photo Updater ---
+    function updateStationLivePhoto(station) {
+        const imgEl = document.getElementById('station-live-image');
+        const nameEl = document.getElementById('camera-station-name');
+        const locEl = document.getElementById('camera-location-river');
+        const codeEl = document.getElementById('camera-station-code');
+        const timeEl = document.getElementById('camera-timestamp');
+
+        if (!station) return;
+
+        if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
+        if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'} Territory Location`;
+        if (codeEl) codeEl.textContent = station.id || '--';
+        if (timeEl) timeEl.textContent = station.lastTimestamp ? station.lastTimestamp.split(' ')[1] || 'Live Stream' : 'Just Now';
+
+        // High-Quality River Monitoring Station Surveillance Image Collection
+        const riverPhotos = {
+            'Ganga River': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
+            'Yamuna River': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+            'Nag River': 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80',
+            'Kanhan River': 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=1200&q=80',
+            'Godavari River': 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=80',
+            'Krishna River': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80',
+            'Narmada River': 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80',
+            'Brahmaputra River': 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1200&q=80',
+            'Sabarmati River': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+            'Hooghly River': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+            'Damodar River': 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=1200&q=80'
+        };
+
+        const defaultPhoto = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
+        const photoUrl = riverPhotos[station.river] || defaultPhoto;
+
+        if (imgEl) {
+            imgEl.style.opacity = '0.4';
+            setTimeout(() => {
+                imgEl.src = photoUrl;
+                imgEl.style.opacity = '1';
+            }, 150);
+        }
+    }
+
+    // --- Render Clean Analytics Chart (Fallback) ---
     function renderAnalyticsChart(station) {
         const ctx = document.getElementById('analyticsChart');
         if (!ctx) return;

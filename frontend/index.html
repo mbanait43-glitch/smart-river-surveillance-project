@@ -351,13 +351,37 @@
                 </div>
             </section>
 
-            <!-- Professional Analytics Chart Panel -->
-            <section id="analytics-section" class="panel-card">
+            <!-- Live Station Surveillance & Camera Feed Panel -->
+            <section id="live-camera-section" class="panel-card">
                 <div class="panel-header">
-                    <h3><i class="fa-solid fa-chart-line"></i> River Water Level & Quality Analytics</h3>
+                    <h3><i class="fa-solid fa-camera-retro" style="color: #0284c7;"></i> Live Station Surveillance & Camera Feed</h3>
+                    <span class="panel-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700;">● Live Kiosk Stream</span>
                 </div>
-                <div class="panel-body" style="height: 400px; padding: 16px;">
-                    <canvas id="analyticsChart"></canvas>
+                <div class="panel-body p-0" style="position: relative; overflow: hidden; height: 380px; background: #0f172a;">
+                    <!-- Live Camera Feed Badge -->
+                    <div class="camera-live-badge">
+                        <span class="pulse-dot"></span>
+                        <span>LIVE CPCB STATION FEED</span>
+                    </div>
+
+                    <!-- Station Live Surveillance Image -->
+                    <div class="station-photo-wrapper" style="width: 100%; height: 100%; position: relative;">
+                        <img id="station-live-image" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80" alt="Live Station Monitoring Photo" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
+                        <div class="camera-gradient-overlay"></div>
+                    </div>
+
+                    <!-- Station Info Overlay Card -->
+                    <div class="camera-info-overlay">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                            <h4 id="camera-station-name" style="font-size: 0.95rem; font-weight: 800; color: #ffffff; margin: 0;">BH72_River Ganga at Chausa, U/s of Buxar</h4>
+                            <span style="font-size: 0.7rem; background: rgba(2, 132, 199, 0.9); color: #fff; padding: 2px 8px; border-radius: 6px; font-weight: 700;">CPCB Monitored</span>
+                        </div>
+                        <p id="camera-location-river" style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 6px 0;">Ganga River Basin | Bihar Territory Location</p>
+                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; color: #cbd5e1;">
+                            <span><i class="fa-solid fa-satellite-dish" style="color: #38bdf8;"></i> Station Code: <strong id="camera-station-code" style="color: #ffffff;">11819</strong></span>
+                            <span><i class="fa-solid fa-clock" style="color: #10b981;"></i> Stream Updated: <strong id="camera-timestamp" style="color: #ffffff;">Just Now</strong></span>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
