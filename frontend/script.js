@@ -954,19 +954,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const phVal = stOverrides['pH'] !== undefined ? `${stOverrides['pH']}` : (s.parameters['pH'] ? `${s.parameters['pH'].value}` : '7.40');
                 const doVal = stOverrides['Dissolved Oxygen'] !== undefined ? `${stOverrides['Dissolved Oxygen']} mg/l` : (s.parameters['Dissolved Oxygen'] ? `${s.parameters['Dissolved Oxygen'].value} mg/l` : '6.80 mg/l');
 
-                const photoUrl = getCpcbStationPhotoUrl(s);
                 const popupContent = `
-                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #0f172a; min-width: 240px; max-width: 300px; line-height: 1.4; display: block; text-align: left;">
-                        <div style="width: 100%; height: 110px; border-radius: 8px; overflow: hidden; margin-bottom: 8px; position: relative; background: #0f172a;">
-                            <img src="${photoUrl}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #0f172a; min-width: 220px; max-width: 300px; line-height: 1.4; display: block; text-align: left;">
                         <div style="font-size: 14px; font-weight: 800; color: #0284c7; margin-bottom: 4px; display: block; white-space: normal; word-break: normal;">${s.name}</div>
                         <div style="font-size: 12px; color: #475569; margin-bottom: 6px; display: block;"><b>River:</b> ${s.river} | <b>Location:</b> ${s.state}</div>
                         <div style="font-size: 12px; color: #0f172a; display: block;"><b>pH Level:</b> ${phVal} &nbsp;|&nbsp; <b>DO:</b> ${doVal}</div>
                     </div>
                 `;
 
-                marker.bindPopup(popupContent, { minWidth: 240, maxWidth: 320, autoPan: false });
+                marker.bindPopup(popupContent, { minWidth: 230, maxWidth: 320, autoPan: false });
 
                 marker.on('click', () => {
                     stationSelect.value = s.id;
