@@ -434,12 +434,17 @@ document.addEventListener('DOMContentLoaded', () => {
             stationSelect.appendChild(opt);
         });
 
-        // Automatically select target station or 1st station in filtered list
+        // Automatically select target station or preserve user's active selected station
+        let targetId = null;
         if (forceStationId && filtered.some(s => s.id === forceStationId)) {
-            stationSelect.value = forceStationId;
-            displayStationData(forceStationId, false);
+            targetId = forceStationId;
+        } else if (selectedStationId && filtered.some(s => s.id === selectedStationId)) {
+            targetId = selectedStationId;
         } else if (filtered.length > 0) {
-            const targetId = filtered[0].id;
+            targetId = filtered[0].id;
+        }
+
+        if (targetId) {
             stationSelect.value = targetId;
             displayStationData(targetId, false);
         }
