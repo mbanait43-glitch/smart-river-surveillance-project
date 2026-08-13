@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIT Nagpur - Project Progress Diary (12 Months PDF)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: #e2e8f0;
+            color: #000;
+            padding: 20px;
+        }
+        .no-print-bar {
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            background: #0f172a;
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .btn-print {
+            background: #0284c7;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .btn-print:hover {
+            background: #0369a1;
+            transform: translateY(-2px);
+        }
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 15mm;
+            margin: 0 auto 20px auto;
+            background: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            position: relative;
+            page-break-after: always;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 16pt;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .header p {
+            font-size: 9pt;
+            line-height: 1.3;
+        }
+        .sub-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .sub-header h2 {
+            font-size: 11pt;
+            font-weight: bold;
+        }
+        .sub-header h3 {
+            font-size: 10pt;
+            font-weight: normal;
+        }
+        .title-box {
+            text-align: center;
+            font-size: 12pt;
+            font-weight: bold;
+            margin: 15px 0;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 10pt;
+        }
+        .table-custom th, .table-custom td {
+            border: 1px solid #000;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .table-custom th {
+            background-color: #f8fafc;
+            font-weight: bold;
+        }
+        .progress-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 8.5pt;
+        }
+        .progress-table th, .progress-table td {
+            border: 1px solid #000;
+            padding: 6px;
+            vertical-align: top;
+        }
+        .progress-table th {
+            text-align: center;
+            font-weight: bold;
+            background: #f1f5f9;
+        }
+        .footer-signatures {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+        .page-num {
+            position: absolute;
+            bottom: 15mm;
+            right: 15mm;
+            font-size: 9pt;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            .no-print-bar {
+                display: none !important;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                padding: 15mm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Action Bar -->
+    <div class="no-print-bar">
+        <div>
+            <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-file-pdf" style="color: #38bdf8;"></i> NIT Nagpur - 12 Months Project Progress Report PDF</h3>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 2px;">Ready to Download / Print PDF for Submission</p>
+        </div>
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-download"></i> Save as PDF / Print</button>
+    </div>
+
+    <!-- PAGE 1: ONE PAGE REPORT -->
+    <div class="page">
+        <div class="header">
+            <h1>NAGPUR INSTITUTE OF TECHNOLOGY</h1>
+            <p>(Affiliated to RTM Nagpur University & Approved by AICTE New Delhi)</p>
+            <p>Campus: 13/2, Mahurzari, Near Fetri, Katol Road, Nagpur-441501, India</p>
+            <p>Email Id : registrar@nit.edu.in | Web : www.nit.edu.in | Contact No. 9764974144</p>
+            <p><strong>NAAC "A" Accredited &nbsp;|&nbsp; AICTE ID: 1-4630701 &nbsp;|&nbsp; DTE Code: 04144 &nbsp;|&nbsp; RTMNU Code: 315 &nbsp;|&nbsp; AISHE Code: C-18725</strong></p>
+        </div>
+
+        <div class="sub-header">
+            <h2>DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING</h2>
+            <h3>Academic Session: 2025-26</h3>
+            <h3>B.Tech. Sixth/Seventh/Eight Semester</h3>
+            <h2 style="margin-top: 5px;">MINI/MAJOR PROJECT – WEEKLY / MONTHLY PROGRESS DIARY</h2>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 10pt; font-weight: bold; margin-bottom: 15px;">
+            <span>Name of Faculty: Prof. Tejas Dhule</span>
+            <span>Year/Semester: IV (7th/8th)</span>
+        </div>
+
+        <div class="title-box">— One Page Report —</div>
+
+        <p style="font-size: 9pt; font-style: italic; margin-bottom: 8px;">Group Details (To be filled once at the start, or verified every week/month):</p>
+        <table class="table-custom">
+            <tr>
+                <td style="width: 30%; font-weight: bold;">Group No.</td>
+                <td>G-05</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">Group Leader Name</td>
+                <td>[Group Leader Name]</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">Mini/Major Project Title</td>
+                <td style="font-weight: bold; color: #000;">SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE</td>
+            </tr>
+        </table>
+
+        <p style="font-size: 9pt; font-weight: bold; margin: 10px 0 5px 0;">Assigned Guide Details (Faculty):</p>
+        <table class="table-custom">
+            <tr>
+                <td style="width: 30%; font-weight: bold;">Guide Name (Faculty)</td>
+                <td>Prof. Tejas Dhule</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">Contact No.</td>
+                <td>+91 9764974144</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">Email ID</td>
+                <td>tejas.dhule@nit.edu.in</td>
+            </tr>
+        </table>
+
+        <p style="font-size: 9pt; font-weight: bold; margin: 10px 0 5px 0;">Group Members Details:</p>
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">SN</th>
+                    <th style="width: 42%;">Name</th>
+                    <th style="width: 12%;">Sec.</th>
+                    <th style="width: 15%;">Roll No.</th>
+                    <th style="width: 23%;">Contact No.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1.</td>
+                    <td>[Group Leader Name]</td>
+                    <td>A</td>
+                    <td>[Roll No]</td>
+                    <td>[Contact No]</td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>[Member 2 Name]</td>
+                    <td>A</td>
+                    <td>[Roll No]</td>
+                    <td>[Contact No]</td>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>[Member 3 Name]</td>
+                    <td>A</td>
+                    <td>[Roll No]</td>
+                    <td>[Contact No]</td>
+                </tr>
+                <tr>
+                    <td>4.</td>
+                    <td>[Member 4 Name]</td>
+                    <td>A</td>
+                    <td>[Roll No]</td>
+                    <td>[Contact No]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 40px;" class="footer-signatures">
+            <div>
+                <p>Prof. Tejas Dhule</p>
+                <p style="font-weight: normal; font-size: 9pt;">Project Incharge</p>
+            </div>
+            <div style="text-align: right;">
+                <p>Dr. S. Zade</p>
+                <p style="font-weight: normal; font-size: 9pt;">HoD (CSE)</p>
+            </div>
+        </div>
+
+        <div class="page-num">1 | Page</div>
+    </div>
+
+    <!-- PAGE 2: MONTH-I TO MONTH-VI -->
+    <div class="page">
+        <div class="header">
+            <h1>NAGPUR INSTITUTE OF TECHNOLOGY</h1>
+            <p>DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING</p>
+            <p style="font-weight: bold; font-size: 11pt; margin-top: 4px;">1-Year Monthly Progress Record (MONTH-I to MONTH-VI)</p>
+        </div>
+
+        <table class="progress-table" style="margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Progress Metrics</th>
+                    <th style="width: 20.5%;">MONTH-I (July)</th>
+                    <th style="width: 20.5%;">MONTH-II (Aug)</th>
+                    <th style="width: 20.5%;">MONTH-III (Sept)</th>
+                    <th style="width: 20.5%;">MONTH-IV (Oct)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;">Targets/Plan For The Month</td>
+                    <td>Problem identification & literature survey on River Water Quality Monitoring.</td>
+                    <td>Study CPCB 12 key water parameters (pH, DO, BOD, COD, Temp, Level, etc.).</td>
+                    <td>System Requirement Specification (SRS) & System Architecture Diagram.</td>
+                    <td>Probe CPCB RTWQMS portal API endpoints and JSON layer structures.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Achievements For The Month</td>
+                    <td>Analyzed CPCB guidelines & environmental pollution metrics across Indian rivers.</td>
+                    <td>Finalized safe vs hazardous threshold limits for 12 water quality parameters.</td>
+                    <td>Designed DFD, System Component Architecture, and chosen tech stack.</td>
+                    <td>Extracted live station layer index (`layers/10/index.json`) & photo paths.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Specific Tasks Assigned by Guide</td>
+                    <td>Define project scope & core objectives.</td>
+                    <td>Categorize safe vs hazardous limits.</td>
+                    <td>Prepare SRS & Module Breakdown.</td>
+                    <td>Verify CPCB sensor update frequency.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Issues / Challenges & Action Taken</td>
+                    <td>Selected CPCB RTWQMS portal for authentic data.</td>
+                    <td>Created CPCB threshold reference dictionary.</td>
+                    <td>Selected hybrid CPCB stream + Cloud local storage.</td>
+                    <td>Resolved CORS blocking via Node.js backend proxy.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Group Leader Sign</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Guide Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="progress-table" style="margin-top: 25px;">
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Progress Metrics</th>
+                    <th style="width: 41%;">MONTH-V (Nov)</th>
+                    <th style="width: 41%;">MONTH-VI (Dec)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;">Targets/Plan For The Month</td>
+                    <td>Develop Node.js Express backend proxy server and deploy on Render Cloud.</td>
+                    <td>Frontend UI Layout design & Glassmorphic dark/light theme engine.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Achievements For The Month</td>
+                    <td>Built proxy server (`smart-river-backend.onrender.com`) to serve CPCB data.</td>
+                    <td>Designed responsive top header navigation, hero banner & metric cards.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Specific Tasks Assigned by Guide</td>
+                    <td>Ensure backend server uptime & fast payload.</td>
+                    <td>Maintain accessibility & high typography contrast.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Issues / Challenges & Action Taken</td>
+                    <td>Added background keep-alive ping for Render.</td>
+                    <td>Created theme-aware CSS classes (`.wqi-good`, `.wqi-poor`).</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Group Leader Sign</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Guide Signature</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 30px;" class="footer-signatures">
+            <div>
+                <p>Prof. Tejas Dhule</p>
+                <p style="font-weight: normal; font-size: 9pt;">Project Incharge</p>
+            </div>
+            <div style="text-align: right;">
+                <p>Dr. S. Zade</p>
+                <p style="font-weight: normal; font-size: 9pt;">HoD (CSE)</p>
+            </div>
+        </div>
+
+        <div class="page-num">2 | Page</div>
+    </div>
+
+    <!-- PAGE 3: MONTH-VII TO MONTH-XII -->
+    <div class="page">
+        <div class="header">
+            <h1>NAGPUR INSTITUTE OF TECHNOLOGY</h1>
+            <p>DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING</p>
+            <p style="font-weight: bold; font-size: 11pt; margin-top: 4px;">1-Year Monthly Progress Record (MONTH-VII to MONTH-XII)</p>
+        </div>
+
+        <table class="progress-table" style="margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Progress Metrics</th>
+                    <th style="width: 20.5%;">MONTH-VII (Jan)</th>
+                    <th style="width: 20.5%;">MONTH-VIII (Feb)</th>
+                    <th style="width: 20.5%;">MONTH-IX (March)</th>
+                    <th style="width: 20.5%;">MONTH-X (April)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;">Targets/Plan For The Month</td>
+                    <td>Build 12 Tested Parameter Metric Cards Grid & Live Status Badges.</td>
+                    <td>Develop Water Quality Index (WQI) 0-100 Weighted Calculation Algorithm.</td>
+                    <td>Integrate Leaflet Interactive GIS Station Map with 40+ Station Pins.</td>
+                    <td>Live Station Monitoring Photo Panel & Instant Mobile Preloader Engine.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Achievements For The Month</td>
+                    <td>Developed 12 parameter cards displaying live values and dynamic badges.</td>
+                    <td>Programmed CPCB weighted arithmetic WQI formula to calculate score.</td>
+                    <td>Planted 40+ live CPCB station pins on map with RED selected marker pin.</td>
+                    <td>Created zero-overlay photo container & tokenized image preloader.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Specific Tasks Assigned by Guide</td>
+                    <td>Implement color-coded status badges.</td>
+                    <td>Validate WQI score formula accuracy.</td>
+                    <td>Ensure smooth map zooming & popups.</td>
+                    <td>Fix mobile phone photo loading latency.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Issues / Challenges & Action Taken</td>
+                    <td>Added safe fallback values for null parameters.</td>
+                    <td>Verified formula against CPCB ratings.</td>
+                    <td>Added bidirectional dropdown sync handler.</td>
+                    <td>Fixed using background `Image()` preloader.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Group Leader Sign</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Guide Signature</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="progress-table" style="margin-top: 25px;">
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Progress Metrics</th>
+                    <th style="width: 41%;">MONTH-XI (May)</th>
+                    <th style="width: 41%;">MONTH-XII (June)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;">Targets/Plan For The Month</td>
+                    <td>Develop Admin Security Control Panel with Map Pin Picker & Photo Upload.</td>
+                    <td>Vercel Production Deployment, A4 PDF Report Generator & Final Viva.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Achievements For The Month</td>
+                    <td>Built Admin portal (`admin.html`) with direct map pin picker & photo uploader.</td>
+                    <td>Deployed site (`smart-river-surveillance-project.vercel.app`) & created PDF generator.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Specific Tasks Assigned by Guide</td>
+                    <td>Implement Admin Auth & custom publishing.</td>
+                    <td>Perform end-to-end audit & viva slides.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Issues / Challenges & Action Taken</td>
+                    <td>Added `selectedStationId` station locking.</td>
+                    <td>Added A4 printable viewport sync CSS.</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Group Leader Sign</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Guide Signature</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 30px;" class="footer-signatures">
+            <div>
+                <p>Prof. Tejas Dhule</p>
+                <p style="font-weight: normal; font-size: 9pt;">Project Incharge</p>
+            </div>
+            <div style="text-align: right;">
+                <p>Dr. S. Zade</p>
+                <p style="font-weight: normal; font-size: 9pt;">HoD (CSE)</p>
+            </div>
+        </div>
+
+        <div class="page-num">3 | Page</div>
+    </div>
+
+</body>
+</html>
