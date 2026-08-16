@@ -1324,8 +1324,12 @@ body.light-mode th {
 
     .detail-pill strong { color: #0284c7 !important; }
 
-    /* WQI Score Card - Exactly Matching User Image */
-    .wqi-score-card {
+    /* WQI Score Card - High Contrast Print Overrides for All Themes & Status Variants */
+    .wqi-score-card,
+    .wqi-score-card.wqi-good,
+    .wqi-score-card.wqi-moderate,
+    .wqi-score-card.wqi-poor,
+    .wqi-score-card.wqi-critical {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
@@ -1356,16 +1360,25 @@ body.light-mode th {
         font-size: 11px !important;
     }
 
-    .wqi-left h3 {
+    .wqi-left h3,
+    .wqi-score-card.wqi-good .wqi-left h3,
+    .wqi-score-card.wqi-moderate .wqi-left h3,
+    .wqi-score-card.wqi-poor .wqi-left h3,
+    .wqi-score-card.wqi-critical .wqi-left h3 {
         font-size: 8.5pt !important;
         color: #0f172a !important;
         font-weight: 800 !important;
         margin: 0 0 1px 0 !important;
     }
 
-    .wqi-left p {
+    .wqi-left p,
+    .wqi-score-card.wqi-good .wqi-left p,
+    .wqi-score-card.wqi-moderate .wqi-left p,
+    .wqi-score-card.wqi-poor .wqi-left p,
+    .wqi-score-card.wqi-critical .wqi-left p {
         font-size: 7pt !important;
-        color: #475569 !important;
+        color: #334155 !important;
+        font-weight: 600 !important;
         margin: 0 !important;
     }
 
