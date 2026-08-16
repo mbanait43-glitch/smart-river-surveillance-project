@@ -1324,22 +1324,133 @@ body.light-mode th {
 
     .detail-pill strong { color: #0284c7 !important; }
 
-    /* WQI Score Card - High Contrast Print Overrides for All Themes & Status Variants */
-    .wqi-score-card,
-    .wqi-score-card.wqi-good,
-    .wqi-score-card.wqi-moderate,
-    .wqi-score-card.wqi-poor,
-    .wqi-score-card.wqi-critical {
+    /* WQI Score Card - Preserving Dynamic Live Website Theme Colors on PDF Print */
+    .wqi-score-card {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        background: #f0fdf4 !important;
-        border: 1px solid #bbf7d0 !important;
         border-radius: 8px !important;
-        padding: 5px 10px !important;
+        padding: 6px 12px !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 3px !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* 1. GOOD WATER QUALITY (Score >= 80) */
+    .wqi-score-card,
+    .wqi-score-card.wqi-good {
+        background: #f0fdf4 !important;
+        border: 1.5px solid #86efac !important;
+    }
+    .wqi-score-card .wqi-left h3,
+    .wqi-score-card.wqi-good .wqi-left h3 {
+        color: #064e3b !important;
+        font-size: 8.5pt !important;
+        font-weight: 800 !important;
+        margin: 0 0 1px 0 !important;
+    }
+    .wqi-score-card .wqi-left p,
+    .wqi-score-card.wqi-good .wqi-left p {
+        color: #047857 !important;
+        font-size: 7pt !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+    }
+    .wqi-score-card.wqi-good .wqi-score-num {
+        color: #16a34a !important;
+        font-size: 13.5pt !important;
+        font-weight: 900 !important;
+    }
+    .wqi-score-card.wqi-good .wqi-status-tag {
+        background: #dcfce7 !important;
+        color: #15803d !important;
+        border: 1px solid #86efac !important;
+    }
+
+    /* 2. MODERATE WATER QUALITY (Score >= 60) */
+    .wqi-score-card.wqi-moderate {
+        background: #fffbeb !important;
+        border: 1.5px solid #fde68a !important;
+    }
+    .wqi-score-card.wqi-moderate .wqi-left h3 {
+        color: #78350f !important;
+        font-size: 8.5pt !important;
+        font-weight: 800 !important;
+        margin: 0 0 1px 0 !important;
+    }
+    .wqi-score-card.wqi-moderate .wqi-left p {
+        color: #b45309 !important;
+        font-size: 7pt !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+    }
+    .wqi-score-card.wqi-moderate .wqi-score-num {
+        color: #d97706 !important;
+        font-size: 13.5pt !important;
+        font-weight: 900 !important;
+    }
+    .wqi-score-card.wqi-moderate .wqi-status-tag {
+        background: #fef3c7 !important;
+        color: #b45309 !important;
+        border: 1px solid #fde68a !important;
+    }
+
+    /* 3. POOR WATER QUALITY (Score >= 40) */
+    .wqi-score-card.wqi-poor {
+        background: #fff7ed !important;
+        border: 1.5px solid #fed7aa !important;
+    }
+    .wqi-score-card.wqi-poor .wqi-left h3 {
+        color: #7c2d12 !important;
+        font-size: 8.5pt !important;
+        font-weight: 800 !important;
+        margin: 0 0 1px 0 !important;
+    }
+    .wqi-score-card.wqi-poor .wqi-left p {
+        color: #c2410c !important;
+        font-size: 7pt !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+    }
+    .wqi-score-card.wqi-poor .wqi-score-num {
+        color: #ea580c !important;
+        font-size: 13.5pt !important;
+        font-weight: 900 !important;
+    }
+    .wqi-score-card.wqi-poor .wqi-status-tag {
+        background: #ffedd5 !important;
+        color: #c2410c !important;
+        border: 1px solid #fed7aa !important;
+    }
+
+    /* 4. CRITICAL WATER QUALITY (Score < 40) */
+    .wqi-score-card.wqi-critical {
+        background: #ffe4e6 !important;
+        border: 1.5px solid #fda4af !important;
+    }
+    .wqi-score-card.wqi-critical .wqi-left h3 {
+        color: #881337 !important;
+        font-size: 8.5pt !important;
+        font-weight: 800 !important;
+        margin: 0 0 1px 0 !important;
+    }
+    .wqi-score-card.wqi-critical .wqi-left p {
+        color: #be123c !important;
+        font-size: 7pt !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+    }
+    .wqi-score-card.wqi-critical .wqi-score-num {
+        color: #e11d48 !important;
+        font-size: 13.5pt !important;
+        font-weight: 900 !important;
+    }
+    .wqi-score-card.wqi-critical .wqi-status-tag {
+        background: #fecdd3 !important;
+        color: #be123c !important;
+        border: 1px solid #fda4af !important;
     }
 
     .wqi-left {
@@ -1360,44 +1471,13 @@ body.light-mode th {
         font-size: 11px !important;
     }
 
-    .wqi-left h3,
-    .wqi-score-card.wqi-good .wqi-left h3,
-    .wqi-score-card.wqi-moderate .wqi-left h3,
-    .wqi-score-card.wqi-poor .wqi-left h3,
-    .wqi-score-card.wqi-critical .wqi-left h3 {
-        font-size: 8.5pt !important;
-        color: #0f172a !important;
-        font-weight: 800 !important;
-        margin: 0 0 1px 0 !important;
-    }
-
-    .wqi-left p,
-    .wqi-score-card.wqi-good .wqi-left p,
-    .wqi-score-card.wqi-moderate .wqi-left p,
-    .wqi-score-card.wqi-poor .wqi-left p,
-    .wqi-score-card.wqi-critical .wqi-left p {
-        font-size: 7pt !important;
-        color: #334155 !important;
-        font-weight: 600 !important;
-        margin: 0 !important;
-    }
-
     .wqi-right {
         display: flex !important;
         align-items: center !important;
         gap: 8px !important;
     }
 
-    .wqi-score-num {
-        color: #16a34a !important;
-        font-size: 13.5pt !important;
-        font-weight: 900 !important;
-    }
-
     .wqi-status-tag {
-        background: #dcfce7 !important;
-        color: #15803d !important;
-        border: 1px solid #86efac !important;
         padding: 2px 6px !important;
         font-size: 6.8pt !important;
         font-weight: 700 !important;
@@ -1405,7 +1485,7 @@ body.light-mode th {
         text-transform: uppercase !important;
     }
 
-    /* 12 Metrics 2-Column Grid - Exactly Matching User Image */
+    /* 12 Metrics 2-Column Grid - Exactly Matching Live Colors */
     .metrics-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
@@ -1431,6 +1511,33 @@ body.light-mode th {
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Dynamic CPCB Status Color Overrides for Printed Cards */
+    .metric-card.status-green {
+        border: 1.5px solid #86efac !important;
+        background: #f0fdf4 !important;
+    }
+    .metric-card.status-green .metric-val {
+        color: #10b981 !important;
+    }
+
+    .metric-card.status-red {
+        border: 1.5px solid #fda4af !important;
+        background: #ffe4e6 !important;
+    }
+    .metric-card.status-red .metric-val {
+        color: #f43f5e !important;
+    }
+
+    .metric-card.status-white {
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+    }
+    .metric-card.status-white .metric-val {
+        color: #0284c7 !important;
     }
 
     .metric-header {
@@ -1461,7 +1568,6 @@ body.light-mode th {
     }
 
     .metric-val {
-        color: #0284c7 !important;
         font-size: 11.5pt !important;
         font-weight: 800 !important;
     }
@@ -1485,6 +1591,8 @@ body.light-mode th {
         height: 100% !important;
         background: #0284c7 !important;
         border-radius: 3px !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     .metric-footer {
@@ -1500,6 +1608,8 @@ body.light-mode th {
         padding: 1.5px 5px !important;
         border-radius: 8px !important;
         font-weight: 700 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     .badge-status-pill.status-green {
