@@ -1224,160 +1224,204 @@ body.light-mode th {
     }
 }
 
+/* Default screen hiding for print-only elements */
+.print-only-header,
+.print-only-footer {
+    display: none;
+}
+
 /* ==========================================================================
-   COMPREHENSIVE A4 PRINT / PDF STYLING (@media print)
-   100% MATCHING USER ATTACHED FULL PAGE REFERENCE IMAGE ON 1 SINGLE PAGE!
+   EXECUTIVE A4 INSPECTION REPORT / PDF PRINTING (@media print)
    ========================================================================== */
 @media print {
     @page {
         size: A4 portrait;
-        margin: 3mm 6mm 3mm 6mm;
+        margin: 5mm 8mm 5mm 8mm;
     }
 
     html, body, .mobile-print-mode {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 100% !important;
-        height: 100% !important;
+        height: auto !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
         color: #0f172a !important;
-        font-size: 7.5pt !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-size: 8pt !important;
+        line-height: 1.3 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
-    /* Hide Web Navigation, Interactive Dropdown Filter Bar, Map Section & Analytics Chart on PDF */
-    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .split-view-grid, #map-section, #analytics-section, .glass-filter-bar {
+    /* Hide Web Elements */
+    .navbar, .hero-banner, .btn, button, #report-actions-bottom, .no-print, .split-view-grid, #map-section, #analytics-section, .glass-filter-bar, #system-status {
         display: none !important;
-    }
-
-    /* Top Official Print Header */
-    .print-only-header {
-        display: block !important;
-        margin-bottom: 4px !important;
-        border-bottom: 1.5px solid #0284c7 !important;
-        padding-bottom: 3px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    .print-logo-row {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        width: 100% !important;
-        margin-bottom: 2px !important;
-    }
-
-    .print-logo-row h2 {
-        font-size: 9.5pt !important;
-        color: #0284c7 !important;
-        font-weight: 900 !important;
-        text-transform: uppercase !important;
-        letter-spacing: -0.01em !important;
-        margin: 0 !important;
-    }
-
-    .print-badge {
-        background: #0284c7 !important;
-        color: #ffffff !important;
-        padding: 1.5px 6px !important;
-        border-radius: 4px !important;
-        font-weight: 700 !important;
-        font-size: 6.5pt !important;
-    }
-
-    .print-meta-grid {
-        display: flex !important;
-        justify-content: space-between !important;
-        font-size: 6.5pt !important;
-        color: #334155 !important;
     }
 
     .main-wrapper {
         padding: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
-        gap: 4px !important;
         margin: 0 !important;
-        box-sizing: border-box !important;
+        gap: 6px !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 
-    /* Station Details Header Bar */
+    /* Executive Official Print Header */
+    .print-only-header {
+        display: block !important;
+        margin-bottom: 6px !important;
+        border-bottom: 2px solid #0284c7 !important;
+        padding-bottom: 6px !important;
+        width: 100% !important;
+    }
+
+    .print-header-top {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+    }
+
+    .print-emblem {
+        width: 44px !important;
+        height: 44px !important;
+        background: #f0f9ff !important;
+        border: 1.5px solid #0284c7 !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #0284c7 !important;
+        font-size: 20pt !important;
+        flex-shrink: 0 !important;
+    }
+
+    .print-title-block {
+        flex: 1 !important;
+        text-align: left !important;
+    }
+
+    .print-title-block h2 {
+        font-size: 11pt !important;
+        color: #0f172a !important;
+        font-weight: 900 !important;
+        margin: 0 0 2px 0 !important;
+        letter-spacing: -0.01em !important;
+        text-transform: uppercase !important;
+    }
+
+    .print-title-block h3 {
+        font-size: 8pt !important;
+        color: #0284c7 !important;
+        font-weight: 800 !important;
+        margin: 0 0 2px 0 !important;
+        letter-spacing: 0.02em !important;
+    }
+
+    .print-title-block p {
+        font-size: 6.8pt !important;
+        color: #64748b !important;
+        margin: 0 !important;
+        font-weight: 600 !important;
+    }
+
+    .print-meta-box {
+        border: 1px solid #cbd5e1 !important;
+        background: #f8fafc !important;
+        border-radius: 6px !important;
+        padding: 5px 10px !important;
+        font-size: 6.8pt !important;
+        line-height: 1.4 !important;
+        color: #334155 !important;
+        text-align: right !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Executive Station Details Bar */
     .station-details-bar {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: wrap !important;
         justify-content: space-between !important;
-        gap: 4px 10px !important;
-        background: #f0f9ff !important;
-        border: 1px solid #bae6fd !important;
+        align-items: center !important;
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
         border-radius: 6px !important;
-        padding: 5px 10px !important;
+        padding: 5px 12px !important;
         font-size: 7.5pt !important;
         width: 100% !important;
-        box-sizing: border-box !important;
-        margin-bottom: 3px !important;
+        margin-bottom: 6px !important;
     }
 
-    .detail-pill strong { color: #0284c7 !important; }
+    .detail-pill {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+    }
 
-    /* WQI Score Card - Exactly Matching User Image */
+    .detail-pill strong {
+        color: #0284c7 !important;
+        font-weight: 800 !important;
+    }
+
+    /* Executive WQI Banner */
     .wqi-score-card {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
         background: #f0fdf4 !important;
-        border: 1px solid #bbf7d0 !important;
+        border: 1.5px solid #86efac !important;
         border-radius: 8px !important;
-        padding: 5px 10px !important;
+        padding: 6px 14px !important;
         width: 100% !important;
-        box-sizing: border-box !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 6px !important;
     }
 
     .wqi-left {
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
+        gap: 10px !important;
     }
 
     .wqi-badge-icon {
-        width: 26px !important;
-        height: 26px !important;
+        width: 30px !important;
+        height: 30px !important;
         background: #10b981 !important;
         color: #ffffff !important;
         border-radius: 50% !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 11px !important;
+        font-size: 13px !important;
+        flex-shrink: 0 !important;
     }
 
     .wqi-left h3 {
-        font-size: 8.5pt !important;
-        color: #0f172a !important;
+        font-size: 9.5pt !important;
+        color: #064e3b !important;
         font-weight: 800 !important;
         margin: 0 0 1px 0 !important;
     }
 
     .wqi-left p {
-        font-size: 7pt !important;
-        color: #475569 !important;
+        font-size: 7.5pt !important;
+        color: #047857 !important;
         margin: 0 !important;
     }
 
     .wqi-right {
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
+        gap: 10px !important;
     }
 
     .wqi-score-num {
-        color: #16a34a !important;
-        font-size: 13.5pt !important;
+        color: #15803d !important;
+        font-size: 16pt !important;
         font-weight: 900 !important;
     }
 
@@ -1385,54 +1429,48 @@ body.light-mode th {
         background: #dcfce7 !important;
         color: #15803d !important;
         border: 1px solid #86efac !important;
-        padding: 2px 6px !important;
-        font-size: 6.8pt !important;
-        font-weight: 700 !important;
-        border-radius: 10px !important;
+        padding: 3px 8px !important;
+        font-size: 7.5pt !important;
+        font-weight: 800 !important;
+        border-radius: 12px !important;
         text-transform: uppercase !important;
     }
 
-    /* 12 Metrics 2-Column Grid - Exactly Matching User Image */
+    /* Executive 12 Parameters 3-Column Grid */
     .metrics-grid {
         display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 4px 8px !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 5px 8px !important;
         width: 100% !important;
-        box-sizing: border-box !important;
-        page-break-after: avoid !important;
-        break-after: avoid !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
+        margin-bottom: 6px !important;
     }
 
     .metric-card {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        border-radius: 8px !important;
-        padding: 4px 8px !important;
+        border-radius: 6px !important;
+        padding: 6px 10px !important;
         box-shadow: none !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
+        min-height: 52px !important;
     }
 
     .metric-header {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        margin-bottom: 1px !important;
+        margin-bottom: 2px !important;
     }
 
     .metric-name {
         color: #334155 !important;
-        font-size: 6.8pt !important;
+        font-size: 7.2pt !important;
         font-weight: 800 !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.01em !important;
     }
 
     .metric-icon {
@@ -1444,19 +1482,19 @@ body.light-mode th {
         display: flex !important;
         align-items: baseline !important;
         gap: 4px !important;
-        margin: 1px 0 2px 0 !important;
+        margin: 1px 0 !important;
     }
 
     .metric-val {
         color: #0284c7 !important;
-        font-size: 11.5pt !important;
+        font-size: 12pt !important;
         font-weight: 800 !important;
     }
 
     .metric-unit {
         color: #64748b !important;
         font-size: 7.5pt !important;
-        font-weight: 500 !important;
+        font-weight: 600 !important;
     }
 
     .gauge-bar {
@@ -1464,7 +1502,7 @@ body.light-mode th {
         height: 3px !important;
         background: #e2e8f0 !important;
         border-radius: 3px !important;
-        margin: 2px 0 3px 0 !important;
+        margin: 2px 0 !important;
         overflow: hidden !important;
     }
 
@@ -1476,44 +1514,67 @@ body.light-mode th {
 
     .metric-footer {
         display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 1.5px !important;
+        align-items: center !important;
+        font-size: 6.2pt !important;
+        color: #64748b !important;
         margin-top: 1px !important;
     }
 
-    .badge-status-pill {
-        font-size: 6.2pt !important;
-        padding: 1.5px 5px !important;
-        border-radius: 8px !important;
-        font-weight: 700 !important;
-    }
-
-    .badge-status-pill.status-green {
-        background: #dcfce7 !important;
-        color: #15803d !important;
-        border: 1px solid #86efac !important;
-    }
-
-    .badge-status-pill.status-red {
-        background: #ffe4e6 !important;
-        color: #e11d48 !important;
-        border: 1px solid #fda4af !important;
-    }
-
-    .badge-status-pill.status-white {
-        background: #f1f5f9 !important;
-        color: #475569 !important;
-        border: 1px solid #cbd5e1 !important;
-    }
-
     .card-source-link {
-        color: #475569 !important;
-        font-size: 6pt !important;
+        color: #64748b !important;
+        font-size: 6.2pt !important;
         font-weight: 600 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 2px !important;
         text-decoration: none !important;
+    }
+
+    /* Executive Official Signatures & Verification Footer */
+    .print-only-footer {
+        display: block !important;
+        margin-top: 6px !important;
+        padding-top: 6px !important;
+        border-top: 1.5px solid #cbd5e1 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .print-cert-note {
+        font-size: 6.5pt !important;
+        color: #475569 !important;
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+        margin-bottom: 8px !important;
+        line-height: 1.3 !important;
+    }
+
+    .print-signatures-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+        margin-top: 4px !important;
+        padding: 0 10px !important;
+    }
+
+    .sig-col {
+        text-align: center !important;
+        width: 30% !important;
+    }
+
+    .sig-line {
+        border-bottom: 1px solid #475569 !important;
+        margin-bottom: 3px !important;
+        height: 18px !important;
+    }
+
+    .sig-title {
+        font-size: 7.2pt !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+    }
+
+    .sig-dept {
+        font-size: 6.2pt !important;
+        color: #64748b !important;
     }
 }
