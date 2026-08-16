@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" class="card-source-link" title="Open Official CPCB RTWQMS Govt Portal">${sourceText} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
 
-                statusSpan.innerHTML = `<div><span class="badge-status-pill status-${statusInfo.color}">${statusInfo.label}</span></div><div>${sourceLinkHtml}</div>`;
+                statusSpan.innerHTML = sourceLinkHtml;
             } else {
                 card.classList.remove('status-green', 'status-red', 'status-white');
                 card.classList.add('status-white');
@@ -790,7 +790,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" class="card-source-link" title="Open Official CPCB RTWQMS Govt Portal">CPCB RTWQMS (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
 
-                statusSpan.innerHTML = `<div><span class="badge-status-pill status-white">⚪ Not Monitored</span></div><div>${sourceLinkHtml}</div>`;
+                statusSpan.innerHTML = sourceLinkHtml;
             }
         }
 
