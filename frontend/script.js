@@ -1030,12 +1030,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lastUpdateSpan) lastUpdateSpan.textContent = now.toLocaleTimeString();
         if (printDate) printDate.textContent = now.toLocaleDateString();
         if (printTime) printTime.textContent = now.toLocaleTimeString();
-        const reportIdEl = document.getElementById('print-report-id');
-        if (reportIdEl) {
-            const stCode = (selectedStationId || 'IND').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-            const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
-            reportIdEl.textContent = `CPCB/RWS/${dateStr}-${stCode}`;
-        }
     }
 
     // --- Mobile & Desktop Viewport Sync for 100% Identical A4 PDF Printing ---
