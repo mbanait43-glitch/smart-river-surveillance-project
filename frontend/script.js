@@ -47,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return { lat: 21.1458, lng: 79.0882 };
     }
 
-    // --- High-Definition Official Leaflet Color Marker Icons ---
+    // --- High-Definition Official Leaflet Color Marker Icons (Production jsDelivr CDN) ---
     const blueIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-shadow.png',
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const redSelectedIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-shadow.png',
         iconSize: [32, 52], // Larger & Highlighted Red Pin for Selected Station!
         iconAnchor: [16, 52],
         popupAnchor: [1, -42],
