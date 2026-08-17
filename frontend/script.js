@@ -47,31 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return { lat: 21.1458, lng: 79.0882 };
     }
 
-    // --- High-Definition Bulletproof SVG Map Marker Icons (Zero-Network Dependency) ---
-    const blueIcon = L.divIcon({
-        className: 'custom-leaflet-pin blue-pin',
-        html: `<div style="position: relative; width: 28px; height: 40px; cursor: pointer;">
-                <svg viewBox="0 0 24 36" width="28" height="40" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));">
-                  <path fill="#0284c7" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.37 0 0 5.37 0 12c0 9 12 24 12 24s12-15 12-24c0-6.63-5.37-12-12-12z"/>
-                  <circle cx="12" cy="12" r="4.5" fill="#ffffff"/>
-                </svg>
-               </div>`,
-        iconSize: [28, 40],
-        iconAnchor: [14, 40],
-        popupAnchor: [0, -36]
+    // --- High-Definition Official Leaflet Color Marker Icons ---
+    const blueIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
     });
 
-    const redSelectedIcon = L.divIcon({
-        className: 'custom-leaflet-pin red-pin',
-        html: `<div style="position: relative; width: 36px; height: 50px; cursor: pointer;">
-                <svg viewBox="0 0 24 36" width="36" height="50" style="filter: drop-shadow(0 4px 10px rgba(239,68,68,0.55));">
-                  <path fill="#ef4444" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.37 0 0 5.37 0 12c0 9 12 24 12 24s12-15 12-24c0-6.63-5.37-12-12-12z"/>
-                  <circle cx="12" cy="12" r="5" fill="#ffffff"/>
-                </svg>
-               </div>`,
-        iconSize: [36, 50],
-        iconAnchor: [18, 50],
-        popupAnchor: [0, -46]
+    const redSelectedIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [32, 52], // Larger & Highlighted Red Pin for Selected Station!
+        iconAnchor: [16, 52],
+        popupAnchor: [1, -42],
+        shadowSize: [52, 52]
     });
 
     // --- Navigation Links Smooth Scroll Offset Fix ---
