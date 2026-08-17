@@ -1639,4 +1639,155 @@ body.light-mode th {
         gap: 2px !important;
         text-decoration: none !important;
     }
+
+    /* ==========================================================================
+       DARK THEME PRINT OVERRIDES (Renders Dark Theme PDF when Dark Mode is active)
+       ========================================================================== */
+    body.dark-mode {
+        background: #090e1a !important;
+        color: #f8fafc !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body.dark-mode .print-only-header {
+        border-bottom: 1.5px solid #38bdf8 !important;
+    }
+
+    body.dark-mode .print-logo-row h2 {
+        color: #38bdf8 !important;
+    }
+
+    body.dark-mode .print-meta-grid {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .station-details-bar {
+        background: #0f172a !important;
+        border: 1px solid rgba(56, 189, 248, 0.3) !important;
+        color: #f8fafc !important;
+    }
+
+    body.dark-mode .detail-pill strong {
+        color: #38bdf8 !important;
+    }
+
+    /* Dark Mode WQI Print Cards */
+    body.dark-mode .wqi-score-card,
+    body.dark-mode .wqi-score-card.wqi-good {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(6, 182, 212, 0.2)) !important;
+        border: 1.5px solid rgba(16, 185, 129, 0.4) !important;
+    }
+    body.dark-mode .wqi-score-card .wqi-left h3,
+    body.dark-mode .wqi-score-card.wqi-good .wqi-left h3 {
+        color: #ffffff !important;
+    }
+    body.dark-mode .wqi-score-card .wqi-left p,
+    body.dark-mode .wqi-score-card.wqi-good .wqi-left p {
+        color: #a7f3d0 !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-good .wqi-score-num {
+        color: #34d399 !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-good .wqi-status-tag {
+        background: rgba(16, 185, 129, 0.2) !important;
+        color: #34d399 !important;
+        border: 1px solid rgba(16, 185, 129, 0.4) !important;
+    }
+
+    body.dark-mode .wqi-score-card.wqi-moderate {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.2)) !important;
+        border: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-moderate .wqi-left h3 {
+        color: #ffffff !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-moderate .wqi-left p {
+        color: #fde68a !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-moderate .wqi-score-num {
+        color: #fbbf24 !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-moderate .wqi-status-tag {
+        background: rgba(245, 158, 11, 0.2) !important;
+        color: #fbbf24 !important;
+        border: 1px solid rgba(245, 158, 11, 0.4) !important;
+    }
+
+    body.dark-mode .wqi-score-card.wqi-poor {
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(234, 88, 12, 0.2)) !important;
+        border: 1.5px solid rgba(249, 115, 22, 0.4) !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-poor .wqi-left h3 {
+        color: #ffffff !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-poor .wqi-left p {
+        color: #fed7aa !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-poor .wqi-score-num {
+        color: #fb923c !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-poor .wqi-status-tag {
+        background: rgba(249, 115, 22, 0.2) !important;
+        color: #fb923c !important;
+        border: 1px solid rgba(249, 115, 22, 0.4) !important;
+    }
+
+    body.dark-mode .wqi-score-card.wqi-critical {
+        background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(225, 29, 72, 0.2)) !important;
+        border: 1.5px solid rgba(244, 63, 94, 0.4) !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-critical .wqi-left h3 {
+        color: #ffffff !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-critical .wqi-left p {
+        color: #fecdd3 !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-critical .wqi-score-num {
+        color: #f43f5e !important;
+    }
+    body.dark-mode .wqi-score-card.wqi-critical .wqi-status-tag {
+        background: rgba(244, 63, 94, 0.2) !important;
+        color: #f43f5e !important;
+        border: 1px solid rgba(244, 63, 94, 0.4) !important;
+    }
+
+    /* Dark Mode Metric Cards */
+    body.dark-mode .metric-card {
+        background: #0f172a !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+    body.dark-mode .metric-name {
+        color: #94a3b8 !important;
+    }
+    body.dark-mode .metric-unit {
+        color: #64748b !important;
+    }
+    body.dark-mode .card-source-link {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .metric-card.status-green {
+        background: rgba(16, 185, 129, 0.12) !important;
+        border: 1.5px solid rgba(16, 185, 129, 0.4) !important;
+    }
+    body.dark-mode .metric-card.status-green .metric-val {
+        color: #34d399 !important;
+    }
+
+    body.dark-mode .metric-card.status-red {
+        background: rgba(244, 63, 94, 0.12) !important;
+        border: 1.5px solid rgba(244, 63, 94, 0.4) !important;
+    }
+    body.dark-mode .metric-card.status-red .metric-val {
+        color: #fb7185 !important;
+    }
+
+    body.dark-mode .metric-card.status-white {
+        background: #0f172a !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+    body.dark-mode .metric-card.status-white .metric-val {
+        color: #38bdf8 !important;
+    }
 }
