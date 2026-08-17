@@ -776,7 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const sourceText = isCustomOverride 
                     ? `Admin Verified (${station.state})` 
-                    : `Government Data Source (${station.state})`;
+                    : `Official Data Source (${station.state})`;
 
                 const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" class="card-source-link" title="Open Official CPCB RTWQMS Govt Portal">${sourceText} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
 
@@ -788,7 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (unitSpan) unitSpan.textContent = '';
                 valSpan.style.color = '#64748b';
 
-                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" class="card-source-link" title="Open Official CPCB RTWQMS Govt Portal">Government Data Source (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
+                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" class="card-source-link" title="Open Official CPCB RTWQMS Govt Portal">Official Data Source (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
 
                 statusSpan.innerHTML = sourceLinkHtml;
             }
@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (reportStatusLabel) {
             reportStatusLabel.innerHTML = hasOverride 
                 ? `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">✓ Admin Verified <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`
-                : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">● Government Data Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
+                : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">● Official Data Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
         }
 
         updateCardById('card-level', 'Water Level', 'm above MSL');
