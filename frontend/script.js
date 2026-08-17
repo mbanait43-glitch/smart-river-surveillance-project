@@ -3,15 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('theme-toggle');
     const body = document.body;
 
-    const savedTheme = localStorage.getItem('theme_preference') || 'dark';
-    if (savedTheme === 'light') {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-        if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-    } else {
+    const savedTheme = localStorage.getItem('theme_preference') || 'light';
+    if (savedTheme === 'dark') {
         body.classList.remove('light-mode');
         body.classList.add('dark-mode');
         if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
     }
     
     if (themeBtn) {
