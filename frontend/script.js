@@ -817,36 +817,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStationLivePhoto(station);
     }
 
-    // Curated Pool of HD River Telemetry & Monitoring Station Field Photos
-    const stationPhotoPool = [
-        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80',
-        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80'
-    ];
-
-    function getDeterministicFallbackPhoto(station) {
-        if (!station) return stationPhotoPool[0];
-        const idStr = String(station.id || station.stationNo || station.name || 'station');
-        let hash = 0;
-        for (let i = 0; i < idStr.length; i++) {
-            hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
-        }
-        const index = Math.abs(hash) % stationPhotoPool.length;
-        return stationPhotoPool[index];
-    }
-
-    // Helper: Construct Official CPCB Server Station Image URL (Supports Admin Custom Uploads & Station Deterministic Photos)
+    // Helper: Construct Official CPCB Server Station Image URL (Supports Admin Custom Uploads)
     function getCpcbStationPhotoUrl(station) {
-        if (!station) return stationPhotoPool[0];
+        if (!station) return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
 
         // 1. Check for Admin Uploaded Custom Station Photo (Base64 Data URL or Web URL)
         const adminPhotos = JSON.parse(localStorage.getItem('admin_station_photos') || '{}');
@@ -861,8 +834,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return station.photo;
         }
 
-        // 2. Default Deterministic Station Photo for distinct visual station identification
-        return getDeterministicFallbackPhoto(station);
+        // 2. Default Official CPCB Server Station Image URL
+        if (stNo) {
+            return `https://rtwqmsdb1.cpcb.gov.in/images/stations/${stNo}_image.jpg`;
+        }
+        return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
     }
 
     let photoLoadToken = 0;
@@ -887,7 +863,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (timeEl) timeEl.textContent = station.lastTimestamp ? (station.lastTimestamp.split(' ')[1] || 'Live Stream') : 'Live Stream';
 
         const photoUrl = getCpcbStationPhotoUrl(station);
-        const fallbackUrl = getDeterministicFallbackPhoto(station);
+        const fallbackUrl = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
 
         if (imgEl) {
             const currentToken = ++photoLoadToken;
