@@ -47,10 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return { lat: 21.1458, lng: 79.0882 };
     }
 
-    // --- High-Definition Official Leaflet Color Marker Icons (Production jsDelivr CDN) ---
+    // --- High-Definition Embedded Leaflet Marker Icons (Zero Network Request - 100% Reliable) ---
+    const blueSvgUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 41" width="25" height="41"><path fill="#0284c7" stroke="#ffffff" stroke-width="1.4" d="M12.5 0C5.6 0 0 5.6 0 12.5C0 22 12.5 41 12.5 41C12.5 41 25 22 25 12.5C25 5.6 19.4 0 12.5 0Z"/><circle cx="12.5" cy="12.5" r="4.5" fill="#ffffff"/></svg>');
+    const redSvgUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 52" width="32" height="52"><path fill="#ef4444" stroke="#ffffff" stroke-width="1.6" d="M16 0C7.17 0 0 7.17 0 16C0 28 16 52 16 52C16 52 32 28 32 16C32 7.17 24.83 0 16 0Z"/><circle cx="16" cy="16" r="5.5" fill="#ffffff"/></svg>');
+    const shadowSvgUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" width="41" height="41"><ellipse cx="20.5" cy="35" rx="14" ry="5" fill="rgba(0,0,0,0.3)"/></svg>');
+
     const blueIcon = new L.Icon({
-        iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-blue.png',
-        shadowUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-shadow.png',
+        iconUrl: blueSvgUrl,
+        shadowUrl: shadowSvgUrl,
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
@@ -58,12 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const redSelectedIcon = new L.Icon({
-        iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-shadow.png',
-        iconSize: [32, 52], // Larger & Highlighted Red Pin for Selected Station!
+        iconUrl: redSvgUrl,
+        shadowUrl: shadowSvgUrl,
+        iconSize: [32, 52],
         iconAnchor: [16, 52],
         popupAnchor: [1, -42],
-        shadowSize: [52, 52]
+        shadowSize: [41, 41]
     });
 
     // --- Navigation Links Smooth Scroll Offset Fix ---
