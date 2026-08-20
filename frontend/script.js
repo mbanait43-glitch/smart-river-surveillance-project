@@ -852,6 +852,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // 🚨 Update Live Hazard & Environmental Alerts List
+        updateLiveAlertsList(station, stationOverrides);
+
         // 🔮 Update AI Flood Forecasting & Water Level Prediction Engine
         updateAIFloodPrediction(station, stationOverrides);
 
