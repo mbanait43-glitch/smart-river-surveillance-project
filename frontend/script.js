@@ -832,7 +832,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 valSpan.style.color = parseFloat(velocityVal) > 2.2 ? '#f43f5e' : '#10b981';
             }
             if (statusSpan) {
-                statusSpan.innerHTML = `<a href="https://indiawris.gov.in" target="_blank" class="card-source-link" title="Central Water Commission Telemetry">Official Data Source (CWC Telemetry) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
+                statusSpan.innerHTML = `<a href="https://cwc.gov.in/" target="_blank" class="card-source-link" title="Central Water Commission (CWC) Official Portal">Official Data Source (CWC) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
             }
         }
 
@@ -848,7 +848,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 valSpan.style.color = parseFloat(rainVal) > 35.0 ? '#f43f5e' : '#38bdf8';
             }
             if (statusSpan) {
-                statusSpan.innerHTML = `<a href="https://hydro.imd.gov.in" target="_blank" class="card-source-link" title="IMD Hydromet Telemetry">Official Data Source (IMD Telemetry) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
+                statusSpan.innerHTML = `<a href="https://mausam.imd.gov.in/" target="_blank" class="card-source-link" title="India Meteorological Department (IMD) Official Portal">Official Data Source (IMD) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
             }
         }
 
