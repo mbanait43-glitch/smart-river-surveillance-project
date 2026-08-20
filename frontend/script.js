@@ -855,9 +855,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 🔮 Update AI Flood Forecasting & Water Level Prediction Engine
         updateAIFloodPrediction(station, stationOverrides);
 
-        // 🚨 Update Live Hazard & Environmental Alerts List
-        updateLiveAlertsList(station, stationOverrides);
-
         // Update Live CPCB Station Surveillance Camera Photo & Info Panel!
         updateStationLivePhoto(station);
     }
