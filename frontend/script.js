@@ -827,9 +827,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const velocityVal = (0.9 + (seed * 0.18) + (Math.abs(rawLvl % 1.5) * 0.2)).toFixed(2);
             const valSpan = velCard.querySelector('.value');
             const statusSpan = velCard.querySelector('.status-indicator');
+            velCard.classList.remove('status-green', 'status-red', 'status-white');
+            velCard.classList.add('status-white');
             if (valSpan) {
                 valSpan.textContent = velocityVal;
-                valSpan.style.color = parseFloat(velocityVal) > 2.2 ? '#f43f5e' : '#10b981';
+                valSpan.style.color = 'var(--text-primary)';
             }
             if (statusSpan) {
                 statusSpan.innerHTML = `<a href="https://cwc.gov.in/" target="_blank" class="card-source-link" title="Central Water Commission (CWC) Official Portal">Official Data Source (CWC) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
@@ -843,9 +845,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const rainVal = (4.2 + (seed * 1.8)).toFixed(1);
             const valSpan = rainCard.querySelector('.value');
             const statusSpan = rainCard.querySelector('.status-indicator');
+            rainCard.classList.remove('status-green', 'status-red', 'status-white');
+            rainCard.classList.add('status-white');
             if (valSpan) {
                 valSpan.textContent = rainVal;
-                valSpan.style.color = parseFloat(rainVal) > 35.0 ? '#f43f5e' : '#38bdf8';
+                valSpan.style.color = 'var(--text-primary)';
             }
             if (statusSpan) {
                 statusSpan.innerHTML = `<a href="https://mausam.imd.gov.in/" target="_blank" class="card-source-link" title="India Meteorological Department (IMD) Official Portal">Official Data Source (IMD) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
