@@ -1640,3 +1640,370 @@ body.light-mode th {
         text-decoration: none !important;
     }
 }
+
+/* ==========================================================================
+   🔮 AI FLOOD FORECASTING & LIVE HAZARD ALERTS STYLING
+   ========================================================================== */
+.ai-flood-card {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.06) 0%, rgba(99, 102, 241, 0.08) 100%), #ffffff;
+    border: 1px solid rgba(2, 132, 199, 0.25);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.1), 0 8px 10px -6px rgba(2, 132, 199, 0.05);
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .ai-flood-card {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(99, 102, 241, 0.15) 100%), #1e293b;
+    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.ai-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(2, 132, 199, 0.15);
+}
+
+.ai-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ai-sparkle-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.12);
+    padding: 4px 10px;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+body.dark-mode .ai-sparkle-badge {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.18);
+}
+
+.ai-card-header h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+}
+
+body.dark-mode .ai-card-header h3 {
+    color: #f8fafc;
+}
+
+.ai-model-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+body.dark-mode .ai-model-tag {
+    color: #94a3b8;
+    background: #0f172a;
+    border-color: #334155;
+}
+
+.ai-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 20px;
+}
+
+@media (max-width: 900px) {
+    .ai-grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ai-risk-meter-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+}
+
+body.dark-mode .ai-risk-meter-box {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+.risk-gauge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.risk-badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.risk-badge.safe {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+
+.risk-badge.moderate {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.risk-badge.danger {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+    animation: pulseRisk 1.5s infinite;
+}
+
+.risk-score-display {
+    margin: 10px 0 16px;
+}
+
+.risk-score-display span {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1;
+    display: block;
+}
+
+body.dark-mode .risk-score-display span {
+    color: #f8fafc;
+}
+
+.risk-score-display small {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 600;
+    display: block;
+    margin-top: 4px;
+}
+
+.risk-progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+body.dark-mode .risk-progress-bar {
+    background: #334155;
+}
+
+.risk-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.risk-fill.safe { background: linear-gradient(90deg, #22c55e, #10b981); }
+.risk-fill.moderate { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.risk-fill.danger { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+.ai-forecast-summary-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+body.dark-mode .ai-forecast-summary-box {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+.ai-summary-text {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #334155;
+    background: rgba(2, 132, 199, 0.05);
+    border-left: 4px solid #0284c7;
+    padding: 12px 14px;
+    border-radius: 0 8px 8px 0;
+}
+
+body.dark-mode .ai-summary-text {
+    color: #cbd5e1;
+    background: rgba(56, 189, 248, 0.08);
+    border-left-color: #38bdf8;
+}
+
+.ai-forecast-pills {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .ai-forecast-pills {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.forecast-pill {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+body.dark-mode .forecast-pill {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+.forecast-pill span {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.forecast-pill strong {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0284c7;
+}
+
+body.dark-mode .forecast-pill strong {
+    color: #38bdf8;
+}
+
+/* 🚨 Hazard Alerts Panel Styling */
+.hazard-panel {
+    margin-bottom: 24px;
+}
+
+.hazard-tag {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #dc2626 !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+    font-weight: 800 !important;
+}
+
+body.dark-mode .hazard-tag {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+}
+
+.alerts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.alert-status-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+
+.alert-status-card.clean {
+    background: rgba(34, 197, 94, 0.08);
+    border-color: rgba(34, 197, 94, 0.25);
+}
+
+.alert-status-card.clean .alert-icon-col {
+    color: #16a34a;
+    font-size: 1.3rem;
+}
+
+.alert-status-card.clean h4 {
+    color: #15803d;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin: 0 0 3px 0;
+}
+
+.alert-status-card.clean p {
+    color: #334155;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+body.dark-mode .alert-status-card.clean h4 { color: #4ade80; }
+body.dark-mode .alert-status-card.clean p { color: #cbd5e1; }
+
+.alert-status-card.danger-hazard {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.35);
+    animation: pulseHazard 2s infinite;
+}
+
+.alert-status-card.danger-hazard .alert-icon-col {
+    color: #dc2626;
+    font-size: 1.3rem;
+}
+
+.alert-status-card.danger-hazard h4 {
+    color: #b91c1c;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin: 0 0 3px 0;
+}
+
+.alert-status-card.danger-hazard p {
+    color: #7f1d1d;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+body.dark-mode .alert-status-card.danger-hazard h4 { color: #f87171; }
+body.dark-mode .alert-status-card.danger-hazard p { color: #fecaca; }
+
+@keyframes pulseRisk {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+
+@keyframes pulseHazard {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+}
+
