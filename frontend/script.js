@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // --- 4-Tier Resilient Cache-Busting Fetch Engine for All 40+ Live CPCB Stations ---
+    // --- Resilient Multi-Tier Cache-Busting Fetch Engine for All 40+ Live CPCB Stations ---
     async function fetchData() {
         if (statusBadge) {
             statusBadge.innerHTML = '<span class="pulse-dot" style="background:#f59e0b"></span><span>Connecting...</span>';
@@ -176,9 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const t = Date.now();
         const endpoints = [
-            `https://smart-river-backend.onrender.com/api/live-data?t=${t}`,
             `/api/live-data?t=${t}`,
+            `https://smart-river-backend.onrender.com/api/live-data?t=${t}`,
             `http://localhost:3000/api/live-data?t=${t}`,
+            `fallback-data.json?t=${t}`,
+            `/fallback-data.json?t=${t}`,
             `https://corsproxy.io/?https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`,
             `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`)}`
         ];
@@ -221,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (alertBanner) {
                 alertBanner.style.display = 'block';
-                alertBanner.querySelector('.alert-content').innerHTML = `<strong>System Alert:</strong> Render backend connection issue.`;
+                alertBanner.querySelector('.alert-content').innerHTML = `<strong>System Alert:</strong> Live sensor connection issue.`;
             }
             updateTimestamp();
         }

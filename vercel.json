@@ -16,6 +16,10 @@
       "dest": "/backend/server.js"
     },
     {
+      "src": "/fallback-data.json(.*)",
+      "dest": "/frontend/fallback-data.json"
+    },
+    {
       "src": "/admin.html",
       "dest": "/frontend/admin.html"
     },
@@ -30,6 +34,10 @@
     {
       "src": "/admin.js",
       "dest": "/frontend/admin.js"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/frontend/assets/$1"
     },
     {
       "src": "/(.*)",

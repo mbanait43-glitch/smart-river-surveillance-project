@@ -21,7 +21,11 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Start Server if not imported as module (for Vercel serverless support)
+if (process.env.NODE_ENV !== 'production' || require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
