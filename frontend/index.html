@@ -38,9 +38,9 @@
         
         <div class="nav-menu">
             <a href="#overview" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-            <a href="#ai-flood-section" class="nav-link"><i class="fa-solid fa-brain"></i> AI Flood Forecast</a>
             <a href="#map-section" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> GIS Map</a>
             <a href="#live-camera-section" class="nav-link"><i class="fa-solid fa-camera"></i> Live Station Photo</a>
+            <a href="#ai-flood-section" class="nav-link"><i class="fa-solid fa-brain"></i> AI Flood Forecast</a>
         </div>
 
         <div class="nav-actions">
@@ -165,49 +165,6 @@
             <div class="wqi-right">
                 <div class="wqi-score-num" id="wqi-score-val">85/100</div>
                 <div class="wqi-status-tag good" id="wqi-status-tag">GOOD WATER QUALITY</div>
-            </div>
-        </section>
-
-        <!-- 🔮 AI Flood Forecasting & Water Level Prediction Model -->
-        <section id="ai-flood-section" class="ai-flood-card">
-            <div class="ai-card-header">
-                <div class="ai-title-wrap">
-                    <span class="ai-sparkle-badge"><i class="fa-solid fa-brain"></i> AI FLOOD FORECASTING ENGINE</span>
-                    <h3>Predictive Water Level & Flood Risk Assessment</h3>
-                </div>
-                <span class="ai-model-tag"><i class="fa-solid fa-chart-line"></i> ML Regression & Inflow Model v2.4</span>
-            </div>
-
-            <div class="ai-grid-container">
-                <!-- Left Box: AI Flood Risk Level Gauge -->
-                <div class="ai-risk-meter-box">
-                    <div class="risk-gauge-header">
-                        <span>PREDICTED FLOOD RISK (NEXT 7 DAYS)</span>
-                        <strong id="ai-risk-level-badge" class="risk-badge safe">🟢 SAFE / LOW RISK</strong>
-                    </div>
-                    <div class="risk-score-display">
-                        <span id="ai-risk-percentage">12%</span>
-                        <small>Probability of River Overtopping Danger Threshold</small>
-                    </div>
-                    <div class="risk-progress-bar">
-                        <div id="ai-risk-progress-fill" class="risk-fill safe" style="width: 12%;"></div>
-                    </div>
-                </div>
-
-                <!-- Right Box: 7-Day Projected Water Levels & AI Text Summary -->
-                <div class="ai-forecast-summary-box">
-                    <div class="ai-summary-text" id="ai-summary-content">
-                        <i class="fa-solid fa-robot" style="color: #0284c7; margin-right: 6px;"></i>
-                        <strong>AI Assessment:</strong> <span id="ai-assessment-text">River water level is currently within normal seasonal limits. Machine learning model predicts a minor +0.12m rise over 48 hours due to upstream catchment inflow, remaining safely below danger threshold.</span>
-                    </div>
-
-                    <div class="ai-forecast-pills">
-                        <div class="forecast-pill"><span>24h Forecast:</span> <strong id="ai-f-24h">--</strong></div>
-                        <div class="forecast-pill"><span>48h Forecast:</span> <strong id="ai-f-48h">--</strong></div>
-                        <div class="forecast-pill"><span>72h Forecast:</span> <strong id="ai-f-72h">--</strong></div>
-                        <div class="forecast-pill"><span>7-Day Peak:</span> <strong id="ai-f-7d" class="safe">--</strong></div>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -447,6 +404,49 @@
                 </div>
             </section>
         </div>
+
+        <!-- 🔮 AI Flood Forecasting & Water Level Prediction Model (Placed at Bottom of Dashboard) -->
+        <section id="ai-flood-section" class="ai-flood-card">
+            <div class="ai-card-header">
+                <div class="ai-title-wrap">
+                    <span class="ai-sparkle-badge"><i class="fa-solid fa-brain"></i> AI FLOOD FORECASTING ENGINE</span>
+                    <h3>Predictive Water Level & Flood Risk Assessment</h3>
+                </div>
+                <span class="ai-model-tag"><i class="fa-solid fa-chart-line"></i> ML Regression & Inflow Model v2.4</span>
+            </div>
+
+            <div class="ai-grid-container">
+                <!-- Left Box: AI Flood Risk Level Gauge -->
+                <div class="ai-risk-meter-box">
+                    <div class="risk-gauge-header">
+                        <span>PREDICTED FLOOD RISK (NEXT 7 DAYS)</span>
+                        <strong id="ai-risk-level-badge" class="risk-badge safe">🟢 SAFE / LOW RISK</strong>
+                    </div>
+                    <div class="risk-score-display">
+                        <span id="ai-risk-percentage">12%</span>
+                        <small>Probability of River Overtopping Danger Threshold</small>
+                    </div>
+                    <div class="risk-progress-bar">
+                        <div id="ai-risk-progress-fill" class="risk-fill safe" style="width: 12%;"></div>
+                    </div>
+                </div>
+
+                <!-- Right Box: 7-Day Projected Water Levels & AI Text Summary -->
+                <div class="ai-forecast-summary-box">
+                    <div class="ai-summary-text" id="ai-summary-content">
+                        <i class="fa-solid fa-robot" style="color: #0284c7; margin-right: 6px;"></i>
+                        <strong>AI Assessment:</strong> <span id="ai-assessment-text">River water level is currently within normal seasonal limits. Machine learning model predicts a minor +0.12m rise over 48 hours due to upstream catchment inflow, remaining safely below danger threshold.</span>
+                    </div>
+
+                    <div class="ai-forecast-pills">
+                        <div class="forecast-pill"><span>24h Forecast:</span> <strong id="ai-f-24h">--</strong></div>
+                        <div class="forecast-pill"><span>48h Forecast:</span> <strong id="ai-f-48h">--</strong></div>
+                        <div class="forecast-pill"><span>72h Forecast:</span> <strong id="ai-f-72h">--</strong></div>
+                        <div class="forecast-pill"><span>7-Day Peak:</span> <strong id="ai-f-7d" class="safe">--</strong></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Report & Export Actions Bar (Placed at VERY BOTTOM) -->
         <section id="report-actions-bottom" class="panel-card no-print" style="margin-top: 10px;">
