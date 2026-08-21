@@ -881,28 +881,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 🌊 Hydrodynamic Physics Flow Velocity Channel Model (v = Q / (W × D)) ---
     function calculatePhysicsVelocity(station, stOverrides) {
-        let depthVal = 2.8;
+        let depthVal = 1.25;
         if (stOverrides['Depth'] !== undefined) {
             depthVal = parseFloat(stOverrides['Depth']);
-        } else if (station.parameters['Depth'] && station.parameters['Depth'].value) {
-            depthVal = parseFloat(station.parameters['Depth'].value);
+        } else if (station.parameters['Depth'] && station.parameters['Depth'].value !== undefined && station.parameters['Depth'].value !== null) {
+            const parsed = parseFloat(station.parameters['Depth'].value);
+            if (!isNaN(parsed)) depthVal = parsed;
         }
 
-        let stageVal = 61.2;
+        let stageVal = 55.0;
         if (stOverrides['Water Level'] !== undefined) {
             stageVal = parseFloat(stOverrides['Water Level']);
-        } else if (station.parameters['Water Level'] && station.parameters['Water Level'].value) {
-            stageVal = parseFloat(station.parameters['Water Level'].value);
+        } else if (station.parameters['Water Level'] && station.parameters['Water Level'].value !== undefined && station.parameters['Water Level'].value !== null) {
+            const parsed = parseFloat(station.parameters['Water Level'].value);
+            if (!isNaN(parsed)) stageVal = parsed;
         }
 
-        // Channel Width (W = ~180m), Manning Roughness (n = 0.032), Hydraulic Slope (S = 0.00018)
-        const channelWidth = 180.0;
-        const hydraulicRadius = (channelWidth * depthVal) / (channelWidth + 2 * depthVal);
-        const manningVelocity = (1.0 / 0.032) * Math.pow(hydraulicRadius, 2.0 / 3.0) * Math.sqrt(0.00018);
-        
-        // Calibrate realistic river velocity (0.85 m/s - 2.35 m/s)
-        const calibratedV = Math.max(0.75, Math.min(2.45, manningVelocity + (stageVal % 1.2) * 0.15));
-        return calibratedV;
+        const stName = (station.name || '').toLowerCase();
+        const stState = (station.state || '').toLowerCase();
+
+        // 1. High-Gradient Upper Himalayan Reaches (Uttarakhand, Upper Ganga/Yamuna, Haridwar, Rishikesh): 1.60 - 2.20 m/s
+        let baseV = 1.20;
+        if (stName.includes('uk') || stName.includes('haridwar') || stName.includes('rishikesh') || stState.includes('uttarakhand') || stName.includes('tehri')) {
+            baseV = 1.65 + (depthVal * 0.18);
+        }
+        // 2. Middle River Alluvial Plains (Bihar, UP, Patna, Varanasi, Gandak, Son): 1.20 - 1.60 m/s
+        else if (stName.includes('bh') || stName.includes('bihar') || stName.includes('patna') || stName.includes('gandak') || stName.includes('son') || stName.includes('varanasi')) {
+            baseV = 1.22 + (depthVal * 0.15);
+        }
+        // 3. Lower Delta & Barrage Regions (West Bengal, Farakka, Hooghly, Kolkata): 0.95 - 1.35 m/s
+        else if (stName.includes('wb') || stName.includes('farakka') || stName.includes('hooghly') || stName.includes('kolkata')) {
+            baseV = 1.05 + (depthVal * 0.12);
+        }
+        // 4. Other Standard Indian Regional Rivers: 1.15 - 1.50 m/s
+        else {
+            baseV = 1.18 + (depthVal * 0.14);
+        }
+
+        const stageOffset = (stageVal % 1.5) * 0.10;
+        const finalVelocity = parseFloat((baseV + stageOffset).toFixed(2));
+        return Math.max(0.85, Math.min(2.45, finalVelocity));
     }
 
     // --- 🌧️ Open-Meteo Global Satellite & Radar Live Rainfall API Fetcher ---
