@@ -817,58 +817,13 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCardById('card-toc', 'Total Organic Carbon', 'mg/l');
         updateCardById('card-depth', 'Depth', 'm');
 
-        // 13. River Flow Velocity Card (Hydrodynamic Physics Channel Model v = Q/(W×D))
-        const velCard = document.getElementById('card-velocity');
-        let velocityVal = 1.35;
-        if (velCard) {
-            velocityVal = calculatePhysicsVelocity(station, stationOverrides);
-            const valSpan = velCard.querySelector('.value');
-            const statusSpan = velCard.querySelector('.status-indicator');
-            velCard.classList.remove('status-green', 'status-red', 'status-white');
-            velCard.classList.add(velocityVal > 2.3 ? 'status-red' : 'status-white');
-            if (valSpan) {
-                valSpan.textContent = velocityVal.toFixed(2);
-                valSpan.style.color = velocityVal > 2.3 ? '#f43f5e' : 'var(--text-primary)';
-            }
-            if (statusSpan) {
-                statusSpan.innerHTML = `<a href="https://cwc.gov.in/" target="_blank" class="card-source-link" title="Hydraulic Stage-Discharge Physics Model">Official Data Source (CWC Physics Model) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
-            }
-        }
+        // Calculate Hydrodynamic Flow Velocity and fetch Open-Meteo Rain for 🔮 AI Flood Forecasting Engine
+        const velocityVal = calculatePhysicsVelocity(station, stationOverrides);
 
-        // 14. Basin Rainfall Card & 🔮 AI Flood Forecasting Pipeline (Live Open-Meteo Weather API)
-        const rainCard = document.getElementById('card-rainfall');
-        if (rainCard) {
-            const valSpan = rainCard.querySelector('.value');
-            const statusSpan = rainCard.querySelector('.status-indicator');
-            rainCard.classList.remove('status-green', 'status-red', 'status-white');
-            rainCard.classList.add('status-white');
-            if (valSpan) {
-                valSpan.textContent = 'Fetching...';
-                valSpan.style.color = 'var(--text-primary)';
-            }
-            if (statusSpan) {
-                statusSpan.innerHTML = `<a href="https://open-meteo.com/" target="_blank" class="card-source-link" title="Open-Meteo Global Meteorological Radar">Official Live Radar (Open-Meteo) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem;"></i></a>`;
-            }
-        }
-
-        // Fetch Live Real-Time Basin Rainfall from Open-Meteo API using station GPS
         fetchOpenMeteoRainfall(station).then(meteoData => {
-            if (rainCard) {
-                const valSpan = rainCard.querySelector('.value');
-                if (valSpan) {
-                    valSpan.textContent = meteoData.todayRain.toFixed(1);
-                    valSpan.style.color = meteoData.todayRain > 35.0 ? '#f43f5e' : 'var(--text-primary)';
-                }
-            }
-            // Update 🔮 AI Flood Forecasting & Water Level Prediction Engine with Real Meteo Data
             updateAIFloodPrediction(station, stationOverrides, meteoData, velocityVal);
         }).catch(() => {
-            // Fallback if offline
-            const fallbackMeteo = { todayRain: 6.2, forecast7d: [6.2, 4.5, 8.1, 5.0, 3.2, 2.8, 4.0], windSpeed: 8.5 };
-            if (rainCard) {
-                const valSpan = rainCard.querySelector('.value');
-                if (valSpan) valSpan.textContent = fallbackMeteo.todayRain.toFixed(1);
-            }
+            const fallbackMeteo = { todayRain: 0.0, forecast7d: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], windSpeed: 8.0 };
             updateAIFloodPrediction(station, stationOverrides, fallbackMeteo, velocityVal);
         });
 
