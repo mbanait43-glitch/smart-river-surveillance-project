@@ -1021,15 +1021,63 @@ document.addEventListener('DOMContentLoaded', () => {
             f7dEl.style.color = riskCategory === 'danger' ? '#ef4444' : (riskCategory === 'moderate' ? '#f59e0b' : '#0284c7');
         }
 
-        if (summaryTextEl) {
-            if (riskCategory === 'danger') {
-                summaryTextEl.textContent = `CRITICAL WARNING: Station ${station.name} stage is ${levelVal}m MSL with heavy catchment rain (${rainToday.toFixed(1)}mm) and high velocity (${v.toFixed(2)} m/s). AI Multi-Factor Model projects a +${rise72h}m surge in 72h. High flood preparedness protocol advised.`;
-            } else if (riskCategory === 'moderate') {
-                summaryTextEl.textContent = `MODERATE INFLOW: Open-Meteo radar reports ${rainToday.toFixed(1)}mm/24h basin precipitation at ${station.name}. Current stage ${levelVal}m MSL is projected to rise by +${rise48h}m over 48h at flow velocity ${v.toFixed(2)} m/s. Safe buffer maintained.`;
-            } else {
-                summaryTextEl.textContent = `NORMAL STATUS: River stage at ${station.name} (${levelVal}m MSL) is stable. Live satellite precipitation (${rainToday.toFixed(1)}mm/24h) and flow speed (${v.toFixed(2)} m/s) indicate negligible flood risk. Projected 48h variation is +${rise48h}m, well within safe seasonal boundaries.`;
-            }
+        // Trigger Real Gemini AI / Neural Hydrological Assessment
+        generateGeminiAIAssessment(station, levelVal, rainToday, v, floodRiskPct, rise48h, rise72h, summaryTextEl);
+    }
+
+    // --- 🤖 Real Gemini AI & Hydrological Assessment Generator ---
+    let geminiRequestToken = 0;
+    async function generateGeminiAIAssessment(station, stage, rain, velocity, riskPct, rise48, rise72, targetEl) {
+        if (!targetEl) return;
+        const currentToken = ++geminiRequestToken;
+        const modelBadge = document.getElementById('ai-model-badge');
+
+        const fallbackSummary = riskPct >= 65
+            ? `CRITICAL WARNING: Station ${station.name} (${station.river || 'River'}) stage is ${stage}m MSL with heavy catchment precipitation (${rain.toFixed(1)}mm/24h) and high channel flow velocity (${velocity.toFixed(2)} m/s). Model projects a +${rise72}m water level surge in 72h. Emergency flood management protocol advised.`
+            : (riskPct >= 35
+                ? `MODERATE INFLOW ADVISORY: Open-Meteo radar reports ${rain.toFixed(1)}mm/24h basin precipitation at ${station.name}. Current stage ${stage}m MSL is projected to rise by +${rise48}m over 48h at flow velocity ${velocity.toFixed(2)} m/s. Hydrological buffer remains stable.`
+                : `SAFE STATUS: River stage at ${station.name} (${stage}m MSL) is within safe seasonal limits. Live radar precipitation (${rain.toFixed(1)}mm/24h) and flow speed (${velocity.toFixed(2)} m/s) indicate negligible flood probability (${riskPct}%). Projected 48h variation is +${rise48}m, safely below danger thresholds.`);
+
+        // Set initial smart assessment immediately
+        targetEl.textContent = fallbackSummary;
+
+        // Check if custom Gemini API Key is available in localStorage
+        const apiKey = localStorage.getItem('gemini_api_key');
+        if (!apiKey) {
+            if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-brain"></i> Open-Meteo + Inflow ML v2.4`;
+            return;
         }
+
+        try {
+            if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Gemini 1.5 Flash Thinking...`;
+            
+            const promptText = `You are a real-time hydrological surveillance AI for Indian rivers. Station: ${station.name}, River: ${station.river || 'Regional River'}, State: ${station.state}. Current Water Stage: ${stage}m MSL, Live Open-Meteo 24h Basin Precipitation: ${rain.toFixed(1)}mm, River Flow Velocity: ${velocity.toFixed(2)} m/s, Calculated Flood Risk: ${riskPct}%. In exactly 2 concise, professional sentences, provide a formal hydrological flood risk assessment advisory. Do not use markdown bullets.`;
+
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: promptText }] }],
+                    generationConfig: { maxOutputTokens: 120, temperature: 0.3 }
+                })
+            });
+
+            if (currentToken !== geminiRequestToken) return;
+
+            if (resp.ok) {
+                const data = await resp.json();
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+                if (text) {
+                    targetEl.textContent = text;
+                    if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-sparkles" style="color: #38bdf8;"></i> Gemini 1.5 Flash AI Active`;
+                    return;
+                }
+            }
+        } catch (e) {
+            // Silently maintain high-performance fallback
+        }
+
+        if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-brain"></i> Open-Meteo + Inflow ML v2.4`;
     }
 
     // --- 🚨 Live Hazard & Environmental Alerts List Scanner ---
