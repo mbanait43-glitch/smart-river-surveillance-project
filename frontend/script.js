@@ -916,7 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return meteoRainCache[cacheKey].data;
         }
 
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=precipitation,rain,wind_speed_10m&daily=precipitation_sum&timezone=auto`;
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=precipitation_sum&forecast_days=7&timezone=Asia%2FKolkata`;
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 6000);
@@ -929,14 +929,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const todaySum = (json.daily && json.daily.precipitation_sum && json.daily.precipitation_sum.length > 0)
                 ? parseFloat(json.daily.precipitation_sum[0])
-                : (json.current && json.current.precipitation !== undefined ? parseFloat(json.current.precipitation) : 4.5);
+                : 0.0;
 
             const f7d = (json.daily && json.daily.precipitation_sum)
                 ? json.daily.precipitation_sum.slice(0, 7).map(v => parseFloat(v || 0))
-                : [todaySum, todaySum * 0.8, todaySum * 1.1, todaySum * 0.9, 4.0, 3.5, 4.2];
+                : [todaySum, todaySum * 0.8, todaySum * 1.1, todaySum * 0.9, 0.0, 0.0, 0.0];
 
             const result = {
-                todayRain: isNaN(todaySum) ? 5.2 : todaySum,
+                todayRain: isNaN(todaySum) ? 0.0 : todaySum,
                 forecast7d: f7d,
                 windSpeed: json.current && json.current.wind_speed_10m ? parseFloat(json.current.wind_speed_10m) : 8.0
             };
@@ -969,15 +969,14 @@ document.addEventListener('DOMContentLoaded', () => {
             levelVal = parseFloat(station.parameters['Water Level'].value);
         }
 
-        const rainToday = meteoData ? meteoData.todayRain : 5.0;
-        const rainNext3d = meteoData && meteoData.forecast7d ? (meteoData.forecast7d[0] + meteoData.forecast7d[1] + meteoData.forecast7d[2]) : 15.0;
+        const rainToday = meteoData ? meteoData.todayRain : 0.0;
+        const rainNext3d = meteoData && meteoData.forecast7d ? (meteoData.forecast7d[0] + meteoData.forecast7d[1] + meteoData.forecast7d[2]) : 0.0;
         const v = flowVelocity || 1.25;
 
-        // Multi-Factor Machine Learning Flood Risk Formula
-        // Risk = BaseRisk + (Rainfall × 1.25) + (Flow Velocity × 6.5) + (Stage Offset)
-        const nameHash = (station.name || '').split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        let floodRiskPct = Math.round(12 + (rainToday * 1.15) + (v * 5.2) + ((nameHash % 7)));
-        floodRiskPct = Math.max(8, Math.min(95, floodRiskPct));
+        // Pure Physical-Hydrological Multi-Factor Flood Risk Formula (No Random/Hash Numbers)
+        // Base Risk (10%) + Rainfall Contribution + Flow Velocity Contribution + High Stage Surge
+        let floodRiskPct = Math.round(10 + (rainToday * 1.3) + (v * 5.0) + (levelVal > 70 ? (levelVal - 70) * 1.5 : 0));
+        floodRiskPct = Math.max(5, Math.min(95, floodRiskPct));
 
         let riskCategory = 'safe';
         let riskLabel = '🟢 SAFE / LOW RISK';
@@ -992,7 +991,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Projected Water Levels based on actual catchment rain inflow accumulation
         const rise24h = (rainToday * 0.008 + v * 0.03).toFixed(2);
-        const rise48h = ((rainToday + (meteoData?.forecast7d?.[1] || 4.0)) * 0.009 + v * 0.05).toFixed(2);
+        const rise48h = ((rainToday + (meteoData?.forecast7d?.[1] || 0.0)) * 0.009 + v * 0.05).toFixed(2);
         const rise72h = (rainNext3d * 0.008 + v * 0.07).toFixed(2);
         const peak7d = (rainNext3d * 0.011 + v * 0.09).toFixed(2);
 
@@ -1020,12 +1019,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Trigger Real Gemini AI / Neural Hydrological Assessment
-        generateGeminiAIAssessment(station, levelVal, rainToday, v, floodRiskPct, rise48h, rise72h, summaryTextEl);
+        generateGeminiAIAssessment(station, levelVal, rainToday, v, floodRiskPct, rise48h, rise72h, summaryTextEl, riskPctEl, riskBadgeEl, riskFillEl, f24hEl, f48hEl, f72hEl, f7dEl);
     }
 
     // --- 🤖 Real Gemini AI & Hydrological Assessment Generator ---
     let geminiRequestToken = 0;
-    async function generateGeminiAIAssessment(station, stage, rain, velocity, riskPct, rise48, rise72, targetEl) {
+    async function generateGeminiAIAssessment(station, stage, rain, velocity, riskPct, rise48, rise72, targetEl, rPctEl, rBadgeEl, rFillEl, f24El, f48El, f72El, f7dEl) {
         if (!targetEl) return;
         const currentToken = ++geminiRequestToken;
         const modelBadge = document.getElementById('ai-model-badge');
@@ -1049,14 +1048,24 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Gemini 1.5 Flash Thinking...`;
             
-            const promptText = `You are a real-time hydrological surveillance AI for Indian rivers. Station: ${station.name}, River: ${station.river || 'Regional River'}, State: ${station.state}. Current Water Stage: ${stage}m MSL, Live Open-Meteo 24h Basin Precipitation: ${rain.toFixed(1)}mm, River Flow Velocity: ${velocity.toFixed(2)} m/s, Calculated Flood Risk: ${riskPct}%. In exactly 2 concise, professional sentences, provide a formal hydrological flood risk assessment advisory. Do not use markdown bullets.`;
+            const promptText = `You are a real-time hydrological surveillance AI for Indian rivers. 
+Station: ${station.name}, River: ${station.river || 'Regional River'}, State: ${station.state}. 
+Current Water Stage: ${stage}m MSL, Live Open-Meteo 24h Basin Precipitation: ${rain.toFixed(1)}mm, River Flow Velocity: ${velocity.toFixed(2)} m/s, Calculated Flood Risk: ${riskPct}%. 
+
+Respond with a JSON object strictly in this format:
+{
+  "floodRiskPct": ${riskPct},
+  "riskCategory": "${riskPct >= 65 ? 'danger' : (riskPct >= 35 ? 'moderate' : 'safe')}",
+  "riskLevel": "${riskPct >= 65 ? '🔴 HIGH FLOOD WARNING' : (riskPct >= 35 ? '🟡 MODERATE INFLOW RISK' : '🟢 SAFE / LOW RISK')}",
+  "assessmentText": "Two professional sentences summarizing flood risk advisory for local water management."
+}`;
 
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{ parts: [{ text: promptText }] }],
-                    generationConfig: { maxOutputTokens: 120, temperature: 0.3 }
+                    generationConfig: { maxOutputTokens: 250, temperature: 0.2 }
                 })
             });
 
@@ -1064,10 +1073,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (resp.ok) {
                 const data = await resp.json();
-                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-                if (text) {
-                    targetEl.textContent = text;
-                    if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-sparkles" style="color: #38bdf8;"></i> Gemini 1.5 Flash AI Active`;
+                const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+                const cleanJsonMatch = rawText.match(/\{[\s\S]*\}/);
+                
+                if (cleanJsonMatch) {
+                    const parsed = JSON.parse(cleanJsonMatch[0]);
+                    if (parsed.assessmentText) targetEl.textContent = parsed.assessmentText;
+                    if (parsed.floodRiskPct && rPctEl) rPctEl.textContent = `${parsed.floodRiskPct}%`;
+                    if (parsed.riskCategory && rBadgeEl) {
+                        rBadgeEl.className = `risk-badge ${parsed.riskCategory}`;
+                        rBadgeEl.textContent = parsed.riskLevel || (parsed.riskCategory === 'danger' ? '🔴 HIGH FLOOD WARNING' : (parsed.riskCategory === 'moderate' ? '🟡 MODERATE INFLOW RISK' : '🟢 SAFE / LOW RISK'));
+                    }
+                    if (parsed.floodRiskPct && rFillEl) {
+                        rFillEl.className = `risk-fill ${parsed.riskCategory || 'safe'}`;
+                        rFillEl.style.width = `${parsed.floodRiskPct}%`;
+                    }
+                    if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-sparkles" style="color: #38bdf8;"></i> Gemini 1.5 Flash Active ✨`;
+                    return;
+                } else if (rawText) {
+                    targetEl.textContent = rawText;
+                    if (modelBadge) modelBadge.innerHTML = `<i class="fa-solid fa-sparkles" style="color: #38bdf8;"></i> Gemini 1.5 Flash Active ✨`;
                     return;
                 }
             }
@@ -1468,7 +1493,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnHomeReset) btnHomeReset.addEventListener('click', resetHomeDefault);
 
-    // Event Listeners
+    // --- Gemini 1.5 Flash Free API Key Configurator ---
+    const btnSetGeminiKey = document.getElementById('btn-set-gemini-key');
+    if (btnSetGeminiKey) {
+        const existingKey = localStorage.getItem('gemini_api_key');
+        if (existingKey) {
+            btnSetGeminiKey.innerHTML = `<i class="fa-solid fa-check"></i> Gemini Key Active`;
+            btnSetGeminiKey.style.borderColor = '#10b981';
+            btnSetGeminiKey.style.color = '#10b981';
+        }
+        btnSetGeminiKey.addEventListener('click', () => {
+            const currentKey = localStorage.getItem('gemini_api_key') || '';
+            const newKey = prompt('Enter your Free Google Gemini API Key from https://aistudio.google.com (1500 req/day free):\n\n(Leave empty to remove key and use built-in neural model)', currentKey);
+            if (newKey !== null) {
+                const trimmed = newKey.trim();
+                if (trimmed) {
+                    localStorage.setItem('gemini_api_key', trimmed);
+                    btnSetGeminiKey.innerHTML = `<i class="fa-solid fa-check"></i> Gemini Key Active`;
+                    btnSetGeminiKey.style.borderColor = '#10b981';
+                    btnSetGeminiKey.style.color = '#10b981';
+                    alert('Gemini 1.5 Flash API Key successfully configured! Re-analyzing station data...');
+                } else {
+                    localStorage.removeItem('gemini_api_key');
+                    btnSetGeminiKey.innerHTML = `<i class="fa-solid fa-key"></i> Set Gemini API Key`;
+                    btnSetGeminiKey.style.borderColor = '';
+                    btnSetGeminiKey.style.color = '';
+                    alert('Gemini API Key removed. Switched to built-in Inflow ML Engine.');
+                }
+                if (selectedStationId) {
+                    displayStationData(selectedStationId, false);
+                }
+            }
+        });
+    }
+
+    // --- Core Navigation & Filter Event Listeners ---
     if (btnRefresh) btnRefresh.addEventListener('click', fetchData);
     if (riverSelect) riverSelect.addEventListener('change', () => updateStationList('RIVER'));
     if (stateSelect) stateSelect.addEventListener('change', () => updateStationList('STATE'));
