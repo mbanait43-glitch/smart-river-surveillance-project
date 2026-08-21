@@ -178,11 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const endpoints = [
             `/api/live-data?t=${t}`,
             `https://smart-river-backend.onrender.com/api/live-data?t=${t}`,
-            `http://localhost:3000/api/live-data?t=${t}`,
             `fallback-data.json?t=${t}`,
             `/fallback-data.json?t=${t}`,
-            `https://corsproxy.io/?https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`,
-            `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://rtwqmsdb1.cpcb.gov.in/data/internet/layers/10/index.json?t=${t}`)}`
+            `http://localhost:3000/api/live-data?t=${t}`
         ];
 
         let success = false;
