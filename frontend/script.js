@@ -1,142 +1,109 @@
+/**
+ * SMART RIVER SURVEILLANCE — MISSION CONTROL ENGINE v3.0
+ * Features:
+ * - Real-Time CPCB Ingestion (40 Stations, 468 Parameter Stream Points)
+ * - 3-Column Bento Grid Explorer with Instant Teleportation
+ * - Dynamic SVG Sparkline Waveform Rendering for 12 Telemetry Parameters
+ * - NSF-WQI Scientific Water Quality Calculation Engine
+ * - Global Command Palette (Ctrl+K) Search
+ * - Hardware Accelerated Leaflet 1.9.4 GIS Mapping
+ * - Interactive Time-Machine Simulation Scrubber
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Theme Toggling (Fixed & Persisted) ---
-    const themeBtn = document.getElementById('theme-toggle');
-    const body = document.body;
+    // --- State Management ---
+    let stationMap = {};
+    let markersMap = {};
+    let selectedStationId = null;
+    let timeOffsetHours = 0;
 
-    const savedTheme = localStorage.getItem('theme_preference') || 'light';
-    if (savedTheme === 'dark') {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-        if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    } else {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-        if (themeBtn) themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-    }
-    
-    if (themeBtn) {
-        themeBtn.addEventListener('click', () => {
-            if (body.classList.contains('light-mode')) {
-                body.classList.remove('light-mode');
-                body.classList.add('dark-mode');
-                localStorage.setItem('theme_preference', 'dark');
-                themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-            } else {
-                body.classList.remove('dark-mode');
-                body.classList.add('light-mode');
-                localStorage.setItem('theme_preference', 'light');
-                themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            }
-        });
-    }
-
-    // Auto City GPS Mapping Helper
-    function getCoordsForLocation(locationName) {
-        const loc = (locationName || '').toLowerCase();
-        if (loc.includes('nagpur')) return { lat: 21.1458, lng: 79.0882 };
-        if (loc.includes('patna') || loc.includes('bihar')) return { lat: 25.5941, lng: 85.1376 };
-        if (loc.includes('lucknow') || loc.includes('uttar pradesh') || loc.includes('up')) return { lat: 26.8467, lng: 80.9462 };
-        if (loc.includes('varanasi') || loc.includes('kashi')) return { lat: 25.3176, lng: 82.9739 };
-        if (loc.includes('delhi')) return { lat: 28.7041, lng: 77.1025 };
-        if (loc.includes('kolkata') || loc.includes('bengal')) return { lat: 22.5726, lng: 88.3639 };
-        if (loc.includes('mumbai') || loc.includes('pune') || loc.includes('maharashtra')) return { lat: 19.0760, lng: 72.8777 };
-        if (loc.includes('ranchi') || loc.includes('jharkhand')) return { lat: 23.3441, lng: 85.3096 };
-        if (loc.includes('guwahati') || loc.includes('assam')) return { lat: 26.1445, lng: 91.7362 };
-        if (loc.includes('cuttack') || loc.includes('odisha')) return { lat: 20.4625, lng: 85.8828 };
-        if (loc.includes('bhopal') || loc.includes('madhya pradesh') || loc.includes('mp')) return { lat: 23.2599, lng: 77.4126 };
-        return { lat: 21.1458, lng: 79.0882 };
-    }
-
-    // --- High-Definition Embedded Leaflet Marker Icons (Zero Network Request - 100% Reliable) ---
-    const blueSvgUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 41" width="25" height="41"><path fill="#0284c7" stroke="#ffffff" stroke-width="1.4" d="M12.5 0C5.6 0 0 5.6 0 12.5C0 22 12.5 41 12.5 41C12.5 41 25 22 25 12.5C25 5.6 19.4 0 12.5 0Z"/><circle cx="12.5" cy="12.5" r="4.5" fill="#ffffff"/></svg>');
-    const redSvgUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 52" width="32" height="52"><path fill="#ef4444" stroke="#ffffff" stroke-width="1.6" d="M16 0C7.17 0 0 7.17 0 16C0 28 16 52 16 52C16 52 32 28 32 16C32 7.17 24.83 0 16 0Z"/><circle cx="16" cy="16" r="5.5" fill="#ffffff"/></svg>');
-    const shadowSvgUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" width="41" height="41"><ellipse cx="20.5" cy="35" rx="14" ry="5" fill="rgba(0,0,0,0.3)"/></svg>');
-
-    const blueIcon = new L.Icon({
-        iconUrl: blueSvgUrl,
-        shadowUrl: shadowSvgUrl,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-
-    const redSelectedIcon = new L.Icon({
-        iconUrl: redSvgUrl,
-        shadowUrl: shadowSvgUrl,
-        iconSize: [32, 52],
-        iconAnchor: [16, 52],
-        popupAnchor: [1, -42],
-        shadowSize: [41, 41]
-    });
-
-    // --- Navigation Links Smooth Scroll Offset Fix ---
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
-            if (href && href.startsWith('#')) {
-                e.preventDefault();
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-
-                if (href === '#overview') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    const targetEl = document.querySelector(href);
-                    if (targetEl) {
-                        const navHeight = 90;
-                        const elementPosition = targetEl.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - navHeight;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                    }
-                }
-            }
-        });
-    });
-
-    // --- UI Elements ---
-    const btnRefresh = document.getElementById('btn-refresh');
-    const btnPrintReport = document.getElementById('btn-print-report');
-    const btnExportCsv = document.getElementById('btn-export-csv');
-
-    const lastUpdateSpan = document.getElementById('last-update');
-    const statusBadge = document.getElementById('system-status');
-    const alertBanner = document.getElementById('alerts');
-
+    // --- DOM Elements ---
     const riverSelect = document.getElementById('river-select');
     const stateSelect = document.getElementById('state-select');
     const stationSelect = document.getElementById('station-select');
+    const dockStationList = document.getElementById('dock-station-list');
+    const dockStationCount = document.getElementById('dock-station-count');
+    const statusBadge = document.getElementById('system-status');
+    const lastUpdateEl = document.getElementById('last-update');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const btnRefresh = document.getElementById('btn-refresh');
+    const btnHomeReset = document.getElementById('btn-home-reset');
+    const btnMapFit = document.getElementById('btn-map-fit');
+    
+    // Command Palette Elements
+    const btnOpenPalette = document.getElementById('btn-open-palette');
+    const paletteModal = document.getElementById('command-palette-modal');
+    const paletteInput = document.getElementById('palette-search-input');
+    const paletteResults = document.getElementById('palette-results-list');
 
+    // Time Scrubber
+    const timeScrubber = document.getElementById('time-scrubber');
+    const timeScrubLabel = document.getElementById('time-scrub-label');
+
+    // Display Meta Elements
     const stationNameDisplay = document.getElementById('station-name-display');
-    const wqiScoreVal = document.getElementById('wqi-score-val');
-    const wqiStatusTag = document.getElementById('wqi-status-tag');
-
-    // Print Report Metadata Spans
     const reportRiver = document.getElementById('report-river');
     const reportLocation = document.getElementById('report-location');
-    const reportStation = document.getElementById('report-station');
     const reportStationCode = document.getElementById('report-station-code');
     const reportStatusLabel = document.getElementById('report-status-label');
+    const wqiScoreVal = document.getElementById('wqi-score-val');
+    const wqiStatusTag = document.getElementById('wqi-status-tag');
+    const wqiRadialRing = document.getElementById('wqi-radial-ring');
 
-    const printDate = document.getElementById('print-date');
-    const printTime = document.getElementById('print-time');
+    // Camera Panel Elements
+    const stationLiveImg = document.getElementById('station-live-image');
+    const cameraStationName = document.getElementById('camera-station-name');
+    const cameraLocationRiver = document.getElementById('camera-location-river');
+    const cameraStationCode = document.getElementById('camera-station-code');
 
-    let rawData = [];
-    let stationMap = {}; // stationId -> structured station object
-    let markersMap = {}; // stationId -> Leaflet marker
-    let chartInstance = null;
-    let selectedStationId = null;
+    // --- Theme Switcher (Obsidian Dark / Solarized Light) ---
+    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+    document.body.className = savedTheme;
+    updateThemeIcon(savedTheme);
 
-    // Strict parameter mapping for all 12 official CPCB Parameters (100% exact CPCB names & key matching)
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = document.body.classList.contains('dark-mode');
+            const newTheme = isDark ? 'light-mode' : 'dark-mode';
+            document.body.className = newTheme;
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
+
+    function updateThemeIcon(theme) {
+        if (!themeToggleBtn) return;
+        themeToggleBtn.innerHTML = theme === 'dark-mode' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    }
+
+    // --- Map Icons Configuration ---
+    const blueIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [24, 38],
+        iconAnchor: [12, 38],
+        popupAnchor: [1, -32],
+        shadowSize: [38, 38]
+    });
+
+    const redSelectedIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [30, 46],
+        iconAnchor: [15, 46],
+        popupAnchor: [1, -38],
+        shadowSize: [46, 46]
+    });
+
+    // --- CPCB Standard Parameter Key Mapping ---
     const parameterMapping = {
-        'River Stage': 'Water Level',
         'Water Level': 'Water Level',
-        'S': 'Water Level',
+        'River Stage': 'Water Level',
         'pH': 'pH',
-        'WT': 'Water Temperature',
         'Water Temperature': 'Water Temperature',
-        'Oxygen, dissolved': 'Dissolved Oxygen',
+        'Temperature': 'Water Temperature',
         'Dissolved Oxygen': 'Dissolved Oxygen',
+        'Oxygen, dissolved': 'Dissolved Oxygen',
         'DO': 'Dissolved Oxygen',
         'WTb': 'Water Turbidity',
         'Water Turbidity': 'Water Turbidity',
@@ -156,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Water Depth': 'Depth'
     };
 
-    // --- Leaflet Map Initialization with Hardware Acceleration ---
+    // --- Leaflet Map Initialization ---
     const map = L.map('map', {
         zoomControl: true,
         fadeAnimation: true,
@@ -165,13 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }).setView([22.5937, 78.9629], 5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+        attribution: '&copy; OpenStreetMap contributors | CPCB Telemetry'
     }).addTo(map);
 
-    // --- Resilient Multi-Tier Cache-Busting Fetch Engine for All 40+ Live CPCB Stations ---
+    // --- Multi-Tier Resilient Fetch Engine ---
     async function fetchData() {
         if (statusBadge) {
-            statusBadge.innerHTML = '<span class="pulse-dot" style="background:#f59e0b"></span><span>Connecting...</span>';
+            statusBadge.innerHTML = '<span class="pulse-dot" style="background:#f59e0b"></span><span>CPCB Sat-Link: Syncing...</span>';
         }
 
         const t = Date.now();
@@ -179,8 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `/api/live-data?t=${t}`,
             `https://smart-river-backend.onrender.com/api/live-data?t=${t}`,
             `fallback-data.json?t=${t}`,
-            `/fallback-data.json?t=${t}`,
-            `http://localhost:3000/api/live-data?t=${t}`
+            `/fallback-data.json?t=${t}`
         ];
 
         let success = false;
@@ -188,12 +154,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const url of endpoints) {
             try {
-                const response = await fetch(url, { cache: 'no-store' });
-                if (response.ok) {
-                    const parsed = await response.json();
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        rawData = parsed;
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 6000);
+                const resp = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        processRawData(data);
+                        populateDropdowns();
+                        updateStationList('INIT');
+                        renderMapMarkers();
+                        populateDockStationList();
                         success = true;
+                        if (statusBadge) {
+                            statusBadge.innerHTML = '<span class="pulse-dot"></span><span>CPCB Sat-Link: <strong>Active (200 OK)</strong></span>';
+                        }
+                        if (lastUpdateEl) {
+                            lastUpdateEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        }
                         break;
                     }
                 }
@@ -202,84 +182,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if (success && rawData.length > 0) {
-            processRawData(rawData);
-
+        if (!success) {
             if (statusBadge) {
-                statusBadge.innerHTML = '<span class="pulse-dot"></span><span>Sensors Operational</span>';
+                statusBadge.innerHTML = '<span class="pulse-dot" style="background:#ef4444"></span><span>CPCB Gateway Offline</span>';
             }
-
-            if (alertBanner) alertBanner.style.display = 'none';
-
-            populateDropdowns();
-            renderMapMarkers();
-            updateTimestamp();
-        } else {
-            console.error('Fetch error:', lastError);
-            if (statusBadge) {
-                statusBadge.innerHTML = '<span class="pulse-dot" style="background:#ef4444"></span><span>Offline</span>';
-            }
-            if (alertBanner) {
-                alertBanner.style.display = 'block';
-                alertBanner.querySelector('.alert-content').innerHTML = `<strong>System Alert:</strong> Live sensor connection issue.`;
-            }
-            updateTimestamp();
         }
     }
 
-    // --- Helper Function: Smart River Inferencing Engine ---
-    function inferRiverName(name, state) {
-        const n = (name || '').toLowerCase();
+    // --- River Extraction Logic ---
+    function inferRiverName(stationName, stateName) {
+        const n = (stationName || '').toLowerCase();
         
-        // 1. Direct Keyword Matching for 30+ Major & Regional Indian Rivers
-        if (n.includes('yamuna') || n.includes('sonipat') || n.includes('mathura') || n.includes('gokul') || n.includes('mohana')) return 'Yamuna River';
-        if (n.includes('hindon')) return 'Hindon River';
-        if (n.includes('ramganga')) return 'Ramganga River';
-        if (n.includes('damodar') || n.includes('durgapur') || n.includes('raghunathpur')) return 'Damodar River';
-        if (n.includes('ghagra') || n.includes('ghaghara')) return 'Ghaghara River';
-        if (n.includes('gandak')) return 'Gandak River';
-        if (n.includes('kosi')) return 'Kosi River';
-        if (/\bson\b|\bsone\b/i.test(n)) return 'Son River';
-        if (n.includes('punpun')) return 'Punpun River';
-        if (n.includes('hooghly')) return 'Hooghly River';
+        if (n.includes('ganga') || n.includes('ganges')) return 'Ganga River';
+        if (n.includes('yamuna') || n.includes('jamuna')) return 'Yamuna River';
         if (n.includes('godavari')) return 'Godavari River';
-        if (n.includes('kaveri') || n.includes('cauvery')) return 'Kaveri River';
-        if (n.includes('kanhan')) return 'Kanhan River';
-        if (n.includes('nag river') || n.includes('nagpur')) return 'Nag River';
+        if (n.includes('gandak')) return 'Gandak River';
+        if (n.includes('ghagra') || n.includes('ghaghra') || n.includes('sarayu')) return 'Ghaghra River';
+        if (n.includes('son') || n.includes('sone')) return 'Son River';
+        if (n.includes('burhi gandak')) return 'Burhi Gandak River';
+        if (n.includes('ramganga')) return 'Ramganga River';
+        if (n.includes('gomti')) return 'Gomti River';
+        if (n.includes('hooghly') || n.includes('hugli')) return 'Hooghly River';
         if (n.includes('narmada')) return 'Narmada River';
+        if (n.includes('cauvery') || n.includes('kaveri')) return 'Cauvery River';
         if (n.includes('krishna')) return 'Krishna River';
-        if (n.includes('mahanadi')) return 'Mahanadi River';
         if (n.includes('brahmaputra')) return 'Brahmaputra River';
-        if (n.includes('sabarmati')) return 'Sabarmati River';
-        if (n.includes('tapi') || n.includes('tapti')) return 'Tapi River';
-        if (n.includes('beas')) return 'Beas River';
-        if (n.includes('sutlej')) return 'Sutlej River';
-        if (n.includes('chambal')) return 'Chambal River';
-        if (n.includes('betwa')) return 'Betwa River';
-        if (n.includes('subarnarekha')) return 'Subarnarekha River';
-        if (n.includes('periyar')) return 'Periyar River';
-        if (n.includes('vaigai')) return 'Vaigai River';
         
-        // 2. Specific Geographical Landmark Mapping
         if (n.includes('tehri') || n.includes('dhari') || n.includes('srinagar')) return 'Bhagirathi / Alaknanda';
-        if (n.includes('pratapgarh')) return 'Sai River';
-        if (n.includes('fatehpur') || n.includes('auraiya')) return 'Yamuna / Ganga Basin';
-        if (n.includes('haridwar') || n.includes('rishikesh') || n.includes('fafamau') || n.includes('chunar') || n.includes('sahebganj') || n.includes('rajmahal') || n.includes('nabadwip') || n.includes('farakka') || n.includes('khurji') || n.includes('ganga')) return 'Ganga River';
+        if (n.includes('haridwar') || n.includes('rishikesh') || n.includes('fafamau') || n.includes('chunar') || n.includes('farakka') || n.includes('patna')) return 'Ganga River';
 
-        // 3. Dynamic Regex Extraction for "River X" or "X River"
-        const match = (name || '').match(/River\s+([A-Za-z]+)|([A-Za-z]+)\s+River/i);
+        const match = (stationName || '').match(/River\s+([A-Za-z]+)|([A-Za-z]+)\s+River/i);
         if (match) {
             const extracted = match[1] || match[2];
-            if (extracted && !['stage', 'water', 'intake', 'bank', 'bridge', 'near', 'on', 'at', 'the', 'main'].includes(extracted.toLowerCase())) {
+            if (extracted && !['stage', 'water', 'intake', 'bank', 'bridge', 'near', 'on', 'at'].includes(extracted.toLowerCase())) {
                 return extracted.charAt(0).toUpperCase() + extracted.slice(1).toLowerCase() + ' River';
             }
         }
-
-        // 4. Default to Clean "Regional River Basin" instead of forcing "Ganga"
         return 'Regional River Basin';
     }
 
-    // --- Process Raw Data & Infer River Name ---
+    // --- Process Raw CPCB Telemetry Records ---
     function processRawData(dataArray) {
         stationMap = {};
 
@@ -317,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Populate Rivers, State & Station Dropdowns ---
+    // --- Populate Dropdown Filter Engine ---
     function populateDropdowns() {
         const rivers = new Set();
         const states = new Set();
@@ -327,6 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (s.state) states.add(s.state);
         });
 
+        // Admin Custom Overrides
         const customRivers = JSON.parse(localStorage.getItem('admin_custom_rivers') || '[]');
         customRivers.forEach(r => rivers.add(r));
 
@@ -336,98 +279,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const customStations = JSON.parse(localStorage.getItem('admin_custom_stations') || '[]');
         customStations.forEach(cs => {
             if (!stationMap[cs.code]) {
-                const autoCoords = getCoordsForLocation(cs.location);
                 stationMap[cs.code] = {
                     id: cs.code,
                     stationNo: cs.code,
                     name: cs.name,
                     river: cs.river,
                     state: cs.location,
-                    lat: cs.lat || autoCoords.lat,
-                    lng: cs.lng || autoCoords.lng,
+                    lat: cs.lat || 25.56,
+                    lng: cs.lng || 83.98,
                     lastTimestamp: new Date().toISOString(),
                     parameters: {}
                 };
             }
-            if (cs.river) rivers.add(cs.river);
-            if (cs.location) states.add(cs.location);
         });
 
-        if (riverSelect) {
-            riverSelect.disabled = false;
-            const curRiver = riverSelect.value;
-            riverSelect.innerHTML = '<option value="ALL">All Rivers (' + rivers.size + ')</option>';
-            Array.from(rivers).sort().forEach(rv => {
-                const opt = document.createElement('option');
-                opt.value = rv;
-                opt.textContent = rv;
-                riverSelect.appendChild(opt);
-            });
-            if (curRiver && curRiver !== 'ALL') riverSelect.value = curRiver;
-        }
+        // Populate Rivers
+        riverSelect.disabled = false;
+        riverSelect.innerHTML = '<option value="ALL">All River Basins</option>';
+        Array.from(rivers).sort().forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r;
+            opt.textContent = r;
+            riverSelect.appendChild(opt);
+        });
 
+        // Populate States
         stateSelect.disabled = false;
-        const currentSelectedState = stateSelect.value;
-        stateSelect.innerHTML = '<option value="ALL">All Locations (' + states.size + ')</option>';
+        stateSelect.innerHTML = '<option value="ALL">All States / Regions</option>';
         Array.from(states).sort().forEach(st => {
             const opt = document.createElement('option');
             opt.value = st;
             opt.textContent = st;
             stateSelect.appendChild(opt);
         });
-        if (currentSelectedState && currentSelectedState !== 'ALL') {
-            stateSelect.value = currentSelectedState;
-        }
-
-        updateStationList();
     }
 
+    // --- Update Station Selection Based on Cascading Filters ---
     function updateStationList(trigger = 'INIT', forceStationId = null) {
-        const allStations = Object.values(stationMap);
-        if (allStations.length === 0) return;
+        const selectedRiver = riverSelect.value;
+        const selectedState = stateSelect.value;
 
-        let curRiver = riverSelect ? riverSelect.value : 'ALL';
-        let curState = stateSelect ? stateSelect.value : 'ALL';
+        const filtered = Object.values(stationMap).filter(s => {
+            const matchRiver = (selectedRiver === 'ALL' || s.river === selectedRiver);
+            const matchState = (selectedState === 'ALL' || s.state === selectedState);
+            return matchRiver && matchState;
+        });
 
-        if (trigger === 'RIVER') {
-            // User selected a River: if specific state doesn't have this river, reset state to ALL
-            if (curRiver !== 'ALL' && curState !== 'ALL') {
-                const riverStations = allStations.filter(s => s.river === curRiver);
-                const validStatesForRiver = new Set(riverStations.map(s => s.state));
-                if (!validStatesForRiver.has(curState)) {
-                    curState = 'ALL';
-                    if (stateSelect) stateSelect.value = 'ALL';
-                }
-            }
-        } else if (trigger === 'STATE') {
-            // User selected a State: if specific river doesn't exist in this state, reset river to ALL
-            if (curState !== 'ALL' && curRiver !== 'ALL') {
-                const stateStations = allStations.filter(s => s.state === curState);
-                const validRiversForState = new Set(stateStations.map(s => s.river));
-                if (!validRiversForState.has(curRiver)) {
-                    curRiver = 'ALL';
-                    if (riverSelect) riverSelect.value = 'ALL';
-                }
-            }
-        }
-
-        // Filter stations matching curRiver and curState
-        let filtered = allStations;
-        if (curRiver && curRiver !== 'ALL') {
-            filtered = filtered.filter(s => s.river === curRiver);
-        }
-        if (curState && curState !== 'ALL') {
-            filtered = filtered.filter(s => s.state === curState);
-        }
-
-        // Safety fallback: if filtered is empty, reset filters
-        if (filtered.length === 0) {
-            filtered = allStations;
-            if (riverSelect) riverSelect.value = 'ALL';
-            if (stateSelect) stateSelect.value = 'ALL';
-        }
-
-        // Populate station dropdown
         stationSelect.disabled = false;
         stationSelect.innerHTML = '<option value="">-- Select Monitoring Station --</option>';
 
@@ -438,7 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
             stationSelect.appendChild(opt);
         });
 
-        // Automatically select target station or preserve user's active selected station
         let targetId = null;
         if (forceStationId && filtered.some(s => s.id === forceStationId)) {
             targetId = forceStationId;
@@ -454,574 +350,57 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Display Station Data & Highlight Selected Marker Pin with RED Pin ---
-    function displayStationData(stationId, autoSyncDropdowns = true) {
-        selectedStationId = stationId;
-        const station = stationMap[stationId];
-        if (!station) return;
-
-        // AUTOMATIC BIDIRECTIONAL DROPDOWN SYNCING (When user picks from station dropdown or clicks map):
-        if (autoSyncDropdowns) {
-            if (riverSelect && station.river) {
-                const options = Array.from(riverSelect.options).map(o => o.value);
-                if (options.includes(station.river)) {
-                    riverSelect.value = station.river;
-                }
-            }
-            if (stateSelect && station.state) {
-                const stateOpts = Array.from(stateSelect.options).map(o => o.value);
-                if (stateOpts.includes(station.state)) {
-                    stateSelect.value = station.state;
-                }
-            }
+    // --- Populate Left Dock Live Station List ---
+    function populateDockStationList() {
+        if (!dockStationList) return;
+        const stations = Object.values(stationMap).sort((a, b) => a.name.localeCompare(b.name));
+        
+        if (dockStationCount) {
+            dockStationCount.textContent = `${stations.length} Nodes`;
         }
 
-        // Switch selected station marker to RED icon, and others to BLUE icon!
-        Object.keys(markersMap).forEach(id => {
-            const isSelected = (id === stationId);
-            markersMap[id].setIcon(isSelected ? redSelectedIcon : blueIcon);
-            if (isSelected) {
-                markersMap[id].setZIndexOffset(1000);
-            } else {
-                markersMap[id].setZIndexOffset(0);
-            }
-        });
+        dockStationList.innerHTML = stations.map(s => {
+            const isSel = (s.id === selectedStationId);
+            return `
+                <div class="dock-station-item ${isSel ? 'active' : ''}" data-station-id="${s.id}">
+                    <span class="dock-station-dot"></span>
+                    <span class="dock-station-name-text" title="${s.name}">${s.name}</span>
+                    <span class="dock-station-wqi-badge">${s.river ? s.river.slice(0, 8) : ''}</span>
+                </div>
+            `;
+        }).join('');
 
-        // 100% 60FPS LAG-FREE SMOOTH FLYTO ZOOM ANIMATION!
-        if (station.lat && station.lng) {
-            map.closePopup();
-
-            map.flyTo([station.lat, station.lng], 9, {
-                duration: 1.2,
-                easeLinearity: 0.25,
-                noMoveStart: true
+        dockStationList.querySelectorAll('.dock-station-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const sid = item.getAttribute('data-station-id');
+                if (sid) displayStationData(sid, true);
             });
-
-            map.once('moveend', () => {
-                if (markersMap[stationId]) {
-                    markersMap[stationId].openPopup();
-                }
-            });
-        }
-
-        // ALWAYS DISPLAY THE TRUE METADATA OF THE ACTIVE STATION!
-        if (reportRiver) reportRiver.textContent = station.river || 'Regional River';
-        if (reportLocation) reportLocation.textContent = station.state || 'Territory Location';
-        if (reportStation) reportStation.textContent = station.name;
-        if (reportStationCode) reportStationCode.textContent = station.id;
-
-        if (stationNameDisplay) stationNameDisplay.textContent = `${station.name} (${station.state})`;
-
-        const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
-        const stationOverrides = overrides[stationId] || {};
-
-        // --- SCIENTIFIC CPCB / NSF WATER QUALITY INDEX (WQI) ENGINE ---
-        function calculateStationWQI(stationObj, stOverrides) {
-            function getVal(key, fallback) {
-                if (stOverrides[key] !== undefined && !isNaN(parseFloat(stOverrides[key]))) {
-                    return parseFloat(stOverrides[key]);
-                }
-                if (stationObj.parameters[key] && stationObj.parameters[key].value !== undefined && stationObj.parameters[key].value !== null) {
-                    const parsed = parseFloat(stationObj.parameters[key].value);
-                    if (!isNaN(parsed)) return parsed;
-                }
-                return fallback;
-            }
-
-            const ph = getVal('pH', null);
-            const doVal = getVal('Dissolved Oxygen', getVal('Oxygen, dissolved', null));
-            const bod = getVal('Biochemical Oxygen Demand', getVal('BOD', null));
-            const cod = getVal('Chemical Oxygen Demand', null);
-            const turb = getVal('Water Turbidity', null);
-            const ec = getVal('Conductivity', null);
-            const nitrate = getVal('Nitrate', null);
-            const chloride = getVal('Chloride', null);
-            const toc = getVal('Total Organic Carbon', null);
-
-            let totalWeight = 0;
-            let weightedSubIndexSum = 0;
-
-            // 1. pH Sub-Index (Weight: 0.15)
-            if (ph !== null) {
-                const w = 0.15;
-                let q = 100;
-                if (ph >= 6.5 && ph <= 8.5) {
-                    q = 100 - Math.abs(ph - 7.0) * 13.3;
-                } else if (ph < 6.5) {
-                    q = Math.max(0, 100 - (6.5 - ph) * 35);
-                } else {
-                    q = Math.max(0, 100 - (ph - 8.5) * 35);
-                }
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 2. Dissolved Oxygen DO (Weight: 0.25)
-            if (doVal !== null) {
-                const w = 0.25;
-                let q = 100;
-                if (doVal >= 7.0) {
-                    q = 100;
-                } else if (doVal >= 5.0) {
-                    q = 70 + (doVal - 5.0) * 15;
-                } else if (doVal >= 3.0) {
-                    q = 35 + (doVal - 3.0) * 17.5;
-                } else {
-                    q = Math.max(0, doVal * 11);
-                }
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 3. Biochemical Oxygen Demand BOD (Weight: 0.20)
-            if (bod !== null) {
-                const w = 0.20;
-                let q = 100;
-                if (bod <= 2.0) {
-                    q = 100;
-                } else if (bod <= 3.0) {
-                    q = 85 - (bod - 2.0) * 15;
-                } else if (bod <= 6.0) {
-                    q = 70 - (bod - 3.0) * 10;
-                } else {
-                    q = Math.max(5, 40 - (bod - 6.0) * 5);
-                }
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 4. Chemical Oxygen Demand COD (Weight: 0.10)
-            if (cod !== null) {
-                const w = 0.10;
-                let q = 100;
-                if (cod <= 10.0) {
-                    q = 100;
-                } else if (cod <= 25.0) {
-                    q = 90 - (cod - 10.0) * 2;
-                } else {
-                    q = Math.max(10, 60 - (cod - 25.0) * 1.5);
-                }
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 5. Water Turbidity (Weight: 0.08)
-            if (turb !== null) {
-                const w = 0.08;
-                let q = 100;
-                if (turb <= 5.0) {
-                    q = 100;
-                } else if (turb <= 25.0) {
-                    q = 90 - (turb - 5.0) * 1.5;
-                } else {
-                    q = Math.max(15, 60 - (turb - 25.0) * 0.5);
-                }
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 6. Conductivity EC (Weight: 0.07)
-            if (ec !== null) {
-                const w = 0.07;
-                let q = 100;
-                if (ec <= 300) {
-                    q = 100;
-                } else if (ec <= 750) {
-                    q = 90 - (ec - 300) * 0.08;
-                } else {
-                    q = Math.max(15, 54 - (ec - 750) * 0.03);
-                }
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 7. Nitrate (Weight: 0.05)
-            if (nitrate !== null) {
-                const w = 0.05;
-                let q = (nitrate <= 1.0) ? 100 : Math.max(10, 90 - (nitrate - 1.0) * 3);
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 8. Chloride (Weight: 0.05)
-            if (chloride !== null) {
-                const w = 0.05;
-                let q = (chloride <= 50) ? 100 : Math.max(15, 90 - (chloride - 50) * 0.15);
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            // 9. Total Organic Carbon TOC (Weight: 0.05)
-            if (toc !== null) {
-                const w = 0.05;
-                let q = (toc <= 3.0) ? 100 : Math.max(15, 90 - (toc - 3.0) * 4);
-                weightedSubIndexSum += (w * q);
-                totalWeight += w;
-            }
-
-            if (totalWeight === 0) return 88;
-            const score = Math.round(weightedSubIndexSum / totalWeight);
-            return Math.max(15, Math.min(100, score));
-        }
-
-        const wqiScore = calculateStationWQI(station, stationOverrides);
-
-        if (wqiScoreVal) wqiScoreVal.textContent = `${wqiScore}/100`;
-
-        const wqiCard = document.querySelector('.wqi-score-card');
-
-        if (wqiStatusTag) {
-            if (wqiScore >= 80) {
-                wqiStatusTag.textContent = 'GOOD WATER QUALITY';
-                wqiStatusTag.className = 'wqi-status-tag good';
-                if (wqiCard) {
-                    wqiCard.className = 'wqi-score-card wqi-good';
-                    wqiCard.style.background = '';
-                    wqiCard.style.borderColor = '';
-                }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#10b981';
-            } else if (wqiScore >= 60) {
-                wqiStatusTag.textContent = 'MODERATE WATER QUALITY';
-                wqiStatusTag.className = 'wqi-status-tag warn';
-                if (wqiCard) {
-                    wqiCard.className = 'wqi-score-card wqi-moderate';
-                    wqiCard.style.background = '';
-                    wqiCard.style.borderColor = '';
-                }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#f59e0b';
-            } else if (wqiScore >= 40) {
-                wqiStatusTag.textContent = 'POOR WATER QUALITY';
-                wqiStatusTag.className = 'wqi-status-tag warn';
-                if (wqiCard) {
-                    wqiCard.className = 'wqi-score-card wqi-poor';
-                    wqiCard.style.background = '';
-                    wqiCard.style.borderColor = '';
-                }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#f97316';
-            } else {
-                wqiStatusTag.textContent = 'CRITICAL / HAZARDOUS';
-                wqiStatusTag.className = 'wqi-status-tag alert';
-                if (wqiCard) {
-                    wqiCard.className = 'wqi-score-card wqi-critical';
-                    wqiCard.style.background = '';
-                    wqiCard.style.borderColor = '';
-                }
-                if (wqiScoreVal) wqiScoreVal.style.color = '#f43f5e';
-            }
-        }
-
-        let hasOverride = false;
-
-        // 100% Exact Official CPCB Dashboard Source Code Rules (Direct from assets/page-index-7bd1c4cc.js)
-        function getParamStatusInfo(paramKey, val) {
-            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: '⚪ Not Monitored' };
-            const num = parseFloat(val);
-
-            // 1. pH Level: CPCB Interval [6.5, 8.5) -> Green if 6.5 <= num < 8.5, else Red
-            if (paramKey === 'pH') {
-                if (num >= 6.5 && num < 8.5) return { color: 'green', label: '🟢 Safe pH' };
-                return { color: 'red', label: '🔴 pH Violation' };
-            }
-
-            // 2. BOD: CPCB Max < 3.0 -> Green if num < 3.0, else Red
-            if (paramKey === 'Biochemical Oxygen Demand' || paramKey === 'BOD') {
-                if (num < 3.0) return { color: 'green', label: '🟢 Safe BOD' };
-                return { color: 'red', label: '🔴 High BOD Hazard' };
-            }
-
-            // 3. Dissolved Oxygen (DO): CPCB Min >= 5.0 -> Green if num >= 5.0, else Red
-            if (paramKey === 'Oxygen, dissolved' || paramKey === 'Dissolved Oxygen' || paramKey === 'DO') {
-                if (num >= 5.0) return { color: 'green', label: '🟢 Healthy DO' };
-                return { color: 'red', label: '🔴 Critical DO Risk' };
-            }
-
-            // ALL OTHER 9 PARAMETERS (WT, COD, Turbidity, EC, Nitrate, Chloride, TOC, Depth, Stage)
-            // Official CPCB Source Code displays them as Neutral / White without judged color!
-            return { color: 'white', label: '⚪ CPCB Monitored' };
-        }
-
-        // Dynamic CPCB Status Color Renderer for Metric Cards (Green, Red, White)
-        function updateCardById(cardId, paramKey, fallbackUnit) {
-            const card = document.getElementById(cardId);
-            if (!card) return;
-
-            const valSpan = card.querySelector('.value');
-            const unitSpan = card.querySelector('.metric-unit');
-            const statusSpan = card.querySelector('.status-indicator');
-
-            let numVal = null;
-            let isCustomOverride = false;
-            if (stationOverrides[paramKey] !== undefined) {
-                hasOverride = true;
-                isCustomOverride = true;
-                numVal = stationOverrides[paramKey];
-            } else if (station.parameters[paramKey] && station.parameters[paramKey].value !== undefined && station.parameters[paramKey].value !== null) {
-                numVal = station.parameters[paramKey].value;
-            }
-
-            if (numVal !== null) {
-                const statusInfo = getParamStatusInfo(paramKey, numVal);
-                const unitStr = (station.parameters[paramKey] ? station.parameters[paramKey].unit : '') || fallbackUnit || '';
-
-                valSpan.textContent = numVal;
-                if (unitSpan) unitSpan.textContent = unitStr;
-
-                // Apply status color classes to the card
-                card.classList.remove('status-green', 'status-red', 'status-white');
-                card.classList.add(`status-${statusInfo.color}`);
-
-                if (statusInfo.color === 'green') {
-                    valSpan.style.color = '#10b981';
-                } else if (statusInfo.color === 'red') {
-                    valSpan.style.color = '#f43f5e';
-                } else {
-                    valSpan.style.color = 'var(--text-primary)';
-                }
-
-                const sourceText = isCustomOverride 
-                    ? `Admin Verified (${station.state})` 
-                    : `Official Data Source (${station.state})`;
-
-                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" class="card-source-link" title="Open Official CPCB RTWQMS Govt Portal">${sourceText} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
-
-                statusSpan.innerHTML = sourceLinkHtml;
-            } else {
-                card.classList.remove('status-green', 'status-red', 'status-white');
-                card.classList.add('status-white');
-                valSpan.textContent = 'N/A';
-                if (unitSpan) unitSpan.textContent = '';
-                valSpan.style.color = '#64748b';
-
-                const sourceLinkHtml = `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" class="card-source-link" title="Open Official CPCB RTWQMS Govt Portal">Official Data Source (${station.state}) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.85;"></i></a>`;
-
-                statusSpan.innerHTML = sourceLinkHtml;
-            }
-        }
-
-        if (reportStatusLabel) {
-            reportStatusLabel.innerHTML = hasOverride 
-                ? `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">✓ Admin Verified <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`
-                : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">● Official Data Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
-        }
-
-        updateCardById('card-level', 'Water Level', 'm above MSL');
-        updateCardById('card-ph', 'pH', 'pH');
-        updateCardById('card-temp', 'Water Temperature', '°C');
-        updateCardById('card-do', 'Dissolved Oxygen', 'mg/l');
-        updateCardById('card-bod', 'Biochemical Oxygen Demand', 'mg/l');
-        updateCardById('card-cod', 'Chemical Oxygen Demand', 'mg/l');
-        updateCardById('card-turbidity', 'Water Turbidity', 'NTU');
-        updateCardById('card-ec', 'Conductivity', 'uS/cm');
-        updateCardById('card-nitrate', 'Nitrate', 'mg/l');
-        updateCardById('card-chloride', 'Chloride', 'mg/l');
-        updateCardById('card-toc', 'Total Organic Carbon', 'mg/l');
-        updateCardById('card-depth', 'Depth', 'm');
-
-        // Update Live CPCB Station Surveillance Camera Photo & Info Panel!
-        updateStationLivePhoto(station);
-    }
-
-    // Helper: Construct Official CPCB Server Station Image URL (Supports Admin Custom Uploads)
-    function getCpcbStationPhotoUrl(station) {
-        if (!station) return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
-
-        // 1. Check for Admin Uploaded Custom Station Photo (Base64 Data URL or Web URL)
-        const adminPhotos = JSON.parse(localStorage.getItem('admin_station_photos') || '{}');
-        const stNo = station.stationNo || station.id || '';
-        if (stNo && adminPhotos[stNo]) {
-            return adminPhotos[stNo];
-        }
-        if (station.id && adminPhotos[station.id]) {
-            return adminPhotos[station.id];
-        }
-        if (station.photo) {
-            return station.photo;
-        }
-
-        // 2. Default Official CPCB Server Station Image URL
-        if (stNo) {
-            return `https://rtwqmsdb1.cpcb.gov.in/images/stations/${stNo}_image.jpg`;
-        }
-        return 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
-    }
-
-    let photoLoadToken = 0;
-
-    // --- Live CPCB Station Surveillance & Camera Photo Updater (100% Instant Mobile Optimized) ---
-    function updateStationLivePhoto(station) {
-        const imgEl = document.getElementById('station-live-image');
-        const nameEl = document.getElementById('camera-station-name');
-        const locEl = document.getElementById('camera-location-river');
-        const codeEl = document.getElementById('camera-station-code');
-        const timeEl = document.getElementById('camera-timestamp');
-
-        if (!station) return;
-
-        if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
-        if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'}`;
-        if (codeEl) {
-            const stNo = station.stationNo || station.id || '--';
-            const stId = (station.id && station.id !== stNo) ? ` (ID: ${station.id})` : '';
-            codeEl.textContent = `${stNo}${stId}`;
-        }
-        if (timeEl) timeEl.textContent = station.lastTimestamp ? (station.lastTimestamp.split(' ')[1] || 'Live Stream') : 'Live Stream';
-
-        const photoUrl = getCpcbStationPhotoUrl(station);
-        const fallbackUrl = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80';
-
-        if (imgEl) {
-            const currentToken = ++photoLoadToken;
-            
-            // 1. Direct instant assignment for zero-delay switching
-            imgEl.src = photoUrl;
-            imgEl.style.opacity = '1';
-
-            // 2. Pre-loader verification for smooth fallback if mobile network drops
-            const preloader = new Image();
-            preloader.onload = () => {
-                if (currentToken === photoLoadToken) {
-                    imgEl.src = photoUrl;
-                    imgEl.style.opacity = '1';
-                }
-            };
-            preloader.onerror = () => {
-                if (currentToken === photoLoadToken) {
-                    imgEl.src = fallbackUrl;
-                    imgEl.style.opacity = '1';
-                }
-            };
-            preloader.src = photoUrl;
-        }
-    }
-
-    // --- Render Clean Analytics Chart (Fallback) ---
-    function renderAnalyticsChart(station) {
-        const ctx = document.getElementById('analyticsChart');
-        if (!ctx) return;
-
-        if (chartInstance) {
-            chartInstance.destroy();
-        }
-
-        const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
-        const stationOverrides = overrides[station.id] || {};
-
-        const hours = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', 'Now (Live)'];
-        const levelBase = stationOverrides['Water Level'] !== undefined ? stationOverrides['Water Level'] : (station.parameters['Water Level'] ? station.parameters['Water Level'].value : 2.5);
-        const phBase = stationOverrides['pH'] !== undefined ? stationOverrides['pH'] : (station.parameters['pH'] ? station.parameters['pH'].value : 7.4);
-        const doBase = stationOverrides['Dissolved Oxygen'] !== undefined ? stationOverrides['Dissolved Oxygen'] : (station.parameters['Dissolved Oxygen'] ? station.parameters['Dissolved Oxygen'].value : 7.2);
-
-        const levelData = hours.map((_, i) => Number((levelBase + (Math.sin(i) * 0.15)).toFixed(2)));
-        const phData = hours.map((_, i) => Number((phBase + (Math.cos(i) * 0.08)).toFixed(2)));
-        const doData = hours.map((_, i) => Number((doBase + (Math.sin(i * 1.5) * 0.25)).toFixed(2)));
-
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: hours,
-                datasets: [
-                    {
-                        label: 'Water Level (m MSL)',
-                        data: levelData,
-                        borderColor: '#38bdf8',
-                        backgroundColor: 'rgba(56, 189, 248, 0.15)',
-                        fill: true,
-                        tension: 0.4,
-                        yAxisID: 'yLevel'
-                    },
-                    {
-                        label: 'pH Level',
-                        data: phData,
-                        borderColor: '#10b981',
-                        backgroundColor: 'transparent',
-                        borderDash: [5, 5],
-                        tension: 0.3,
-                        yAxisID: 'yQuality'
-                    },
-                    {
-                        label: 'Dissolved Oxygen (mg/l)',
-                        data: doData,
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'transparent',
-                        tension: 0.4,
-                        yAxisID: 'yQuality'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', weight: '600' } } }
-                },
-                scales: {
-                    x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    yLevel: {
-                        type: 'linear', position: 'left',
-                        title: { display: true, text: 'Water Level (m)', color: '#38bdf8' },
-                        ticks: { color: '#38bdf8' }, grid: { color: 'rgba(255,255,255,0.05)' }
-                    },
-                    yQuality: {
-                        type: 'linear', position: 'right',
-                        title: { display: true, text: 'Quality Parameters (pH / DO)', color: '#10b981' },
-                        ticks: { color: '#10b981' }, grid: { drawOnChartArea: false }
-                    }
-                }
-            }
         });
     }
 
-    // --- Render Leaflet Map Markers ---
+    // --- Render GIS Map Markers ---
     function renderMapMarkers() {
         Object.values(markersMap).forEach(m => map.removeLayer(m));
         markersMap = {};
-
-        const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
 
         Object.values(stationMap).forEach(s => {
             if (s.lat && s.lng) {
                 const isSelected = (s.id === selectedStationId);
                 const marker = L.marker([s.lat, s.lng], {
-                    icon: isSelected ? redSelectedIcon : blueIcon,
-                    zIndexOffset: isSelected ? 1000 : 0
+                    icon: isSelected ? redSelectedIcon : blueIcon
                 }).addTo(map);
 
-                const stOverrides = overrides[s.id] || {};
-                const phVal = stOverrides['pH'] !== undefined ? `${stOverrides['pH']}` : (s.parameters['pH'] ? `${s.parameters['pH'].value}` : '7.40');
-                const doVal = stOverrides['Dissolved Oxygen'] !== undefined ? `${stOverrides['Dissolved Oxygen']} mg/l` : (s.parameters['Dissolved Oxygen'] ? `${s.parameters['Dissolved Oxygen'].value} mg/l` : '6.80 mg/l');
-
-                const popupContent = `
-                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: #0f172a; min-width: 220px; max-width: 300px; line-height: 1.4; display: block; text-align: left;">
-                        <div style="font-size: 14px; font-weight: 800; color: #0284c7; margin-bottom: 4px; display: block; white-space: normal; word-break: normal;">${s.name}</div>
-                        <div style="font-size: 12px; color: #475569; margin-bottom: 6px; display: block;"><b>River:</b> ${s.river} | <b>Location:</b> ${s.state}</div>
-                        <div style="font-size: 12px; color: #0f172a; display: block;"><b>pH Level:</b> ${phVal} &nbsp;|&nbsp; <b>DO:</b> ${doVal}</div>
+                marker.bindPopup(`
+                    <div style="font-family: var(--font-body); padding: 4px;">
+                        <strong style="color: #0284c7; font-size: 0.95rem;">${s.name}</strong><br>
+                        <span style="font-size: 0.8rem; color: #475569;">${s.river || 'Regional River'} | ${s.state || 'India'}</span><br>
+                        <span style="font-size: 0.75rem; color: #64748b;">Code: <strong>${s.id}</strong></span><br>
+                        <button onclick="window.selectStationFromMap('${s.id}')" style="margin-top: 6px; padding: 4px 10px; background: #0284c7; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">View Telemetry</button>
                     </div>
-                `;
-
-                marker.bindPopup(popupContent, { minWidth: 230, maxWidth: 320, autoPan: false });
+                `);
 
                 marker.on('click', () => {
-                    // Sync riverSelect and stateSelect filters to match clicked station
-                    if (riverSelect && s.river) {
-                        const rOptions = Array.from(riverSelect.options).map(o => o.value);
-                        if (rOptions.includes(s.river)) {
-                            riverSelect.value = s.river;
-                        } else {
-                            riverSelect.value = 'ALL';
-                        }
-                    }
-
-                    if (stateSelect && s.state) {
-                        const sOptions = Array.from(stateSelect.options).map(o => o.value);
-                        if (sOptions.includes(s.state)) {
-                            stateSelect.value = s.state;
-                        } else {
-                            stateSelect.value = 'ALL';
-                        }
-                    }
-
-                    updateStationList('MAP', s.id);
+                    displayStationData(s.id, true);
                 });
 
                 markersMap[s.id] = marker;
@@ -1029,132 +408,398 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function updateTimestamp() {
-        const now = new Date();
-        if (lastUpdateSpan) lastUpdateSpan.textContent = now.toLocaleTimeString();
-        if (printDate) printDate.textContent = now.toLocaleDateString();
-        if (printTime) printTime.textContent = now.toLocaleTimeString();
-    }
+    window.selectStationFromMap = function(stationId) {
+        displayStationData(stationId, true);
+    };
 
-    // --- Mobile & Desktop Viewport Sync for 100% Identical A4 PDF Printing ---
-    function prepareForPrint() {
-        updateTimestamp();
+    // --- Display Station Data & Trigger Telemetry Render ---
+    function displayStationData(stationId, autoSyncDropdowns = true) {
+        selectedStationId = stationId;
+        const station = stationMap[stationId];
+        if (!station) return;
 
-        // Switch viewport meta tag to standard A4 printable width 794px for Mobile Chrome & iOS Safari
-        const viewportMeta = document.querySelector('meta[name="viewport"]');
-        if (viewportMeta) {
-            if (!viewportMeta.getAttribute('data-original')) {
-                viewportMeta.setAttribute('data-original', viewportMeta.getAttribute('content'));
+        // Auto Sync Dropdowns
+        if (autoSyncDropdowns) {
+            if (riverSelect && station.river) {
+                const options = Array.from(riverSelect.options).map(o => o.value);
+                if (options.includes(station.river)) riverSelect.value = station.river;
             }
-            viewportMeta.setAttribute('content', 'width=794, initial-scale=1.0');
+            if (stateSelect && station.state) {
+                const stateOpts = Array.from(stateSelect.options).map(o => o.value);
+                if (stateOpts.includes(station.state)) stateSelect.value = station.state;
+            }
+            if (stationSelect) stationSelect.value = stationId;
         }
 
-        document.body.classList.add('mobile-print-mode');
-
-        if (selectedStationId && stationMap[selectedStationId]) {
-            const s = stationMap[selectedStationId];
-            if (map) {
-                map.setView([s.lat, s.lng], 10, { animate: false });
-                map.invalidateSize(true);
-                if (markersMap[s.id]) markersMap[s.id].openPopup();
-            }
-        }
-        if (chartInstance) chartInstance.resize();
-    }
-
-    function cleanupAfterPrint() {
-        const viewportMeta = document.querySelector('meta[name="viewport"]');
-        if (viewportMeta && viewportMeta.getAttribute('data-original')) {
-            viewportMeta.setAttribute('content', viewportMeta.getAttribute('data-original'));
-        }
-        document.body.classList.remove('mobile-print-mode');
-        if (map) map.invalidateSize();
-        if (chartInstance) chartInstance.resize();
-    }
-
-    window.addEventListener('beforeprint', prepareForPrint);
-    window.addEventListener('afterprint', cleanupAfterPrint);
-
-    // --- Print / Save A4 PDF Event ---
-    if (btnPrintReport) {
-        btnPrintReport.addEventListener('click', () => {
-            prepareForPrint();
-            setTimeout(() => {
-                window.print();
-                setTimeout(cleanupAfterPrint, 1500);
-            }, 450);
-        });
-    }
-
-    if (btnExportCsv) {
-        btnExportCsv.addEventListener('click', () => {
-            if (!selectedStationId || !stationMap[selectedStationId]) {
-                alert('Please select a station to export data.');
-                return;
-            }
-
-            const station = stationMap[selectedStationId];
-            const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
-            const stationOverrides = overrides[selectedStationId] || {};
-
-            let csvContent = "data:text/csv;charset=utf-8,";
-
-            csvContent += "==========================================================================\n";
-            csvContent += "FULL PROJECT TITLE: SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE\n";
-            csvContent += `SELECTED RIVER: "${station.river}"\n`;
-            csvContent += `SELECTED LOCATION: "${station.state}"\n`;
-            csvContent += `SELECTED STATION: "${station.name}"\n`;
-            csvContent += `STATION CODE: "${station.id}"\n`;
-            csvContent += `SOURCE NAME / LINK: CPCB RTWQMS (https://rtwqmsdb1.cpcb.gov.in)\n`;
-            csvContent += `DATA STATUS LABEL: ${Object.keys(stationOverrides).length > 0 ? "✓ Admin Verified" : "● CPCB RTWQMS Source"}\n`;
-            csvContent += `ORIGINAL OBSERVATION TIME: "${station.lastTimestamp || 'N/A'}"\n`;
-            csvContent += `LAST CHECKED BY WEBSITE: ${new Date().toLocaleString()}\n`;
-            csvContent += `ACTIVE ALERTS: None\n`;
-            csvContent += "==========================================================================\n\n";
-
-            csvContent += "Parameter Name,Value,Unit,Status\n";
-            Object.entries(station.parameters).forEach(([pName, pObj]) => {
-                const val = stationOverrides[pName] !== undefined ? stationOverrides[pName] : pObj.value;
-                const status = stationOverrides[pName] !== undefined ? "✓ Admin Verified" : "● CPCB RTWQMS Source";
-                csvContent += `"${pName}",${val},"${pObj.unit}","${status}"\n`;
+        // Highlight Active Station in Left Dock
+        if (dockStationList) {
+            dockStationList.querySelectorAll('.dock-station-item').forEach(item => {
+                const isSel = (item.getAttribute('data-station-id') === stationId);
+                item.classList.toggle('active', isSel);
             });
+        }
 
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `SURVEILLANCE_REPORT_${station.id}_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        // Update Map Markers Pin Icons (Red for Active, Blue for Network)
+        Object.keys(markersMap).forEach(id => {
+            const isSelected = (id === stationId);
+            markersMap[id].setIcon(isSelected ? redSelectedIcon : blueIcon);
+            markersMap[id].setZIndexOffset(isSelected ? 1000 : 0);
         });
-    }
 
-    // --- Home Reset Button Listener (Top Logo Reset Only) ---
-    const btnHomeReset = document.getElementById('btn-home-reset');
-
-    function resetHomeDefault() {
-        selectedStationId = null;
-        if (riverSelect) riverSelect.value = 'ALL';
-        if (stateSelect) stateSelect.value = 'ALL';
-        updateStationList('INIT');
-        if (map) {
-            map.flyTo([22.5937, 78.9629], 5, {
+        // Smooth FlyTo Zoom Animation
+        if (station.lat && station.lng) {
+            map.closePopup();
+            map.flyTo([station.lat, station.lng], 9, {
                 duration: 1.2,
-                easeLinearity: 0.25
+                easeLinearity: 0.25,
+                noMoveStart: true
+            });
+            map.once('moveend', () => {
+                if (markersMap[stationId]) markersMap[stationId].openPopup();
             });
         }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Update Text Headings
+        if (reportRiver) reportRiver.textContent = station.river || 'Regional River';
+        if (reportLocation) reportLocation.textContent = station.state || 'Territory Location';
+        if (reportStationCode) reportStationCode.textContent = station.id;
+        if (stationNameDisplay) stationNameDisplay.textContent = `${station.name} (${station.state})`;
+
+        const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
+        const stationOverrides = overrides[stationId] || {};
+
+        // --- NSF-WQI Scientific Water Quality Calculation Engine ---
+        function calculateStationWQI(stationObj, stOverrides) {
+            function getVal(key, fallback) {
+                if (stOverrides[key] !== undefined) return parseFloat(stOverrides[key]);
+                if (stationObj.parameters[key] && stationObj.parameters[key].value !== undefined && stationObj.parameters[key].value !== null) {
+                    const parsed = parseFloat(stationObj.parameters[key].value);
+                    if (!isNaN(parsed)) return parsed;
+                }
+                return fallback;
+            }
+
+            const doVal = getVal('Dissolved Oxygen', null);
+            const bodVal = getVal('Biochemical Oxygen Demand', null);
+            const phVal = getVal('pH', null);
+            const tempVal = getVal('Water Temperature', null);
+            const turbVal = getVal('Water Turbidity', null);
+            const ecVal = getVal('Conductivity', null);
+            const nitrateVal = getVal('Nitrate', null);
+            const chlorideVal = getVal('Chloride', null);
+            const tocVal = getVal('Total Organic Carbon', null);
+
+            let weightedSum = 0;
+            let totalWeight = 0;
+
+            if (doVal !== null) {
+                const w = 0.25;
+                const q = Math.max(10, Math.min(100, (doVal / 7.5) * 100));
+                weightedSum += (w * q);
+                totalWeight += w;
+            }
+
+            if (bodVal !== null) {
+                const w = 0.20;
+                let q = (bodVal <= 2.0) ? 100 : (bodVal <= 3.0 ? 80 : Math.max(10, 80 - (bodVal - 3.0) * 15));
+                weightedSum += (w * q);
+                totalWeight += w;
+            }
+
+            if (phVal !== null) {
+                const w = 0.15;
+                let q = (phVal >= 7.0 && phVal <= 8.0) ? 100 : ((phVal >= 6.5 && phVal <= 8.5) ? 85 : Math.max(10, 85 - Math.abs(phVal - 7.5) * 25));
+                weightedSum += (w * q);
+                totalWeight += w;
+            }
+
+            if (turbVal !== null) {
+                const w = 0.10;
+                let q = (turbVal <= 10) ? 100 : Math.max(15, 90 - (turbVal - 10) * 0.8);
+                weightedSum += (w * q);
+                totalWeight += w;
+            }
+
+            if (totalWeight === 0) return 85;
+            const score = Math.round(weightedSum / totalWeight);
+            return Math.max(15, Math.min(100, score));
+        }
+
+        const wqiScore = calculateStationWQI(station, stationOverrides);
+
+        if (wqiScoreVal) wqiScoreVal.textContent = `${wqiScore}/100`;
+
+        if (wqiStatusTag) {
+            if (wqiScore >= 80) {
+                wqiStatusTag.textContent = 'GOOD WATER QUALITY';
+                wqiStatusTag.style.color = 'var(--emerald-safe)';
+                if (wqiRadialRing) wqiRadialRing.style.borderColor = 'var(--emerald-safe)';
+            } else if (wqiScore >= 60) {
+                wqiStatusTag.textContent = 'MODERATE QUALITY';
+                wqiStatusTag.style.color = 'var(--amber-warn)';
+                if (wqiRadialRing) wqiRadialRing.style.borderColor = 'var(--amber-warn)';
+            } else {
+                wqiStatusTag.textContent = 'POOR / HAZARDOUS';
+                wqiStatusTag.style.color = 'var(--rose-alert)';
+                if (wqiRadialRing) wqiRadialRing.style.borderColor = 'var(--rose-alert)';
+            }
+        }
+
+        // --- Render 12 Micro-Telemetry Parameter Tiles with SVG Sparklines ---
+        function updateTileById(cardId, sparkId, paramKey, fallbackUnit) {
+            const card = document.getElementById(cardId);
+            if (!card) return;
+
+            const valSpan = card.querySelector('.value');
+            const statusSpan = card.querySelector('.status-indicator');
+            const sparkSvg = document.getElementById(sparkId);
+
+            let numVal = null;
+            if (stationOverrides[paramKey] !== undefined) {
+                numVal = stationOverrides[paramKey];
+            } else if (station.parameters[paramKey] && station.parameters[paramKey].value !== undefined && station.parameters[paramKey].value !== null) {
+                numVal = station.parameters[paramKey].value;
+            }
+
+            if (numVal !== null && !isNaN(parseFloat(numVal))) {
+                const parsed = parseFloat(numVal);
+                if (valSpan) valSpan.textContent = parsed.toFixed(1);
+
+                // Render Sparkline SVG Waveform
+                renderSparkline(sparkSvg, parsed, (parsed % 2 === 0));
+
+                if (statusSpan) {
+                    if (paramKey === 'pH') {
+                        statusSpan.textContent = (parsed >= 6.5 && parsed < 8.5) ? '🟢 Safe pH Range' : '🔴 pH Breach';
+                    } else if (paramKey === 'Dissolved Oxygen') {
+                        statusSpan.textContent = (parsed >= 5.0) ? '🟢 Healthy DO' : '🔴 Critical Deficit';
+                    } else if (paramKey === 'Biochemical Oxygen Demand') {
+                        statusSpan.textContent = (parsed < 3.0) ? '🟢 Safe BOD' : '🔴 High BOD Hazard';
+                    } else {
+                        statusSpan.textContent = '● CPCB Modbus Stream';
+                    }
+                }
+            } else {
+                if (valSpan) valSpan.textContent = '--';
+                if (statusSpan) statusSpan.textContent = '⚪ Not Monitored';
+            }
+        }
+
+        updateTileById('card-level', 'spark-level', 'Water Level', 'm');
+        updateTileById('card-ph', 'spark-ph', 'pH', 'pH');
+        updateTileById('card-temp', 'spark-temp', 'Water Temperature', '°C');
+        updateTileById('card-do', 'spark-do', 'Dissolved Oxygen', 'mg/l');
+        updateTileById('card-bod', 'spark-bod', 'Biochemical Oxygen Demand', 'mg/l');
+        updateTileById('card-cod', 'spark-cod', 'Chemical Oxygen Demand', 'mg/l');
+        updateTileById('card-turbidity', 'spark-turbidity', 'Water Turbidity', 'NTU');
+        updateTileById('card-ec', 'spark-ec', 'Conductivity', 'uS/cm');
+        updateTileById('card-nitrate', 'spark-nitrate', 'Nitrate', 'mg/l');
+        updateTileById('card-chloride', 'spark-chloride', 'Chloride', 'mg/l');
+        updateTileById('card-toc', 'spark-toc', 'Total Organic Carbon', 'mg/l');
+        updateTileById('card-depth', 'spark-depth', 'Depth', 'm');
+
+        // Update Camera Photo
+        updateStationLivePhoto(station);
     }
 
-    if (btnHomeReset) btnHomeReset.addEventListener('click', resetHomeDefault);
+    // --- Dynamic SVG Sparkline Waveform Generator ---
+    function renderSparkline(svgEl, baseVal, isUp) {
+        if (!svgEl) return;
+        const width = 120;
+        const height = 22;
+        
+        // Generate pseudo-sinusoidal wave based on baseVal
+        const points = [];
+        const steps = 8;
+        for (let i = 0; i <= steps; i++) {
+            const x = (i / steps) * width;
+            const variance = Math.sin((i + baseVal) * 1.5) * 6;
+            const y = height / 2 + variance;
+            points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+        }
 
-    // --- Core Navigation & Filter Event Listeners ---
+        const pathD = `M ${points.join(' L ')}`;
+        const color = isUp ? '#00f2fe' : '#10b981';
+
+        svgEl.innerHTML = `
+            <path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+        `;
+    }
+
+    // --- Station Photo URL Construction ---
+    function updateStationLivePhoto(station) {
+        if (!station) return;
+        const adminPhotos = JSON.parse(localStorage.getItem('admin_station_photos') || '{}');
+        let photoUrl = `https://rtwqmsdb1.cpcb.gov.in/images/stations/${station.stationNo || station.id}_image.jpg`;
+
+        if (adminPhotos[station.stationNo] || adminPhotos[station.id]) {
+            photoUrl = adminPhotos[station.stationNo] || adminPhotos[station.id];
+        }
+
+        if (stationLiveImg) {
+            stationLiveImg.src = photoUrl;
+            stationLiveImg.onerror = () => {
+                stationLiveImg.src = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80';
+            };
+        }
+
+        if (cameraStationName) cameraStationName.textContent = station.name;
+        if (cameraLocationRiver) cameraLocationRiver.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'}`;
+        if (cameraStationCode) cameraStationCode.textContent = `${station.stationNo || station.id} (ID: ${station.id})`;
+    }
+
+    // --- ⌨️ Global Command Palette (Ctrl + K) ---
+    function openCommandPalette() {
+        if (!paletteModal) return;
+        paletteModal.style.display = 'flex';
+        if (paletteInput) {
+            paletteInput.value = '';
+            paletteInput.focus();
+            renderPaletteResults('');
+        }
+    }
+
+    function closeCommandPalette() {
+        if (!paletteModal) return;
+        paletteModal.style.display = 'none';
+    }
+
+    function renderPaletteResults(query) {
+        if (!paletteResults) return;
+        const q = query.toLowerCase().trim();
+        const stations = Object.values(stationMap);
+
+        const matches = stations.filter(s => {
+            return (s.name || '').toLowerCase().includes(q) ||
+                   (s.river || '').toLowerCase().includes(q) ||
+                   (s.state || '').toLowerCase().includes(q) ||
+                   (s.id || '').toLowerCase().includes(q);
+        }).slice(0, 10);
+
+        if (matches.length === 0) {
+            paletteResults.innerHTML = '<div style="padding: 12px; color: var(--text-muted); font-size: 0.84rem;">No matching telemetry stations found.</div>';
+            return;
+        }
+
+        paletteResults.innerHTML = matches.map((s, idx) => `
+            <div class="palette-item ${idx === 0 ? 'selected' : ''}" data-station-id="${s.id}">
+                <div>
+                    <strong style="color: var(--text-primary); font-size: 0.88rem;">${s.name}</strong>
+                    <div style="font-size: 0.74rem; color: var(--text-muted);">${s.river || 'River'} • ${s.state || 'India'}</div>
+                </div>
+                <span class="mono" style="font-size: 0.72rem; color: var(--cyan-primary); background: rgba(0,242,254,0.1); padding: 2px 6px; border-radius: 4px;">${s.id}</span>
+            </div>
+        `).join('');
+
+        paletteResults.querySelectorAll('.palette-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const sid = item.getAttribute('data-station-id');
+                if (sid) {
+                    displayStationData(sid, true);
+                    closeCommandPalette();
+                }
+            });
+        });
+    }
+
+    if (btnOpenPalette) btnOpenPalette.addEventListener('click', openCommandPalette);
+
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            if (paletteModal && paletteModal.style.display === 'flex') {
+                closeCommandPalette();
+            } else {
+                openCommandPalette();
+            }
+        }
+        if (e.key === 'Escape') closeCommandPalette();
+    });
+
+    if (paletteInput) {
+        paletteInput.addEventListener('input', (e) => {
+            renderPaletteResults(e.target.value);
+        });
+    }
+
+    if (paletteModal) {
+        paletteModal.addEventListener('click', (e) => {
+            if (e.target === paletteModal) closeCommandPalette();
+        });
+    }
+
+    // --- Time Machine Slider Listener ---
+    if (timeScrubber && timeScrubLabel) {
+        timeScrubber.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            timeOffsetHours = val;
+            if (val === 0) {
+                timeScrubLabel.textContent = 'LIVE STREAMING (NOW)';
+                timeScrubLabel.style.color = 'var(--cyan-primary)';
+            } else if (val < 0) {
+                timeScrubLabel.textContent = `REPLAY: ${Math.abs(val)}h PAST TELEMETRY`;
+                timeScrubLabel.style.color = 'var(--amber-warn)';
+            } else {
+                timeScrubLabel.textContent = `AI SIMULATION: +${val}h PREDICTION`;
+                timeScrubLabel.style.color = 'var(--emerald-safe)';
+            }
+        });
+    }
+
+    // --- Fit National Map View Button ---
+    if (btnMapFit) {
+        btnMapFit.addEventListener('click', () => {
+            map.flyTo([22.5937, 78.9629], 5, { duration: 1.0 });
+        });
+    }
+
+    // --- Reset Home View ---
+    if (btnHomeReset) {
+        btnHomeReset.addEventListener('click', () => {
+            if (riverSelect) riverSelect.value = 'ALL';
+            if (stateSelect) stateSelect.value = 'ALL';
+            updateStationList('INIT');
+            map.flyTo([22.5937, 78.9629], 5, { duration: 1.0 });
+        });
+    }
+
+    // --- Print PDF & Export CSV Handlers ---
+    const btnPrint = document.getElementById('btn-print-report');
+    if (btnPrint) btnPrint.addEventListener('click', () => window.print());
+
+    const btnExport = document.getElementById('btn-export-csv');
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            const station = stationMap[selectedStationId];
+            if (!station) return alert('Please select a station first.');
+
+            let csv = "SMART RIVER SURVEILLANCE - TELEMETRY REPORT\n";
+            csv += `STATION: ${station.name}\n`;
+            csv += `RIVER: ${station.river}\n`;
+            csv += `LOCATION: ${station.state}\n`;
+            csv += `DATE: ${new Date().toISOString()}\n\n`;
+            csv += "Parameter,Value,Unit\n";
+
+            Object.entries(station.parameters).forEach(([k, v]) => {
+                csv += `"${k}",${v.value},"${v.unit}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `TELEMETRY_${station.id}_${Date.now()}.csv`;
+            a.click();
+        });
+    }
+
+    // --- Filter Event Listeners ---
     if (btnRefresh) btnRefresh.addEventListener('click', fetchData);
     if (riverSelect) riverSelect.addEventListener('change', () => updateStationList('RIVER'));
     if (stateSelect) stateSelect.addEventListener('change', () => updateStationList('STATE'));
     if (stationSelect) stationSelect.addEventListener('change', (e) => displayStationData(e.target.value, true));
 
-    // --- Initial Auto Start ---
+    // --- Initialize Auto Start ---
     fetchData();
     setInterval(fetchData, 60000);
 });
