@@ -2566,3 +2566,241 @@ body.dark-mode .alert-status-card.danger-hazard p { color: #fecaca; }
 .light-mode .flood-safe {
     background: rgba(16, 185, 129, 0.07);
 }
+
+/* ==========================================================================
+   🔮 72-HOUR FLOOD PREDICTION & ALERT SYSTEM (FPAS) STYLES
+   ========================================================================== */
+
+.fpas-section {
+    margin: 10px 0;
+    border-radius: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px);
+    overflow: hidden;
+}
+
+/* Header */
+.fpas-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--glass-border);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.fpas-header-left { display: flex; flex-direction: column; gap: 5px; }
+.fpas-badge {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    color: #ef4444; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+}
+.fpas-header h3 {
+    font-size: 1.2rem; font-weight: 900; color: var(--text-primary); margin: 0;
+}
+.fpas-sub { font-size: 0.78rem; color: var(--text-secondary); max-width: 540px; }
+.fpas-update-tag {
+    font-size: 0.72rem; font-weight: 600; color: var(--cyan-primary);
+    background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2);
+    padding: 5px 12px; border-radius: 20px; white-space: nowrap;
+    display: flex; align-items: center; gap: 5px;
+}
+
+/* Master Banner */
+.fpas-master-banner {
+    display: flex; align-items: center; gap: 16px;
+    margin: 14px 16px; padding: 16px 20px;
+    border-radius: 14px; transition: all 0.4s ease; flex-wrap: wrap;
+}
+.fpas-state-idle {
+    background: rgba(148,163,184,0.08); border: 1.5px solid rgba(148,163,184,0.2);
+}
+.fpas-state-safe {
+    background: rgba(16,185,129,0.1); border: 1.5px solid rgba(16,185,129,0.35);
+}
+.fpas-state-watch {
+    background: rgba(245,158,11,0.12); border: 1.5px solid rgba(245,158,11,0.45);
+    animation: fpasWatchPulse 2.5s ease-in-out infinite;
+}
+.fpas-state-danger {
+    background: rgba(239,68,68,0.12); border: 1.5px solid rgba(239,68,68,0.55);
+    animation: fpasDangerPulse 1.5s ease-in-out infinite;
+}
+@keyframes fpasWatchPulse {
+    0%,100% { border-color: rgba(245,158,11,0.4); }
+    50% { border-color: rgba(245,158,11,0.85); }
+}
+@keyframes fpasDangerPulse {
+    0%,100% { border-color: rgba(239,68,68,0.5); box-shadow: 0 0 0 0 rgba(239,68,68,0.15); }
+    50% { border-color: rgba(239,68,68,0.95); box-shadow: 0 0 20px 6px rgba(239,68,68,0.1); }
+}
+.fpas-banner-icon {
+    font-size: 2rem; flex-shrink: 0;
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+}
+.fpas-state-safe .fpas-banner-icon { color: #10b981; background: rgba(16,185,129,0.12); }
+.fpas-state-watch .fpas-banner-icon { color: #f59e0b; background: rgba(245,158,11,0.12); }
+.fpas-state-danger .fpas-banner-icon { color: #ef4444; background: rgba(239,68,68,0.12); }
+.fpas-state-idle .fpas-banner-icon { color: #94a3b8; background: rgba(148,163,184,0.1); }
+
+.fpas-banner-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.fpas-banner-title { font-size: 1.05rem; font-weight: 800; color: var(--text-primary); }
+.fpas-banner-sub { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; }
+
+/* Risk Donut */
+.fpas-risk-score-wrap { flex-shrink: 0; }
+.fpas-risk-donut {
+    width: 72px; height: 72px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 3px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+}
+.fpas-state-safe .fpas-risk-donut { border-color: #10b981; }
+.fpas-state-watch .fpas-risk-donut { border-color: #f59e0b; }
+.fpas-state-danger .fpas-risk-donut { border-color: #ef4444; }
+.fpas-risk-pct {
+    font-size: 1.15rem; font-weight: 900; color: var(--text-primary);
+    font-family: 'Outfit', sans-serif; line-height: 1;
+}
+.fpas-risk-label { font-size: 0.56rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.08em; }
+
+/* Body Grid */
+.fpas-body-grid {
+    display: grid; grid-template-columns: 1.2fr 1fr;
+    gap: 14px; padding: 0 16px 14px;
+}
+@media (max-width: 960px) { .fpas-body-grid { grid-template-columns: 1fr; } }
+
+/* Left Col */
+.fpas-left-col { display: flex; flex-direction: column; gap: 12px; }
+
+/* Chart Panel */
+.fpas-chart-panel {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+    border-radius: 12px; overflow: hidden;
+}
+.fpas-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--glass-border);
+    font-size: 0.82rem; font-weight: 700; color: var(--text-secondary);
+    flex-wrap: wrap; gap: 6px;
+}
+.fpas-chart-tag {
+    font-size: 0.68rem; font-weight: 700; color: var(--cyan-primary);
+    background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2);
+    padding: 2px 10px; border-radius: 10px; max-width: 200px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.fpas-chart-wrap { padding: 10px 12px; height: 210px; }
+
+/* Rainfall Panel */
+.fpas-rain-panel {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(56,189,248,0.05); border: 1px solid rgba(56,189,248,0.18);
+    border-radius: 12px; padding: 12px 16px; flex-wrap: wrap;
+}
+.fpas-rain-icon { font-size: 1.4rem; color: #38bdf8; flex-shrink: 0; }
+.fpas-rain-body { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.fpas-rain-label {
+    font-size: 0.65rem; font-weight: 800; color: var(--cyan-primary);
+    letter-spacing: 0.08em; text-transform: uppercase;
+}
+.fpas-rain-values { display: flex; gap: 16px; flex-wrap: wrap; }
+.fpas-rain-item { display: flex; flex-direction: column; gap: 1px; }
+.fpas-rain-item span { font-size: 0.68rem; color: var(--text-muted); }
+.fpas-rain-item strong { font-size: 0.9rem; font-weight: 800; color: var(--text-primary); }
+.fpas-source-link {
+    font-size: 0.7rem; font-weight: 700; color: var(--cyan-primary);
+    text-decoration: none; padding: 4px 10px;
+    border: 1px solid rgba(56,189,248,0.2); border-radius: 8px;
+    background: rgba(56,189,248,0.05); white-space: nowrap;
+    display: flex; align-items: center; gap: 4px;
+}
+
+/* Right Col */
+.fpas-right-col { display: flex; flex-direction: column; gap: 12px; }
+
+/* Threshold Row */
+.fpas-threshold-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.fpas-thresh-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 10px; flex: 1; min-width: 80px;
+    font-size: 0.8rem;
+}
+.fpas-thresh-pill i { font-size: 0.9rem; flex-shrink: 0; }
+.fpas-thresh-pill div { display: flex; flex-direction: column; gap: 1px; }
+.fpas-thresh-pill span { font-size: 0.65rem; color: var(--text-muted); }
+.fpas-thresh-pill strong { font-size: 0.85rem; font-weight: 800; }
+.fpas-current-pill { background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); color: var(--cyan-primary); }
+.fpas-current-pill strong { color: var(--text-primary); }
+.fpas-wl-pill { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); color: #f59e0b; }
+.fpas-wl-pill strong { color: #f59e0b; }
+.fpas-dl-pill { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #ef4444; }
+.fpas-dl-pill strong { color: #ef4444; }
+
+/* 3 Prediction Cards */
+.fpas-pred-cards { display: flex; gap: 8px; }
+.fpas-pred-card {
+    flex: 1; padding: 14px 12px; border-radius: 12px;
+    border: 1.5px solid var(--glass-border); display: flex; flex-direction: column; gap: 8px;
+    transition: all 0.3s ease; background: rgba(255,255,255,0.03);
+}
+.fpas-card-safe { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+.fpas-card-watch { border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.06); }
+.fpas-card-danger { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.07); animation: fpasDangerPulse 2s ease-in-out infinite; }
+.fpas-pred-time { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em; }
+.fpas-pred-level { font-size: 1.4rem; font-weight: 900; color: var(--text-primary); font-family: 'Outfit', sans-serif; }
+.fpas-pred-prob-wrap { display: flex; align-items: center; gap: 8px; }
+.fpas-pred-prob-bar {
+    flex: 1; height: 6px; background: rgba(255,255,255,0.08);
+    border-radius: 4px; overflow: hidden;
+}
+.fpas-pred-prob-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease, background 0.3s ease; }
+.fpas-pred-prob-val { font-size: 0.78rem; font-weight: 800; white-space: nowrap; min-width: 32px; text-align: right; }
+.fpas-pred-status { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); }
+
+/* Metrics Row */
+.fpas-metrics-row {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 12px 14px;
+}
+.fpas-mini-metric {
+    display: flex; align-items: center; gap: 10px; flex: 1; min-width: 100px;
+}
+.fpas-mini-metric i { font-size: 1rem; color: var(--cyan-primary); flex-shrink: 0; }
+.fpas-mini-metric div { display: flex; flex-direction: column; gap: 1px; }
+.fpas-mini-metric span { font-size: 0.66rem; color: var(--text-muted); }
+.fpas-mini-metric strong { font-size: 0.88rem; font-weight: 800; color: var(--text-primary); }
+
+/* Advisory */
+.fpas-advisory {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin: 0 16px 14px; padding: 14px 18px;
+    background: rgba(56,189,248,0.04); border: 1px solid rgba(56,189,248,0.18);
+    border-radius: 12px; flex-wrap: wrap;
+}
+.fpas-advisory-icon { font-size: 1.1rem; color: var(--cyan-primary); flex-shrink: 0; margin-top: 2px; }
+.fpas-advisory-text { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 4px; }
+.fpas-advisory-text strong { font-size: 0.75rem; color: var(--cyan-primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.fpas-advisory-text span { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.55; }
+.fpas-cwc-link {
+    font-size: 0.7rem; font-weight: 700; color: var(--cyan-primary);
+    text-decoration: none; padding: 5px 10px;
+    border: 1px solid rgba(56,189,248,0.2); border-radius: 8px;
+    background: rgba(56,189,248,0.05); white-space: nowrap;
+    display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+
+/* Light Mode */
+.light-mode .fpas-section { background: rgba(255,255,255,0.85); border-color: rgba(0,0,0,0.08); }
+.light-mode .fpas-chart-panel, .light-mode .fpas-pred-card,
+.light-mode .fpas-metrics-row { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.08); }
+.light-mode .fpas-state-safe { background: rgba(16,185,129,0.07); }
+.light-mode .fpas-state-watch { background: rgba(245,158,11,0.07); }
+.light-mode .fpas-state-danger { background: rgba(239,68,68,0.07); }
+.light-mode .fpas-card-safe { background: rgba(16,185,129,0.06); }
+.light-mode .fpas-card-watch { background: rgba(245,158,11,0.06); }
+.light-mode .fpas-card-danger { background: rgba(239,68,68,0.06); }
