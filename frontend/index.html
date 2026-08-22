@@ -40,6 +40,7 @@
             <a href="#overview" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
             <a href="#map-section" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> GIS Map</a>
             <a href="#live-camera-section" class="nav-link"><i class="fa-solid fa-camera"></i> Live Station Photo</a>
+            <a href="#flood-warning-section" class="nav-link"><i class="fa-solid fa-triangle-exclamation"></i> Flood Warning</a>
         </div>
 
         <div class="nav-actions">
@@ -375,6 +376,151 @@
                 </div>
             </section>
         </div>
+
+        <!-- 🚨 Real-Time Flood Prediction & Early Warning Alert Section -->
+        <section id="flood-warning-section" class="flood-warning-section no-print">
+
+            <!-- Header -->
+            <div class="flood-section-header">
+                <div class="flood-header-left">
+                    <span class="flood-header-badge"><i class="fa-solid fa-satellite-dish"></i> CWC REAL-TIME FLOOD MONITORING</span>
+                    <h3>Flood Early Warning &amp; Risk Radar</h3>
+                </div>
+                <span class="flood-header-tag"><i class="fa-solid fa-brain"></i> AI + Hydrology Engine v3.0</span>
+            </div>
+
+            <!-- Dynamic Color Alert Banner -->
+            <div id="flood-banner" class="flood-banner flood-safe">
+                <div class="flood-banner-left">
+                    <span class="flood-banner-icon" id="flood-banner-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                    <div class="flood-banner-text">
+                        <strong id="flood-banner-title">🟢 NO FLOOD RISK — SYSTEM SAFE</strong>
+                        <span id="flood-banner-subtitle">Select a monitoring station to view real-time flood risk assessment.</span>
+                    </div>
+                </div>
+                <span class="flood-alert-badge" id="flood-alert-badge">SELECT STATION</span>
+            </div>
+
+            <!-- Main Grid: Gauge (Left) + 4 Metric Boxes (Right) -->
+            <div class="flood-main-grid">
+
+                <!-- LEFT: Water Level Visual Gauge -->
+                <div class="flood-gauge-panel">
+                    <div class="flood-gauge-header">
+                        <h4><i class="fa-solid fa-gauge-high"></i> Live Water Level vs CWC Thresholds</h4>
+                        <span id="flood-station-label" class="flood-station-tag">No Station Selected</span>
+                    </div>
+
+                    <div class="flood-level-display">
+                        <span id="flood-current-level" class="flood-level-num">--</span>
+                        <span class="flood-level-unit">m above MSL</span>
+                    </div>
+
+                    <!-- Horizontal Gauge Bar -->
+                    <div class="flood-gauge-container">
+                        <div class="flood-gauge-track">
+                            <div class="flood-gauge-fill" id="flood-gauge-fill" style="width:0%"></div>
+                            <div class="flood-gauge-marker warning-marker" id="flood-wl-marker" style="left:66%">
+                                <span class="marker-label-top">WL</span>
+                            </div>
+                            <div class="flood-gauge-marker danger-marker" id="flood-dl-marker" style="left:88%">
+                                <span class="marker-label-top">DL</span>
+                            </div>
+                        </div>
+                        <div class="flood-gauge-legend">
+                            <span class="gauge-legend-safe">Safe Zone</span>
+                            <span class="gauge-legend-warn">Watch</span>
+                            <span class="gauge-legend-danger">Danger</span>
+                        </div>
+                    </div>
+
+                    <!-- Threshold Value Pills -->
+                    <div class="flood-threshold-row">
+                        <div class="flood-threshold-pill warn-pill">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <div>
+                                <span>Warning Level (WL)</span>
+                                <strong id="flood-wl-value">-- m</strong>
+                            </div>
+                        </div>
+                        <div class="flood-threshold-pill danger-pill">
+                            <i class="fa-solid fa-skull-crossbones"></i>
+                            <div>
+                                <span>Danger Level (DL)</span>
+                                <strong id="flood-dl-value">-- m</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: 4 Metric Boxes -->
+                <div class="flood-metrics-panel">
+
+                    <!-- Box 1: Rate of Rise -->
+                    <div class="flood-metric-box" id="flood-box-ror">
+                        <div class="flood-metric-icon-wrap"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        <div class="flood-metric-content">
+                            <span class="flood-metric-label">Rate of Rise (Δh/Δt)</span>
+                            <span class="flood-metric-value" id="flood-ror-value">-- m/hr</span>
+                            <span class="flood-metric-sub" id="flood-ror-status">Tracking history...</span>
+                        </div>
+                    </div>
+
+                    <!-- Box 2: Time to Danger (TTD) -->
+                    <div class="flood-metric-box" id="flood-box-ttd">
+                        <div class="flood-metric-icon-wrap ttd-icon"><i class="fa-solid fa-clock"></i></div>
+                        <div class="flood-metric-content">
+                            <span class="flood-metric-label">Time to Danger (TTD)</span>
+                            <strong class="flood-ttd-num" id="flood-ttd-value">--</strong>
+                            <span class="flood-metric-sub" id="flood-ttd-sub">Hours until danger breach</span>
+                        </div>
+                    </div>
+
+                    <!-- Box 3: 6h / 12h Forecast -->
+                    <div class="flood-metric-box">
+                        <div class="flood-metric-icon-wrap"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="flood-metric-content">
+                            <span class="flood-metric-label">Water Level Forecast</span>
+                            <span class="flood-metric-value" id="flood-f6h">6h: -- m</span>
+                            <span class="flood-metric-sub">12h: <strong id="flood-f12h">-- m</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Box 4: Turbidity Flash-Flood Trigger -->
+                    <div class="flood-metric-box" id="flood-box-turb">
+                        <div class="flood-metric-icon-wrap"><i class="fa-solid fa-water"></i></div>
+                        <div class="flood-metric-content">
+                            <span class="flood-metric-label">Turbidity Flash-Flood Trigger</span>
+                            <span class="flood-metric-value" id="flood-turb-value">-- NTU</span>
+                            <span class="flood-metric-sub" id="flood-turb-status">Normal sediment load</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Upstream Cascade Warning Row (hidden by default) -->
+            <div id="flood-cascade-row" class="flood-cascade-row" style="display:none">
+                <i class="fa-solid fa-sitemap"></i>
+                <strong>Upstream Cascade Warning:</strong>
+                <span id="flood-cascade-text">Surge detected upstream — downstream stations may be affected.</span>
+            </div>
+
+            <!-- Emergency Advisory Bar -->
+            <div class="flood-advisory" id="flood-advisory-bar">
+                <div class="advisory-icon-col"><i class="fa-solid fa-bullhorn"></i></div>
+                <div class="advisory-text-col">
+                    <strong>CWC Emergency Advisory:</strong>
+                    <span id="flood-advisory-text">Select a monitoring station to activate real-time flood risk assessment and CWC advisory protocol.</span>
+                </div>
+                <div class="advisory-source-col">
+                    <a href="https://cwc.gov.in" target="_blank" class="advisory-source-link">
+                        CWC Guidelines <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem"></i>
+                    </a>
+                </div>
+            </div>
+
+        </section>
 
         <!-- Report & Export Actions Bar (Placed at VERY BOTTOM) -->
         <section id="report-actions-bottom" class="panel-card no-print" style="margin-top: 10px;">

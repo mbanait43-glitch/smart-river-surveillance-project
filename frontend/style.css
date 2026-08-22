@@ -2007,3 +2007,562 @@ body.dark-mode .alert-status-card.danger-hazard p { color: #fecaca; }
     50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
 }
 
+/* ==========================================================================
+   🚨 FLOOD EARLY WARNING & RISK RADAR SECTION
+   ========================================================================== */
+
+.flood-warning-section {
+    margin: 10px 0;
+    border-radius: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px);
+    overflow: hidden;
+    padding: 0 0 4px 0;
+}
+
+/* --- Section Header --- */
+.flood-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px 14px;
+    border-bottom: 1px solid var(--glass-border);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.flood-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.flood-header-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #ef4444;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flood-section-header h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.flood-header-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--cyan-primary);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+/* --- Dynamic Color Alert Banner --- */
+.flood-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    margin: 14px 16px;
+    border-radius: 12px;
+    transition: all 0.4s ease;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.flood-safe {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1.5px solid rgba(16, 185, 129, 0.35);
+}
+
+.flood-watch {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1.5px solid rgba(245, 158, 11, 0.4);
+    animation: watchPulse 2.5s ease-in-out infinite;
+}
+
+.flood-danger {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1.5px solid rgba(239, 68, 68, 0.5);
+    animation: dangerPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes watchPulse {
+    0%, 100% { border-color: rgba(245, 158, 11, 0.4); }
+    50% { border-color: rgba(245, 158, 11, 0.8); }
+}
+
+@keyframes dangerPulse {
+    0%, 100% { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
+    50% { border-color: rgba(239, 68, 68, 0.9); box-shadow: 0 0 16px 4px rgba(239, 68, 68, 0.15); }
+}
+
+.flood-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+}
+
+.flood-banner-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.flood-safe .flood-banner-icon { color: #10b981; }
+.flood-watch .flood-banner-icon { color: #f59e0b; }
+.flood-danger .flood-banner-icon { color: #ef4444; }
+
+.flood-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.flood-banner-text strong {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.flood-banner-text span {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+.flood-alert-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 6px 16px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.flood-safe .flood-alert-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.flood-watch .flood-alert-badge {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.flood-danger .flood-alert-badge {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* --- Main Grid Layout --- */
+.flood-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 0 16px 14px;
+}
+
+@media (max-width: 900px) {
+    .flood-main-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Gauge Panel (Left) --- */
+.flood-gauge-panel {
+    background: var(--card-bg, rgba(255,255,255,0.03));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.flood-gauge-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.flood-gauge-header h4 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flood-station-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--cyan-primary);
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 3px 10px;
+    border-radius: 12px;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.flood-level-display {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.flood-level-num {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1;
+    font-family: 'Outfit', sans-serif;
+}
+
+.flood-level-unit {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Horizontal Gauge Bar */
+.flood-gauge-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.flood-gauge-track {
+    position: relative;
+    height: 18px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: visible;
+    border: 1px solid var(--glass-border);
+}
+
+.flood-gauge-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #10b981 0%, #f59e0b 70%, #ef4444 100%);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 100%;
+}
+
+.flood-gauge-marker {
+    position: absolute;
+    top: -6px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+.flood-gauge-marker::after {
+    content: '';
+    width: 2px;
+    height: 30px;
+    display: block;
+    margin-top: 2px;
+}
+
+.warning-marker::after { background: #f59e0b; }
+.danger-marker::after { background: #ef4444; }
+
+.marker-label-top {
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.warning-marker .marker-label-top {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.danger-marker .marker-label-top {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.flood-gauge-legend {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 2px 0;
+}
+
+.flood-gauge-legend span {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.gauge-legend-safe { color: #10b981 !important; }
+.gauge-legend-warn { color: #f59e0b !important; }
+.gauge-legend-danger { color: #ef4444 !important; }
+
+/* Threshold Pills */
+.flood-threshold-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.flood-threshold-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    flex: 1;
+    min-width: 120px;
+    font-size: 0.78rem;
+}
+
+.flood-threshold-pill > i { font-size: 1rem; flex-shrink: 0; }
+.flood-threshold-pill > div { display: flex; flex-direction: column; gap: 1px; }
+.flood-threshold-pill span { font-size: 0.7rem; color: var(--text-secondary); }
+.flood-threshold-pill strong { font-size: 0.88rem; font-weight: 800; }
+
+.warn-pill {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    color: #f59e0b;
+}
+.warn-pill strong { color: #f59e0b; }
+
+.danger-pill {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+}
+.danger-pill strong { color: #ef4444; }
+
+/* --- Metrics Panel (Right) --- */
+.flood-metrics-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.flood-metric-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 14px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.flood-metric-box.alert-active {
+    background: rgba(239, 68, 68, 0.07);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.flood-metric-icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: var(--cyan-primary);
+    flex-shrink: 0;
+}
+
+.flood-metric-icon-wrap.ttd-icon {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
+    color: #f59e0b;
+}
+
+.flood-metric-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.flood-metric-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.flood-metric-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+}
+
+.flood-ttd-num {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    display: block;
+}
+
+.flood-metric-sub {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* --- Cascade Warning Row --- */
+.flood-cascade-row {
+    margin: 0 16px 12px;
+    padding: 10px 16px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    color: #f59e0b;
+    flex-wrap: wrap;
+}
+
+.flood-cascade-row strong { color: #f59e0b; }
+.flood-cascade-row span { color: var(--text-secondary); }
+
+/* --- Emergency Advisory Bar --- */
+.flood-advisory {
+    margin: 0 16px 12px;
+    padding: 14px 18px;
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.advisory-icon-col {
+    font-size: 1.2rem;
+    color: var(--cyan-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.advisory-text-col {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.advisory-text-col strong {
+    font-size: 0.8rem;
+    color: var(--cyan-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.advisory-text-col span {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.advisory-source-col {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.advisory-source-link {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--cyan-primary);
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 8px;
+    background: rgba(56, 189, 248, 0.05);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.advisory-source-link:hover {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* --- Light Mode Overrides --- */
+.light-mode .flood-warning-section {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .flood-gauge-panel,
+.light-mode .flood-metric-box {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .flood-gauge-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .flood-advisory {
+    background: rgba(2, 132, 199, 0.04);
+    border-color: rgba(2, 132, 199, 0.15);
+}
+
+.light-mode .flood-cascade-row {
+    background: rgba(245, 158, 11, 0.06);
+}
+
+/* Danger banner light mode */
+.light-mode .flood-danger {
+    background: rgba(239, 68, 68, 0.07);
+}
+.light-mode .flood-watch {
+    background: rgba(245, 158, 11, 0.07);
+}
+.light-mode .flood-safe {
+    background: rgba(16, 185, 129, 0.07);
+}

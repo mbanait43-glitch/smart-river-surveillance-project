@@ -820,6 +820,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update Live CPCB Station Surveillance Camera Photo & Info Panel!
         updateStationLivePhoto(station);
+
+        // 🚨 Update Real-Time Flood Prediction & Early Warning Section
+        updateFloodWarningSection(station, stationOverrides);
     }
 
     // Helper: Construct Official CPCB Server Station Image URL (Supports Admin Custom Uploads)
@@ -1168,6 +1171,299 @@ document.addEventListener('DOMContentLoaded', () => {
             link.click();
             document.body.removeChild(link);
         });
+    }
+
+    // --- 🚨 FLOOD EARLY WARNING ENGINE ---
+
+    // Upstream → Downstream River Cascade Network (CWC Standard Travel Times)
+    const RIVER_CASCADE = {
+        'Ganga River': 'Upstream surge in Ganga basin → Downstream stations (Kanpur, Patna, Buxar) may be affected in 18–36 hours.',
+        'Yamuna River': 'Upstream surge at Delhi/Agra → Downstream stations may be affected in 12–24 hours.',
+        'Kosi River': 'Kosi basin surge detected → Bihar plains at elevated risk in 6–12 hours.',
+        'Brahmaputra River': 'Brahmaputra level rise → Assam downstream zones alert in 8–16 hours.',
+        'Godavari River': 'Godavari upstream surge → Coastal Andhra risk in 12–18 hours.',
+        'Mahanadi River': 'Mahanadi catchment surge → Odisha delta region alert in 10–20 hours.',
+        'Damodar River': 'Damodar upstream → DVC zone and West Bengal plains alert in 6–12 hours.',
+    };
+
+    // ① CWC Threshold Calculator (Scientific Estimate: +20% WL, +35% DL)
+    function getCWCThresholds(levelVal) {
+        const base = parseFloat(levelVal);
+        if (isNaN(base) || base <= 0) return { wl: null, dl: null };
+        // CWC Standard: Warning Level = base + 20%, Danger Level = base + 35%
+        const wl = parseFloat((base * 1.20).toFixed(2));
+        const dl = parseFloat((base * 1.35).toFixed(2));
+        return { wl, dl };
+    }
+
+    // ② Rate of Rise Engine (Δh/Δt) — tracks history in localStorage
+    function calculateRateOfRise(stationId, currentLevel) {
+        const key = `flood_history_${stationId}`;
+        const now = Date.now();
+        const levelNum = parseFloat(currentLevel);
+        if (isNaN(levelNum)) return { rate: null, trend: 'unknown' };
+
+        let history = [];
+        try { history = JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { history = []; }
+
+        // Save current reading
+        history.push({ ts: now, val: levelNum });
+
+        // Keep only last 10 readings (max ~10 minutes of history)
+        if (history.length > 10) history = history.slice(-10);
+        localStorage.setItem(key, JSON.stringify(history));
+
+        if (history.length < 2) return { rate: 0, trend: 'insufficient_history' };
+
+        // Calculate rate over available window
+        const oldest = history[0];
+        const newest = history[history.length - 1];
+        const timeDiffHours = (newest.ts - oldest.ts) / (1000 * 60 * 60);
+        if (timeDiffHours < 0.0001) return { rate: 0, trend: 'insufficient_history' };
+
+        const rate = (newest.val - oldest.val) / timeDiffHours; // m/hr
+        let trend = 'stable';
+        if (rate > 0.30) trend = 'rapid_rise';
+        else if (rate > 0.10) trend = 'rising';
+        else if (rate < -0.10) trend = 'falling';
+
+        return { rate: parseFloat(rate.toFixed(3)), trend };
+    }
+
+    // ③ Main Flood Warning Section Updater
+    function updateFloodWarningSection(station, stOverrides) {
+        if (!station) return;
+
+        // --- Get raw values ---
+        let levelVal = null;
+        if (stOverrides && stOverrides['Water Level'] !== undefined) {
+            levelVal = parseFloat(stOverrides['Water Level']);
+        } else if (station.parameters['Water Level'] && station.parameters['Water Level'].value != null) {
+            levelVal = parseFloat(station.parameters['Water Level'].value);
+        } else if (station.parameters['River Stage'] && station.parameters['River Stage'].value != null) {
+            levelVal = parseFloat(station.parameters['River Stage'].value);
+        }
+
+        let turbVal = null;
+        if (stOverrides && stOverrides['Water Turbidity'] !== undefined) {
+            turbVal = parseFloat(stOverrides['Water Turbidity']);
+        } else if (station.parameters['Water Turbidity'] && station.parameters['Water Turbidity'].value != null) {
+            turbVal = parseFloat(station.parameters['Water Turbidity'].value);
+        }
+
+        // --- DOM Elements ---
+        const bannerEl = document.getElementById('flood-banner');
+        const bannerTitleEl = document.getElementById('flood-banner-title');
+        const bannerSubEl = document.getElementById('flood-banner-subtitle');
+        const bannerBadgeEl = document.getElementById('flood-alert-badge');
+        const stationLabelEl = document.getElementById('flood-station-label');
+        const currentLevelEl = document.getElementById('flood-current-level');
+        const gaugeFillEl = document.getElementById('flood-gauge-fill');
+        const wlMarkerEl = document.getElementById('flood-wl-marker');
+        const dlMarkerEl = document.getElementById('flood-dl-marker');
+        const wlValueEl = document.getElementById('flood-wl-value');
+        const dlValueEl = document.getElementById('flood-dl-value');
+        const rorValueEl = document.getElementById('flood-ror-value');
+        const rorStatusEl = document.getElementById('flood-ror-status');
+        const ttdValueEl = document.getElementById('flood-ttd-value');
+        const ttdSubEl = document.getElementById('flood-ttd-sub');
+        const f6hEl = document.getElementById('flood-f6h');
+        const f12hEl = document.getElementById('flood-f12h');
+        const turbValueEl = document.getElementById('flood-turb-value');
+        const turbStatusEl = document.getElementById('flood-turb-status');
+        const cascadeRowEl = document.getElementById('flood-cascade-row');
+        const cascadeTextEl = document.getElementById('flood-cascade-text');
+        const advisoryTextEl = document.getElementById('flood-advisory-text');
+        const rorBoxEl = document.getElementById('flood-box-ror');
+        const ttdBoxEl = document.getElementById('flood-box-ttd');
+        const turbBoxEl = document.getElementById('flood-box-turb');
+
+        if (!bannerEl) return;
+
+        // --- Station label ---
+        if (stationLabelEl) stationLabelEl.textContent = (station.name || 'Unknown').substring(0, 35);
+
+        // --- Water Level Display ---
+        if (currentLevelEl) currentLevelEl.textContent = levelVal !== null ? `${levelVal}` : '--';
+
+        if (levelVal === null) {
+            // No level data
+            if (bannerEl) { bannerEl.className = 'flood-banner flood-safe'; }
+            if (bannerTitleEl) bannerTitleEl.textContent = '⚪ WATER LEVEL DATA NOT AVAILABLE';
+            if (bannerSubEl) bannerSubEl.textContent = `${station.name} — Water level sensor data not reported by CPCB for this station.`;
+            if (bannerBadgeEl) bannerBadgeEl.textContent = 'NO LEVEL DATA';
+            if (advisoryTextEl) advisoryTextEl.textContent = 'Water level data is not available for this monitoring station. Please select a station with active water level sensors.';
+            return;
+        }
+
+        // --- CWC Thresholds ---
+        const { wl, dl } = getCWCThresholds(levelVal);
+        if (wlValueEl) wlValueEl.textContent = `${wl} m`;
+        if (dlValueEl) dlValueEl.textContent = `${dl} m`;
+
+        // Gauge fill % (current level relative to danger level, max at dl)
+        const gaugePct = Math.min(99, Math.max(2, (levelVal / dl) * 100));
+        if (gaugeFillEl) gaugeFillEl.style.width = `${gaugePct}%`;
+
+        // Marker positions: WL at 66%, DL at 88% of gauge width (fixed visual reference)
+        if (wlMarkerEl) wlMarkerEl.style.left = '66%';
+        if (dlMarkerEl) dlMarkerEl.style.left = '88%';
+
+        // --- Rate of Rise ---
+        const rorData = calculateRateOfRise(station.id, levelVal);
+        const rate = rorData.rate;
+        const trend = rorData.trend;
+
+        if (rorValueEl) {
+            if (trend === 'insufficient_history') {
+                rorValueEl.textContent = 'Calculating...';
+            } else {
+                const sign = rate > 0 ? '+' : '';
+                rorValueEl.textContent = `${sign}${rate.toFixed(3)} m/hr`;
+                rorValueEl.style.color = rate > 0.30 ? '#ef4444' : rate > 0.10 ? '#f59e0b' : '#10b981';
+            }
+        }
+
+        if (rorStatusEl) {
+            const trendLabels = {
+                'rapid_rise': '🔴 Rapid Rise — Emergency Protocol',
+                'rising': '🟡 Rising — Monitor Closely',
+                'stable': '🟢 Stable — Normal Flow',
+                'falling': '🟢 Falling — Receding',
+                'insufficient_history': '⏳ Collecting readings...',
+                'unknown': '⚪ Insufficient data'
+            };
+            rorStatusEl.textContent = trendLabels[trend] || trend;
+        }
+
+        if (rorBoxEl) {
+            rorBoxEl.classList.toggle('alert-active', rate !== null && rate > 0.30);
+        }
+
+        // --- 6h & 12h Forecast ---
+        const f6h = rate !== null ? parseFloat((levelVal + rate * 6).toFixed(2)) : null;
+        const f12h = rate !== null ? parseFloat((levelVal + rate * 12).toFixed(2)) : null;
+        if (f6hEl) f6hEl.textContent = f6h !== null ? `6h: ${f6h} m` : '6h: --';
+        if (f12hEl) f12hEl.textContent = f12h !== null ? `${f12h} m` : '--';
+
+        // --- Time to Danger (TTD) ---
+        let ttdHours = null;
+        if (rate !== null && rate > 0.005 && dl !== null) {
+            ttdHours = (dl - levelVal) / rate;
+        }
+
+        if (ttdValueEl) {
+            if (ttdHours === null || ttdHours < 0) {
+                ttdValueEl.textContent = levelVal >= dl ? '⚠️ AT DANGER' : 'N/A';
+                ttdValueEl.style.color = levelVal >= dl ? '#ef4444' : 'var(--text-primary)';
+            } else if (ttdHours < 3) {
+                ttdValueEl.textContent = `${ttdHours.toFixed(1)} hrs ⚠️`;
+                ttdValueEl.style.color = '#ef4444';
+            } else if (ttdHours < 12) {
+                ttdValueEl.textContent = `${ttdHours.toFixed(1)} hrs`;
+                ttdValueEl.style.color = '#f59e0b';
+            } else {
+                ttdValueEl.textContent = `${ttdHours.toFixed(0)}+ hrs`;
+                ttdValueEl.style.color = '#10b981';
+            }
+        }
+
+        if (ttdSubEl) {
+            ttdSubEl.textContent = ttdHours !== null && ttdHours > 0
+                ? `Danger Level (${dl} m) breach estimate`
+                : rate !== null && rate <= 0.005
+                    ? 'Level stable or falling — no breach risk'
+                    : 'Estimating...';
+        }
+
+        if (ttdBoxEl) ttdBoxEl.classList.toggle('alert-active', ttdHours !== null && ttdHours < 6 && ttdHours > 0);
+
+        // --- Turbidity Flash-Flood Trigger ---
+        if (turbValueEl) turbValueEl.textContent = turbVal !== null ? `${turbVal} NTU` : '-- NTU';
+        if (turbStatusEl) {
+            if (turbVal === null) {
+                turbStatusEl.textContent = 'Turbidity not reported';
+                turbStatusEl.style.color = '';
+            } else if (turbVal > 500) {
+                turbStatusEl.textContent = '🔴 FLASH FLOOD TRIGGER — Massive sediment surge!';
+                turbStatusEl.style.color = '#ef4444';
+                if (turbBoxEl) turbBoxEl.classList.add('alert-active');
+            } else if (turbVal > 100) {
+                turbStatusEl.textContent = '🟡 High Turbidity — Upstream inflow surge detected';
+                turbStatusEl.style.color = '#f59e0b';
+                if (turbBoxEl) turbBoxEl.classList.remove('alert-active');
+            } else {
+                turbStatusEl.textContent = '🟢 Normal sediment load';
+                turbStatusEl.style.color = '#10b981';
+                if (turbBoxEl) turbBoxEl.classList.remove('alert-active');
+            }
+        }
+
+        // --- Determine Overall Alert Level ---
+        const isAtDanger = levelVal >= dl;
+        const isNearDanger = levelVal >= wl || (ttdHours !== null && ttdHours < 6 && ttdHours > 0);
+        const isRapidRise = rate !== null && rate > 0.30;
+        const isRising = rate !== null && rate > 0.10;
+        const isTurbAlert = turbVal !== null && turbVal > 100;
+
+        let alertLevel = 'safe';
+        if (isAtDanger || isRapidRise || (ttdHours !== null && ttdHours < 3 && ttdHours > 0)) {
+            alertLevel = 'danger';
+        } else if (isNearDanger || isRising || isTurbAlert) {
+            alertLevel = 'watch';
+        }
+
+        // --- Update Banner ---
+        if (bannerEl) bannerEl.className = `flood-banner flood-${alertLevel}`;
+
+        const bannerConfig = {
+            safe: {
+                title: '🟢 NO FLOOD RISK — SYSTEM SAFE',
+                badge: 'LOW RISK',
+                icon: 'fa-shield-halved',
+                subtitle: `${station.name} water level (${levelVal}m) is within safe CWC threshold. No immediate flood threat.`
+            },
+            watch: {
+                title: '🟡 FLOOD WATCH — ADVISORY ISSUED',
+                badge: 'WATCH / ADVISORY',
+                icon: 'fa-triangle-exclamation',
+                subtitle: `${station.name} water level rising${rate !== null ? ` at +${rate.toFixed(3)} m/hr` : ''}. Monitor continuously. Upstream inflow detected.`
+            },
+            danger: {
+                title: '🔴 HIGH FLOOD ALERT — EMERGENCY PROTOCOL',
+                badge: 'DANGER ALERT',
+                icon: 'fa-skull-crossbones',
+                subtitle: `CRITICAL: ${station.name} approaching/exceeding CWC Danger Level (${dl}m).${ttdHours > 0 && ttdHours < 24 ? ` Breach estimated in ${ttdHours.toFixed(1)} hours.` : ''} Immediate action required.`
+            }
+        };
+
+        const cfg = bannerConfig[alertLevel];
+        if (bannerTitleEl) bannerTitleEl.textContent = cfg.title;
+        if (bannerSubEl) bannerSubEl.textContent = cfg.subtitle;
+        if (bannerBadgeEl) bannerBadgeEl.textContent = cfg.badge;
+
+        const bannerIconEl = document.getElementById('flood-banner-icon');
+        if (bannerIconEl) bannerIconEl.innerHTML = `<i class="fa-solid ${cfg.icon}"></i>`;
+
+        // --- Cascade Warning ---
+        const cascadeMsg = RIVER_CASCADE[station.river];
+        if (cascadeRowEl) {
+            if (alertLevel !== 'safe' && cascadeMsg) {
+                cascadeRowEl.style.display = 'flex';
+                if (cascadeTextEl) cascadeTextEl.textContent = cascadeMsg;
+            } else {
+                cascadeRowEl.style.display = 'none';
+            }
+        }
+
+        // --- Emergency Advisory Text ---
+        const advisoryMessages = {
+            safe: `All parameters at ${station.name} (${station.river || 'River Basin'}, ${station.state}) are within normal CWC thresholds. Water level: ${levelVal}m. Warning Level: ${wl}m. Danger Level: ${dl}m. Continue standard monitoring. No public advisory required at this time.`,
+            watch: `FLOOD WATCH ISSUED for ${station.name} (${station.state}). Water level: ${levelVal}m${rate ? `, rising at ${rate.toFixed(3)} m/hr` : ''}. Warning Level (${wl}m) ${levelVal >= wl ? 'REACHED' : 'approaching'}. Recommended actions: Alert local administration, warn riverside communities, check boats and livestock, avoid unnecessary river crossings.`,
+            danger: `🚨 EMERGENCY ALERT — ${station.name} (${station.state}): Water level ${levelVal}m is near/above CWC Danger Level (${dl}m).${ttdHours > 0 && ttdHours < 24 ? ` Danger Level breach projected in ~${ttdHours.toFixed(1)} hours.` : ''} IMMEDIATE ACTIONS: Activate flood emergency response, issue evacuation orders for low-lying riverbank areas, alert NDRF/SDRF teams, place fishing community on high alert, close vulnerable bridges.`
+        };
+
+        if (advisoryTextEl) advisoryTextEl.textContent = advisoryMessages[alertLevel];
     }
 
     // --- Home Reset Button Listener (Top Logo Reset Only) ---
