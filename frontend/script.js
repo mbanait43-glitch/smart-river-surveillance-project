@@ -214,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
             populateDropdowns();
             renderMapMarkers();
             updateTimestamp();
+            precacheAllStationPhotos(stationMap);
         } else {
             console.error('Fetch error:', lastError);
             if (statusBadge) {
@@ -846,8 +847,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let photoLoadToken = 0;
+    const cachedStationPhotos = new Set();
 
-    // --- Live CPCB Station Surveillance & Camera Photo Updater (100% Instant Mobile Optimized) ---
+    // Background pre-fetcher for all 40 station photos so station switching is 100% instant!
+    function precacheAllStationPhotos(stations) {
+        if (!stations) return;
+        Object.values(stations).forEach(st => {
+            const url = getCpcbStationPhotoUrl(st);
+            if (url && !cachedStationPhotos.has(url)) {
+                const img = new Image();
+                img.onload = () => cachedStationPhotos.add(url);
+                img.src = url;
+            }
+        });
+    }
+
+    // --- Live CPCB Station Surveillance & Camera Photo Updater (100% Instant Zero-Delay Switching) ---
     function updateStationLivePhoto(station) {
         const imgEl = document.getElementById('station-live-image');
         const nameEl = document.getElementById('camera-station-name');
@@ -857,6 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!station) return;
 
+        // Instant Metadata Updates
         if (nameEl) nameEl.textContent = station.name || 'Monitoring Station';
         if (locEl) locEl.textContent = `${station.river || 'River Basin'} | ${station.state || 'India'}`;
         if (codeEl) {
@@ -871,20 +887,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (imgEl) {
             const currentToken = ++photoLoadToken;
-            
-            // 1. Direct instant assignment for zero-delay switching
-            imgEl.src = photoUrl;
-            imgEl.style.opacity = '1';
 
-            // 2. Pre-loader verification for smooth fallback if mobile network drops
+            // Direct onerror backup on image tag
+            imgEl.onerror = () => {
+                if (currentToken === photoLoadToken) {
+                    imgEl.src = fallbackUrl;
+                    imgEl.style.opacity = '1';
+                }
+            };
+
+            // If photo was already pre-cached in memory, render immediately with 0ms delay!
+            if (cachedStationPhotos.has(photoUrl)) {
+                imgEl.src = photoUrl;
+                imgEl.style.opacity = '1';
+                return;
+            }
+
+            // Quick smooth micro-fade for instant user visual feedback
+            imgEl.style.opacity = '0.6';
+            imgEl.src = photoUrl;
+
+            // Fast 1.8s timeout: if CPCB server hangs, immediately switch to fallback
+            let timer = setTimeout(() => {
+                if (currentToken === photoLoadToken && imgEl.style.opacity !== '1') {
+                    imgEl.src = fallbackUrl;
+                    imgEl.style.opacity = '1';
+                }
+            }, 1800);
+
             const preloader = new Image();
             preloader.onload = () => {
+                clearTimeout(timer);
                 if (currentToken === photoLoadToken) {
+                    cachedStationPhotos.add(photoUrl);
                     imgEl.src = photoUrl;
                     imgEl.style.opacity = '1';
                 }
             };
             preloader.onerror = () => {
+                clearTimeout(timer);
                 if (currentToken === photoLoadToken) {
                     imgEl.src = fallbackUrl;
                     imgEl.style.opacity = '1';
