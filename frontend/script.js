@@ -1301,13 +1301,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (wlValueEl) wlValueEl.textContent = `${wl} m`;
         if (dlValueEl) dlValueEl.textContent = `${dl} m`;
 
-        // Gauge fill % (current level relative to danger level, max at dl)
-        const gaugePct = Math.min(99, Math.max(2, (levelVal / dl) * 100));
+        // Gauge fill % (current level relative to danger level)
+        const gaugePct = Math.min(96, Math.max(2, (levelVal / dl) * 100));
         if (gaugeFillEl) gaugeFillEl.style.width = `${gaugePct}%`;
 
-        // Marker positions: WL at 66%, DL at 88% of gauge width (fixed visual reference)
-        if (wlMarkerEl) wlMarkerEl.style.left = '66%';
-        if (dlMarkerEl) dlMarkerEl.style.left = '88%';
+        // Dynamic marker positions based on actual WL/DL ratio
+        // WL marker: where warning level sits relative to danger level
+        const wlMarkerPct = Math.min(92, Math.max(50, (wl / dl) * 100));
+        const dlMarkerPct = 96; // always near end of gauge
+        if (wlMarkerEl) wlMarkerEl.style.left = `${wlMarkerPct}%`;
+        if (dlMarkerEl) dlMarkerEl.style.left = `${dlMarkerPct}%`;
 
         // --- Rate of Rise ---
         const rorData = calculateRateOfRise(station.id, levelVal);
