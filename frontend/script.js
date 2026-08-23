@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // --- Theme Toggling (Fixed & Persisted) ---
     const themeBtn = document.getElementById('theme-toggle');
     const body = document.body;
@@ -713,32 +713,32 @@
 
         let hasOverride = false;
 
-        // 100% Exact Official CPCB Dashboard Source Code Rules (Direct from assets/page-index-7bd1c4cc.js)
+                // 100% Exact Official CPCB Dashboard Source Code Rules (Direct from assets/page-index-7bd1c4cc.js)
         function getParamStatusInfo(paramKey, val) {
-            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: 'Ã¢Å¡Âª Not Monitored' };
+            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: '● Not Monitored' };
             const num = parseFloat(val);
 
             // 1. pH Level: CPCB Interval [6.5, 8.5) -> Green if 6.5 <= num < 8.5, else Red
             if (paramKey === 'pH') {
-                if (num >= 6.5 && num < 8.5) return { color: 'green', label: 'Ã°Å¸Å¸Â¢ Safe pH' };
-                return { color: 'red', label: 'Ã°Å¸â€Â´ pH Violation' };
+                if (num >= 6.5 && num < 8.5) return { color: 'green', label: '● Safe pH' };
+                return { color: 'red', label: '● pH Violation' };
             }
 
             // 2. BOD: CPCB Max < 3.0 -> Green if num < 3.0, else Red
             if (paramKey === 'Biochemical Oxygen Demand' || paramKey === 'BOD') {
-                if (num < 3.0) return { color: 'green', label: 'Ã°Å¸Å¸Â¢ Safe BOD' };
-                return { color: 'red', label: 'Ã°Å¸â€Â´ High BOD Hazard' };
+                if (num < 3.0) return { color: 'green', label: '● Safe BOD' };
+                return { color: 'red', label: '● High BOD Hazard' };
             }
 
             // 3. Dissolved Oxygen (DO): CPCB Min >= 5.0 -> Green if num >= 5.0, else Red
             if (paramKey === 'Oxygen, dissolved' || paramKey === 'Dissolved Oxygen' || paramKey === 'DO') {
-                if (num >= 5.0) return { color: 'green', label: 'Ã°Å¸Å¸Â¢ Healthy DO' };
-                return { color: 'red', label: 'Ã°Å¸â€Â´ Critical DO Risk' };
+                if (num >= 5.0) return { color: 'green', label: '● Healthy DO' };
+                return { color: 'red', label: '● Critical DO Risk' };
             }
 
             // ALL OTHER 9 PARAMETERS (WT, COD, Turbidity, EC, Nitrate, Chloride, TOC, Depth, Stage)
             // Official CPCB Source Code displays them as Neutral / White without judged color!
-            return { color: 'white', label: 'Ã¢Å¡Âª CPCB Monitored' };
+            return { color: 'white', label: '● CPCB Monitored' };
         }
 
         // Dynamic CPCB Status Color Renderer for Metric Cards (Green, Red, White)
@@ -801,13 +801,13 @@
 
         if (reportStatusLabel) {
             reportStatusLabel.innerHTML = hasOverride 
-                ? `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">Ã¢Å“â€œ Admin Verified <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`
-                : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">Ã¢â€”Â Official Data Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
+                ? `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;"><i class="fa-solid fa-check" style="margin-right: 4px;"></i> Admin Verified <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`
+                : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;"><i class="fa-solid fa-circle" style="font-size: 0.55rem; vertical-align: middle; margin-right: 4px;"></i> Official Data Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
         }
 
         updateCardById('card-level', 'Water Level', 'm above MSL');
         updateCardById('card-ph', 'pH', 'pH');
-        updateCardById('card-temp', 'Water Temperature', 'Ã‚Â°C');
+        updateCardById('card-temp', 'Water Temperature', '°C');
         updateCardById('card-do', 'Dissolved Oxygen', 'mg/l');
         updateCardById('card-bod', 'Biochemical Oxygen Demand', 'mg/l');
         updateCardById('card-cod', 'Chemical Oxygen Demand', 'mg/l');
@@ -1148,7 +1148,7 @@
             csvContent += `SELECTED STATION: "${station.name}"\n`;
             csvContent += `STATION CODE: "${station.id}"\n`;
             csvContent += `SOURCE NAME / LINK: CPCB RTWQMS (https://rtwqmsdb1.cpcb.gov.in)\n`;
-            csvContent += `DATA STATUS LABEL: ${Object.keys(stationOverrides).length > 0 ? "Ã¢Å“â€œ Admin Verified" : "Ã¢â€”Â CPCB RTWQMS Source"}\n`;
+            csvContent += `DATA STATUS LABEL: ${Object.keys(stationOverrides).length > 0 ? "✓ Admin Verified" : "● CPCB RTWQMS Source"}\n`;
             csvContent += `ORIGINAL OBSERVATION TIME: "${station.lastTimestamp || 'N/A'}"\n`;
             csvContent += `LAST CHECKED BY WEBSITE: ${new Date().toLocaleString()}\n`;
             csvContent += `ACTIVE ALERTS: None\n`;
@@ -1157,7 +1157,7 @@
             csvContent += "Parameter Name,Value,Unit,Status\n";
             Object.entries(station.parameters).forEach(([pName, pObj]) => {
                 const val = stationOverrides[pName] !== undefined ? stationOverrides[pName] : pObj.value;
-                const status = stationOverrides[pName] !== undefined ? "Ã¢Å“â€œ Admin Verified" : "Ã¢â€”Â CPCB RTWQMS Source";
+                const status = stationOverrides[pName] !== undefined ? "✓ Admin Verified" : "● CPCB RTWQMS Source";
                 csvContent += `"${pName}",${val},"${pObj.unit}","${status}"\n`;
             });
 
