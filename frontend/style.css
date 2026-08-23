@@ -563,157 +563,542 @@ body.light-mode .wqi-score-card.wqi-critical .wqi-left p { color: #be123c !impor
 .wqi-status-tag { padding: 5px 12px; border-radius: 18px; font-size: 0.78rem; font-weight: 700; }
 .wqi-status-tag.good { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
 
-/* --- REAL-TIME FLOOD ALERT & RISK RADAR STYLES --- */
-.flood-card {
-    width: 100%;
-    border-radius: 18px;
-    padding: 22px 26px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+/* --- REAL-TIME FLOOD RADAR & EARLY WARNING BENTO SYSTEM --- */
+.flood-radar-panel {
+    border-radius: 20px;
+    overflow: hidden;
     transition: all 0.3s ease;
 }
 
-@media (max-width: 768px) {
-    .flood-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-    .flood-right {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        padding-top: 12px;
-    }
-    .flood-forecast-box {
-        text-align: right;
-    }
-}
-
-/* 1. Normal Flow State (Green) */
-.flood-card.flood-normal {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(6, 182, 212, 0.12));
-    border: 1px solid rgba(16, 185, 129, 0.4);
-}
-.flood-card.flood-normal .flood-left h3 { color: #ffffff !important; font-weight: 800; }
-.flood-card.flood-normal .flood-left p { color: #a7f3d0 !important; }
-
-body.light-mode .flood-card.flood-normal {
-    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-    border: 1px solid #a7f3d0;
-}
-body.light-mode .flood-card.flood-normal .flood-left h3 { color: #064e3b !important; font-weight: 800; }
-body.light-mode .flood-card.flood-normal .flood-left p { color: #047857 !important; }
-
-/* 2. Flood Watch / Warning State (Amber) */
-.flood-card.flood-watch {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(217, 119, 6, 0.14));
-    border: 1px solid rgba(245, 158, 11, 0.5);
-    box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);
-}
-.flood-card.flood-watch .flood-left h3 { color: #ffffff !important; font-weight: 800; }
-.flood-card.flood-watch .flood-left p { color: #fde68a !important; }
-
-body.light-mode .flood-card.flood-watch {
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-    border: 1px solid #fde68a;
-}
-body.light-mode .flood-card.flood-watch .flood-left h3 { color: #78350f !important; font-weight: 800; }
-body.light-mode .flood-card.flood-watch .flood-left p { color: #b45309 !important; }
-
-/* 3. High Flood Alert State (Red/Pulsing) */
-.flood-card.flood-alert {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(225, 29, 72, 0.18));
-    border: 1.5px solid rgba(239, 68, 68, 0.6);
-    box-shadow: 0 0 35px rgba(239, 68, 68, 0.3);
-    animation: floodPulseGlow 2s infinite ease-in-out;
-}
-.flood-card.flood-alert .flood-left h3 { color: #ffffff !important; font-weight: 800; }
-.flood-card.flood-alert .flood-left p { color: #fecdd3 !important; }
-
-body.light-mode .flood-card.flood-alert {
-    background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
-    border: 1.5px solid #fda4af;
-    box-shadow: 0 0 25px rgba(225, 29, 72, 0.18);
-}
-body.light-mode .flood-card.flood-alert .flood-left h3 { color: #881337 !important; font-weight: 800; }
-body.light-mode .flood-card.flood-alert .flood-left p { color: #be123c !important; }
-
-@keyframes floodPulseGlow {
-    0% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
-    50% { box-shadow: 0 0 35px rgba(239, 68, 68, 0.5); }
-    100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
-}
-
-.flood-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
-
-.flood-badge-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: #10b981;
-    color: white;
+.radar-ping-icon {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(2, 132, 199, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.35rem;
-    flex-shrink: 0;
-    transition: background 0.3s ease;
 }
 
-.flood-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+.radar-ping-wave {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 12px;
+    border: 1.5px solid var(--cyan-primary);
+    opacity: 0;
+    animation: radarWaveExpand 2.5s infinite ease-out;
+}
 
-.flood-status-tag {
-    padding: 6px 14px;
+@keyframes radarWaveExpand {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    70% { transform: scale(1.35); opacity: 0; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* 3-Column Bento Grid */
+.flood-bento-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1.25fr 0.95fr;
+    gap: 20px;
+    width: 100%;
+}
+
+@media (max-width: 1100px) {
+    .flood-bento-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+.flood-bento-col {
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+/* Box 1: Alert Level Hero */
+.flood-hero-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.flood-hero-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.flood-beacon-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.flood-beacon-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.45rem;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.flood-beacon-ring {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
     border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 800;
+    border: 2px solid currentColor;
+    opacity: 0.35;
+    animation: beaconPulse 2s infinite ease-in-out;
+}
+
+@keyframes beaconPulse {
+    0%, 100% { transform: scale(1); opacity: 0.35; }
+    50% { transform: scale(1.08); opacity: 0.75; }
+}
+
+.flood-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.flood-state-headline {
+    font-size: 1.12rem;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+    margin: 0;
+}
+
+.flood-advisory-desc {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 6px 0 16px 0;
+}
+
+.flood-hero-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 12px;
+}
+
+.flood-footer-chip {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 4px 10px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Box 2: Gauge & Water Stage */
+.flood-gauge-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.flood-box-label {
+    font-size: 0.76rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
-.flood-status-tag.normal {
+
+.flood-gauge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+.flood-current-num-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.flood-big-level {
+    font-size: 1.95rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+}
+
+.flood-level-unit {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+/* Interactive Visual Multi-Zone Gauge Meter Bar */
+.flood-meter-wrapper {
+    margin: 16px 0 18px 0;
+}
+
+.flood-meter-bar-track {
+    position: relative;
+    height: 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    display: flex;
+    overflow: visible;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.flood-zone-segment {
+    height: 100%;
+    opacity: 0.25;
+}
+.flood-zone-segment.zone-safe { background: #10b981; border-top-left-radius: 7px; border-bottom-left-radius: 7px; }
+.flood-zone-segment.zone-warning { background: #f59e0b; }
+.flood-zone-segment.zone-danger { background: #ef4444; border-top-right-radius: 7px; border-bottom-right-radius: 7px; }
+
+.flood-meter-fill-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 7px;
+    background: linear-gradient(90deg, #10b981, #06b6d4);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 2;
+}
+
+.flood-meter-pointer-pin {
+    position: absolute;
+    top: -7px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 4;
+}
+
+.meter-pin-dot {
+    width: 12px;
+    height: 28px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 2.5px solid var(--cyan-primary);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 12px var(--cyan-primary);
+}
+
+.meter-pin-tooltip {
+    position: absolute;
+    bottom: 32px;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    white-space: nowrap;
+    border: 1px solid var(--cyan-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.flood-meter-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+.meter-lbl-warn strong { color: #f59e0b; }
+.meter-lbl-danger strong { color: #ef4444; }
+
+.flood-benchmark-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.benchmark-pill {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.benchmark-pill .dot-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.bm-title {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: block;
+}
+
+.bm-value {
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* Box 3: Predictive Trend & AI Forecast */
+.flood-forecast-box-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.flood-forecast-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.flood-forecast-card.forecast-highlight {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(6, 182, 212, 0.05));
+    border: 1px solid rgba(2, 132, 199, 0.3);
+}
+
+.flood-trend-row {
+    margin: 8px 0 4px 0;
+}
+
+.trend-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.trend-badge.rising {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+}
+
+.trend-badge.falling {
     background: rgba(16, 185, 129, 0.2);
     color: #10b981;
     border: 1px solid #10b981;
 }
-.flood-status-tag.watch {
+
+.trend-badge.stable {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.flood-trend-subtitle {
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.forecast-conf-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--cyan-primary);
+    background: rgba(2, 132, 199, 0.15);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.flood-projected-level {
+    margin: 6px 0;
+}
+
+.forecast-val-num {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--cyan-primary);
+}
+
+.forecast-status-note {
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* =========================================================================
+   STATUS PALETTES (NORMAL vs WATCH vs ALERT)
+   ========================================================================= */
+
+/* 1. NORMAL FLOW */
+.flood-bento-grid.flood-normal .flood-hero-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(6, 182, 212, 0.06) 100%);
+    border-color: rgba(16, 185, 129, 0.35);
+}
+.flood-bento-grid.flood-normal .flood-beacon-icon {
+    background: #10b981;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+.flood-bento-grid.flood-normal .flood-beacon-ring { color: #10b981; }
+.flood-bento-grid.flood-normal .flood-pill.normal {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid #10b981;
+}
+.flood-bento-grid.flood-normal .flood-state-headline { color: #ffffff; }
+
+/* 2. FLOOD WATCH / WARNING */
+.flood-bento-grid.flood-watch .flood-hero-box {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.08) 100%);
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.12);
+}
+.flood-bento-grid.flood-watch .flood-beacon-icon {
+    background: #f59e0b;
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
+}
+.flood-bento-grid.flood-watch .flood-beacon-ring { color: #f59e0b; }
+.flood-bento-grid.flood-watch .flood-pill.watch {
     background: rgba(245, 158, 11, 0.25);
     color: #f59e0b;
     border: 1px solid #f59e0b;
 }
-.flood-status-tag.alert {
+.flood-bento-grid.flood-watch .flood-state-headline { color: #fde68a; }
+.flood-bento-grid.flood-watch .flood-meter-fill-bar {
+    background: linear-gradient(90deg, #10b981, #f59e0b);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+}
+
+/* 3. HIGH FLOOD ALERT */
+.flood-bento-grid.flood-alert .flood-hero-box {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(225, 29, 72, 0.12) 100%);
+    border-color: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 35px rgba(239, 68, 68, 0.25);
+    animation: floodPulseGlow 2s infinite ease-in-out;
+}
+.flood-bento-grid.flood-alert .flood-beacon-icon {
+    background: #ef4444;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+}
+.flood-bento-grid.flood-alert .flood-beacon-ring { color: #ef4444; }
+.flood-bento-grid.flood-alert .flood-pill.alert {
     background: rgba(239, 68, 68, 0.25);
     color: #ef4444;
     border: 1px solid #ef4444;
     animation: alertTagBlink 1.5s infinite;
 }
-
-@keyframes alertTagBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.65; }
+.flood-bento-grid.flood-alert .flood-state-headline { color: #fecdd3; }
+.flood-bento-grid.flood-alert .flood-meter-fill-bar {
+    background: linear-gradient(90deg, #f59e0b, #ef4444);
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.7);
 }
 
-body.light-mode .flood-status-tag.normal {
+/* =========================================================================
+   LIGHT MODE OVERRIDES FOR FLOOD RADAR BENTO GRID
+   ========================================================================= */
+body.light-mode .flood-hero-box,
+body.light-mode .flood-gauge-box,
+body.light-mode .flood-forecast-card {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .flood-meter-bar-track {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+}
+
+body.light-mode .benchmark-pill {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+body.light-mode .flood-footer-chip {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+body.light-mode .meter-pin-tooltip {
+    background: #1e293b;
+    color: #ffffff;
+}
+
+body.light-mode .flood-bento-grid.flood-normal .flood-hero-box {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border-color: #a7f3d0;
+}
+body.light-mode .flood-bento-grid.flood-normal .flood-state-headline { color: #064e3b; }
+body.light-mode .flood-bento-grid.flood-normal .flood-advisory-desc { color: #047857; }
+body.light-mode .flood-bento-grid.flood-normal .flood-pill.normal {
     background: #dcfce7;
     color: #15803d;
-    border: 1px solid #86efac;
+    border-color: #86efac;
 }
-body.light-mode .flood-status-tag.watch {
+
+body.light-mode .flood-bento-grid.flood-watch .flood-hero-box {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: #fde68a;
+}
+body.light-mode .flood-bento-grid.flood-watch .flood-state-headline { color: #78350f; }
+body.light-mode .flood-bento-grid.flood-watch .flood-advisory-desc { color: #b45309; }
+body.light-mode .flood-bento-grid.flood-watch .flood-pill.watch {
     background: #fef3c7;
     color: #b45309;
-    border: 1px solid #fde68a;
+    border-color: #fde68a;
 }
-body.light-mode .flood-status-tag.alert {
+
+body.light-mode .flood-bento-grid.flood-alert .flood-hero-box {
+    background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+    border-color: #fda4af;
+}
+body.light-mode .flood-bento-grid.flood-alert .flood-state-headline { color: #881337; }
+body.light-mode .flood-bento-grid.flood-alert .flood-advisory-desc { color: #be123c; }
+body.light-mode .flood-bento-grid.flood-alert .flood-pill.alert {
     background: #fee2e2;
     color: #b91c1c;
-    border: 1px solid #fca5a5;
+    border-color: #fca5a5;
 }
 
 /* 8 Metrics Grid */
