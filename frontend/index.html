@@ -40,8 +40,6 @@
             <a href="#overview" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
             <a href="#map-section" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> GIS Map</a>
             <a href="#live-camera-section" class="nav-link"><i class="fa-solid fa-camera"></i> Live Station Photo</a>
-            <a href="https://floodhub.org/" target="_blank" class="nav-link flood-nav-link" title="Open Google Flood Hub (India River AI)"><i class="fa-solid fa-satellite-dish"></i> Flood Hub AI <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem;"></i></a>
-            <a href="https://ffs.india-water.gov.in/" target="_blank" class="nav-link flood-nav-link" title="Open Central Water Commission (CWC) Official Flood Forecasting Portal"><i class="fa-solid fa-water"></i> CWC Forecast <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem;"></i></a>
         </div>
 
         <div class="nav-actions">
@@ -142,8 +140,6 @@
             <div class="detail-pill"><strong>Station Name:</strong> <span id="report-station">--</span></div>
             <div class="detail-pill"><strong>Station Code:</strong> <span id="report-station-code">--</span></div>
             <div class="detail-pill"><strong>Status Label:</strong> <span id="report-status-label" class="status-indicator" style="color: #10b981; font-weight: 700;"><i class="fa-solid fa-circle" style="font-size: 0.55rem; vertical-align: middle; margin-right: 4px;"></i> Official Data Source</span></div>
-            <a href="https://floodhub.org/" target="_blank" class="detail-pill action-link-pill" title="View Real-Time Satellite Flood Prediction (Google AI)" style="color: var(--cyan-primary); text-decoration: none; font-weight: 700;"><i class="fa-solid fa-satellite-dish"></i> Google Flood Hub AI <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem;"></i></a>
-            <a href="https://ffs.india-water.gov.in/" target="_blank" class="detail-pill action-link-pill" title="View Central Water Commission (CWC) Official Flood Forecasting" style="color: #10b981; text-decoration: none; font-weight: 700;"><i class="fa-solid fa-water"></i> CWC Flood Forecast <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem;"></i></a>
         </section>
 
         <!-- Alerts Container -->
@@ -346,13 +342,9 @@
         <div class="split-view-grid">
             <!-- GIS Map Container -->
             <section id="map-section" class="panel-card">
-                <div class="panel-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div class="panel-header">
                     <h3><i class="fa-solid fa-map-location-dot"></i> Live GIS Station Map</h3>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <a href="https://floodhub.org/" target="_blank" class="gis-radar-link" title="Open Google Flood Hub Live Satellite Flood Map"><i class="fa-solid fa-satellite-dish"></i> Flood Hub AI <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem;"></i></a>
-                        <a href="https://ffs.india-water.gov.in/" target="_blank" class="gis-radar-link cwc" title="Open CWC Official River Flood Forecasting Portal"><i class="fa-solid fa-water"></i> CWC Portal <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem;"></i></a>
-                        <span class="panel-tag">Interactive GIS</span>
-                    </div>
+                    <span class="panel-tag">Interactive GIS</span>
                 </div>
                 <div class="panel-body p-0">
                     <div id="map" class="map-view"></div>
