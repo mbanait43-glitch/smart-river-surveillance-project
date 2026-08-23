@@ -892,6 +892,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- REAL-TIME FLOOD STATUS EVALUATOR (CWC BENCHMARKS & ADAPTIVE FALLBACK) ---
+    let selectedForecastHours = 3; // Default: 3 hours
+
     function getFloodStatus(currentLevel, station) {
         const defaultRule = (floodThresholds && floodThresholds['_default']) || {
             warningMultiplier: 1.25,
@@ -949,13 +951,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             const now = Date.now();
             
-            // Only add if last entry is older than 5 seconds or level changed
+            // Only add if level changed or 5 seconds passed
             const last = history[history.length - 1];
             if (!last || Math.abs(last.level - level) > 0.001 || (now - last.timestamp) > 5000) {
                 history.push({ level: Number(level), timestamp: now });
             }
 
-            // Cap at last 20 entries
+            // Cap at max 20 entries (FIFO)
             while (history.length > 20) {
                 history.shift();
             }
@@ -966,26 +968,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- REAL TREND CALCULATION VIA LINEAR REGRESSION MATH ---
-    function calculateFloodTrend(history, currentLevel) {
+    // --- REAL TREND & MULTI-HOUR FORECAST CALCULATION ---
+    function calculateFloodTrend(history, currentLevel, hoursAhead = 3) {
         if (!history || history.length < 2 || currentLevel === null || isNaN(currentLevel)) {
             return {
-                trendText: 'Calculating trend...',
-                trendDirection: 'calculating',
+                trendText: 'Water is Stable',
+                trendDirection: 'stable',
                 slopePerHour: 0,
-                forecast3h: null
+                projectedLevel: currentLevel
             };
         }
 
-        // Use last 5 to 10 entries for sensitive, real-time trend detection
+        // Use last 5 to 10 entries for real-time trend detection
         const sample = history.slice(-10);
         const n = sample.length;
         if (n < 2) {
             return {
-                trendText: 'Calculating trend...',
-                trendDirection: 'calculating',
+                trendText: 'Water is Stable',
+                trendDirection: 'stable',
                 slopePerHour: 0,
-                forecast3h: null
+                projectedLevel: currentLevel
             };
         }
 
@@ -1010,11 +1012,10 @@ document.addEventListener('DOMContentLoaded', () => {
             slope = (n * sumXY - sumX * sumY) / denominator;
         }
 
-        // 3-hour projection
-        const forecast3h = Number((currentLevel + (slope * 3)).toFixed(2));
+        // Multi-hour forecast projection
+        const projectedLevel = Number((currentLevel + (slope * hoursAhead)).toFixed(2));
 
-        // Slope classification threshold: ±0.015 m/hr (1.5 cm/hr)
-        let trendText = '';
+        let trendText = 'Water is Stable';
         let trendDirection = 'stable';
 
         if (slope > 0.015) {
@@ -1025,18 +1026,18 @@ document.addEventListener('DOMContentLoaded', () => {
             trendText = `Falling ↓ (${(slope).toFixed(2)} m/hr)`;
         } else {
             trendDirection = 'stable';
-            trendText = `Stable → (±0.00 m/hr)`;
+            trendText = `Water is Stable`;
         }
 
         return {
             trendText,
             trendDirection,
             slopePerHour: slope,
-            forecast3h: Math.max(0, forecast3h)
+            projectedLevel: Math.max(0, projectedLevel)
         };
     }
 
-    // --- RENDER & UPDATE FLOOD ALERT BENTO RADAR IN UI ---
+    // --- RENDER & UPDATE CLEAN INTUITIVE FLOOD CARD IN UI ---
     function updateFloodAlertCard(station, stationOverrides) {
         const floodCard = document.getElementById('flood-status-card');
         const badgeTag = document.getElementById('flood-badge-tag');
@@ -1044,25 +1045,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const mainIcon = document.getElementById('flood-main-icon');
         const titleText = document.getElementById('flood-title-text');
         const subText = document.getElementById('flood-sub-text');
+        const statusTag = document.getElementById('flood-status-tag');
         
         // Gauge Elements
         const currentLevelEl = document.getElementById('flood-current-level');
-        const warningLevelEl = document.getElementById('flood-warning-level');
         const dangerLevelEl = document.getElementById('flood-danger-level');
-        const warnValDisplay = document.getElementById('flood-warn-val-display');
-        const dangerValDisplay = document.getElementById('flood-danger-val-display');
         const bufferValEl = document.getElementById('flood-buffer-val');
         const meterFillEl = document.getElementById('flood-meter-fill');
-        const meterPointerEl = document.getElementById('flood-meter-pointer');
-        const meterTooltipEl = document.getElementById('flood-meter-tooltip');
 
-        // Status & Forecast Elements
-        const statusTag = document.getElementById('flood-status-tag');
+        // Forecast Elements
+        const hoursLabel = document.getElementById('flood-hours-label');
+        const forecastValEl = document.getElementById('flood-forecast-val');
         const trendChip = document.getElementById('flood-trend-chip');
         const trendIcon = document.getElementById('flood-trend-icon');
         const trendValEl = document.getElementById('flood-trend-val');
-        const forecastValEl = document.getElementById('flood-forecast-val');
-        const forecastStatusLine = document.getElementById('flood-forecast-status-line');
 
         if (!station || !floodCard) return;
 
@@ -1091,25 +1087,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const warnNum = parseFloat(floodInfo.warningLevel);
         const dangerNum = parseFloat(floodInfo.dangerLevel);
 
-        // 4. Compute Real Trend & 3-Hour Forecast
+        // 4. Compute Real Trend & Selected Horizon Forecast
         const historyKey = `flood_history_${station.id}`;
         const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
-        const trendInfo = calculateFloodTrend(history, currentLevel);
+        const trendInfo = calculateFloodTrend(history, currentLevel, selectedForecastHours);
 
-        // 5. Update Current Level & Benchmarks
+        // 5. Update Current Level & Danger Mark
         if (currentLevelEl) {
             currentLevelEl.textContent = currentLevel !== null ? currentLevel.toFixed(2) : '--';
         }
-        const estTag = floodInfo.isEstimated ? ' (Est.)' : '';
-        if (warningLevelEl) warningLevelEl.textContent = `${floodInfo.warningLevel}m${estTag}`;
-        if (dangerLevelEl) dangerLevelEl.textContent = `${floodInfo.dangerLevel}m${estTag}`;
-        if (warnValDisplay) warnValDisplay.textContent = `${floodInfo.warningLevel} m MSL${estTag}`;
-        if (dangerValDisplay) dangerValDisplay.textContent = `${floodInfo.dangerLevel} m MSL${estTag}`;
+        if (dangerLevelEl) {
+            dangerLevelEl.textContent = `${floodInfo.dangerLevel} m${floodInfo.isEstimated ? ' (Est.)' : ''}`;
+        }
 
-        // Buffer calculation (Margin to Warning Mark)
+        // Buffer calculation (Margin to Danger Mark)
         if (bufferValEl) {
-            if (currentLevel !== null && !isNaN(warnNum)) {
-                const diff = warnNum - currentLevel;
+            if (currentLevel !== null && !isNaN(dangerNum)) {
+                const diff = dangerNum - currentLevel;
                 if (diff > 0) {
                     bufferValEl.textContent = `+${diff.toFixed(2)} m (Safe)`;
                     bufferValEl.style.color = '#10b981';
@@ -1123,93 +1117,82 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 6. Interactive Visual Multi-Zone Gauge Meter Fill & Pointer
+        // 6. Clean Visual Progress Bar
         if (currentLevel !== null && dangerNum > 0) {
-            const maxGaugeScale = dangerNum * 1.15; // Give 15% headroom above danger
-            let percent = Math.min(100, Math.max(4, (currentLevel / maxGaugeScale) * 100));
+            let percent = Math.min(100, Math.max(5, (currentLevel / dangerNum) * 100));
             if (meterFillEl) meterFillEl.style.width = `${percent}%`;
-            if (meterPointerEl) meterPointerEl.style.left = `${percent}%`;
-            if (meterTooltipEl) meterTooltipEl.textContent = `${currentLevel.toFixed(2)} m`;
         } else {
-            if (meterFillEl) meterFillEl.style.width = '0%';
-            if (meterPointerEl) meterPointerEl.style.left = '0%';
-            if (meterTooltipEl) meterTooltipEl.textContent = '-- m';
+            if (meterFillEl) meterFillEl.style.width = '20%';
         }
 
-        // 7. Badge Tag (CWC vs Estimated)
+        // 7. Badge Tag (Official CWC vs Estimated)
         if (badgeTag) {
-            badgeTag.textContent = floodInfo.isEstimated ? 'Hydrology Estimated (Unverified)' : 'Official CWC Benchmarked';
+            badgeTag.textContent = floodInfo.isEstimated ? 'Hydrology Estimated' : 'Official CWC Data';
             badgeTag.style.background = floodInfo.isEstimated ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)';
             badgeTag.style.color = floodInfo.isEstimated ? '#f59e0b' : '#10b981';
             badgeTag.style.borderColor = floodInfo.isEstimated ? 'rgba(245, 158, 11, 0.3)' : 'rgba(16, 185, 129, 0.3)';
         }
 
-        // 8. Trend Radar Vector & Icon
-        if (trendValEl) trendValEl.textContent = trendInfo.trendText;
-        if (trendChip) {
-            trendChip.className = `trend-badge ${trendInfo.trendDirection}`;
+        // 8. Forecast & Trend Output
+        if (hoursLabel) hoursLabel.textContent = `${selectedForecastHours} Hours`;
+        if (forecastValEl) {
+            forecastValEl.textContent = trendInfo.projectedLevel !== null ? `${trendInfo.projectedLevel.toFixed(2)} m` : '-- m';
         }
+        if (trendValEl) trendValEl.textContent = trendInfo.trendText;
+        if (trendChip) trendChip.className = `pred-trend-chip ${trendInfo.trendDirection}`;
         if (trendIcon) {
             if (trendInfo.trendDirection === 'rising') {
-                trendIcon.className = 'fa-solid fa-arrow-trend-up';
+                trendIcon.className = 'fa-solid fa-arrow-up';
             } else if (trendInfo.trendDirection === 'falling') {
-                trendIcon.className = 'fa-solid fa-arrow-trend-down';
+                trendIcon.className = 'fa-solid fa-arrow-down';
             } else {
                 trendIcon.className = 'fa-solid fa-arrow-right';
             }
         }
 
-        // 9. 3-Hour Predictive Projection
-        if (forecastValEl) {
-            if (trendInfo.forecast3h !== null) {
-                forecastValEl.textContent = `${trendInfo.forecast3h.toFixed(2)} m MSL`;
-            } else {
-                forecastValEl.textContent = '-- m MSL';
-            }
-        }
-        if (forecastStatusLine) {
-            if (trendInfo.forecast3h !== null && !isNaN(dangerNum) && !isNaN(warnNum)) {
-                if (trendInfo.forecast3h >= dangerNum) {
-                    forecastStatusLine.innerHTML = '<span style="color: #ef4444; font-weight: 700;"><i class="fa-solid fa-triangle-exclamation"></i> Critical: Expected to breach Danger Level in 3 hrs!</span>';
-                } else if (trendInfo.forecast3h >= warnNum) {
-                    forecastStatusLine.innerHTML = '<span style="color: #f59e0b; font-weight: 700;"><i class="fa-solid fa-bell"></i> Warning: Expected to enter Flood Warning zone in 3 hrs.</span>';
-                } else {
-                    forecastStatusLine.innerHTML = '<span style="color: #10b981;"><i class="fa-solid fa-shield-halved"></i> Projected condition remains safely below warning thresholds.</span>';
-                }
-            } else {
-                forecastStatusLine.textContent = 'Projected condition based on real-time stream velocity.';
-            }
-        }
-
-        // 10. Apply Dynamic State Classes & Advisories
-        floodCard.className = `flood-bento-grid flood-${floodInfo.status}`;
+        // 9. Apply Simple State Status
+        floodCard.className = `flood-clean-card flood-${floodInfo.status}`;
 
         if (floodInfo.status === 'alert') {
-            if (titleText) titleText.textContent = 'HIGH FLOOD ALERT - LEVEL BREACHED';
-            if (subText) subText.textContent = `Water level (${currentLevel !== null ? currentLevel.toFixed(2) : '--'} m) has breached the Danger Mark (${floodInfo.dangerLevel} m). Immediate emergency riverbank precautions advised.`;
+            if (titleText) titleText.textContent = 'High Flood Alert — Danger Mark Breached';
+            if (subText) subText.textContent = `Water level (${currentLevel !== null ? currentLevel.toFixed(2) : '--'} m) has exceeded the danger limit (${floodInfo.dangerLevel} m). Emergency riverbank alert active.`;
             if (statusTag) {
-                statusTag.className = 'flood-pill alert';
-                statusTag.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> DANGER BREACH';
+                statusTag.className = 'flood-simple-pill alert';
+                statusTag.innerHTML = '🔴 HIGH FLOOD ALERT';
             }
             if (mainIcon) mainIcon.className = 'fa-solid fa-triangle-exclamation';
         } else if (floodInfo.status === 'watch') {
-            if (titleText) titleText.textContent = 'FLOOD WATCH - ELEVATED DISCHARGE';
-            if (subText) subText.textContent = `Water level (${currentLevel !== null ? currentLevel.toFixed(2) : '--'} m) has exceeded the Warning Mark (${floodInfo.warningLevel} m). River discharge is elevated.`;
+            if (titleText) titleText.textContent = 'Flood Watch — Water Level is Elevated';
+            if (subText) subText.textContent = `Water level (${currentLevel !== null ? currentLevel.toFixed(2) : '--'} m) is near warning mark (${floodInfo.warningLevel} m). Upstream flow is rising.`;
             if (statusTag) {
-                statusTag.className = 'flood-pill watch';
-                statusTag.innerHTML = '<i class="fa-solid fa-bell"></i> FLOOD WATCH';
+                statusTag.className = 'flood-simple-pill watch';
+                statusTag.innerHTML = '🟡 FLOOD WATCH ACTIVE';
             }
             if (mainIcon) mainIcon.className = 'fa-solid fa-bell';
         } else {
-            if (titleText) titleText.textContent = 'SAFE HYDROLOGICAL FLOW';
-            if (subText) subText.textContent = 'Water level is safely below the warning mark. Upstream river discharge remains within normal parameters.';
+            if (titleText) titleText.textContent = 'River Water Level is Normal';
+            if (subText) subText.textContent = 'Water is currently at a safe level. There is no flood danger at this station.';
             if (statusTag) {
-                statusTag.className = 'flood-pill normal';
-                statusTag.innerHTML = '<i class="fa-solid fa-circle-check"></i> NORMAL DISCHARGE';
+                statusTag.className = 'flood-simple-pill normal';
+                statusTag.innerHTML = '🟢 SAFE — NO FLOOD RISK';
             }
             if (mainIcon) mainIcon.className = 'fa-solid fa-shield-halved';
         }
     }
+
+    // Attach click listeners for multi-hour forecast pills
+    document.querySelectorAll('.pred-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.pred-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedForecastHours = parseInt(btn.getAttribute('data-hours') || '3', 10);
+            if (selectedStationId && stationMap[selectedStationId]) {
+                const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
+                updateFloodAlertCard(stationMap[selectedStationId], overrides[selectedStationId] || {});
+            }
+        });
+    });
+
 
     // --- Live CPCB Station Surveillance & Camera Photo Updater (100% Instant Zero-Delay Switching) ---
     function updateStationLivePhoto(station) {

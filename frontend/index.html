@@ -376,128 +376,86 @@
             </section>
         </div>
 
-        <!-- Real-Time Flood Alert & Risk Prediction Section -->
-        <section id="flood-alert-section" class="panel-card flood-radar-panel" style="margin-top: 18px;">
+        <!-- Real-Time Flood Alert & Early Prediction Section (Ultra Clean & Simple) -->
+        <section id="flood-alert-section" class="panel-card" style="margin-top: 18px;">
             <div class="panel-header" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div class="radar-ping-icon">
-                        <i class="fa-solid fa-satellite-dish" style="color: var(--cyan-primary); font-size: 1.1rem;"></i>
-                        <span class="radar-ping-wave"></span>
-                    </div>
-                    <div>
-                        <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                            Real-Time Flood Risk &amp; Early Warning Radar
-                        </h3>
-                        <span style="font-size: 0.76rem; color: var(--text-muted);">CWC Hydrological Benchmarking &amp; Predictive Machine Inference</span>
-                    </div>
-                </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="panel-tag" id="flood-badge-tag">Official CWC Benchmarked</span>
+                    <i class="fa-solid fa-water" style="color: var(--cyan-primary); font-size: 1.15rem;"></i>
+                    <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                        Flood Risk &amp; Water Prediction
+                    </h3>
                 </div>
+                <span class="panel-tag" id="flood-badge-tag">Official CWC Data</span>
             </div>
             
-            <div class="panel-body" style="padding: 22px 24px;">
-                <div id="flood-status-card" class="flood-bento-grid flood-normal">
+            <div class="panel-body" style="padding: 24px;">
+                <div id="flood-status-card" class="flood-clean-card flood-normal">
                     
-                    <!-- Box 1: Alert Level Hero -->
-                    <div class="flood-bento-col flood-hero-box">
-                        <div class="flood-hero-top">
-                            <div class="flood-beacon-wrapper">
-                                <div class="flood-beacon-icon" id="flood-icon-box">
-                                    <i class="fa-solid fa-shield-halved" id="flood-main-icon"></i>
-                                </div>
-                                <span class="flood-beacon-ring"></span>
+                    <!-- Left Side: Status & Simple Forecast -->
+                    <div class="flood-clean-left">
+                        <!-- Status Badge & Big Clear Text -->
+                        <div class="flood-status-header">
+                            <div class="flood-status-badge" id="flood-icon-box">
+                                <i class="fa-solid fa-shield-halved" id="flood-main-icon"></i>
                             </div>
-                            <div class="flood-hero-heading">
-                                <div id="flood-status-tag" class="flood-pill normal">
-                                    <i class="fa-solid fa-circle-check"></i> NORMAL DISCHARGE
+                            <div>
+                                <div id="flood-status-tag" class="flood-simple-pill normal">
+                                    🟢 SAFE - NO FLOOD RISK
                                 </div>
-                                <h3 id="flood-title-text" class="flood-state-headline">SAFE HYDROLOGICAL FLOW</h3>
+                                <h3 id="flood-title-text" class="flood-main-title">River Water Level is Normal</h3>
                             </div>
                         </div>
-                        <p id="flood-sub-text" class="flood-advisory-desc">
-                            Water level is safely below the warning mark. Upstream river discharge remains within normal parameters.
+
+                        <p id="flood-sub-text" class="flood-simple-desc">
+                            Water is currently at a safe level. There is no flood danger at this station.
                         </p>
-                        <div class="flood-hero-footer">
-                            <span class="flood-footer-chip"><i class="fa-solid fa-tower-broadcast" style="color: var(--cyan-primary);"></i> Live Telemetry Active</span>
-                            <span class="flood-footer-chip" id="flood-buffer-chip"><i class="fa-solid fa-arrows-up-down"></i> Buffer: <strong id="flood-buffer-val">-- m</strong></span>
-                        </div>
-                    </div>
 
-                    <!-- Box 2: Visual Multi-Tier Gauge & Level -->
-                    <div class="flood-bento-col flood-gauge-box">
-                        <div class="flood-gauge-header">
-                            <span class="flood-box-label"><i class="fa-solid fa-water"></i> Current Water Stage</span>
-                            <div class="flood-current-num-wrap">
-                                <span id="flood-current-level" class="flood-big-level">--</span>
-                                <span class="flood-level-unit">m MSL</span>
-                            </div>
-                        </div>
-
-                        <!-- Interactive Multi-Zone Gauge Meter Bar -->
-                        <div class="flood-meter-wrapper">
-                            <div class="flood-meter-bar-track">
-                                <div class="flood-zone-segment zone-safe" style="width: 70%;"></div>
-                                <div class="flood-zone-segment zone-warning" style="width: 15%;"></div>
-                                <div class="flood-zone-segment zone-danger" style="width: 15%;"></div>
-                                
-                                <!-- Dynamic Fill Level -->
-                                <div id="flood-meter-fill" class="flood-meter-fill-bar" style="width: 45%;"></div>
-                                <!-- Floating Pointer Needle -->
-                                <div id="flood-meter-pointer" class="flood-meter-pointer-pin" style="left: 45%;">
-                                    <div class="meter-pin-dot"></div>
-                                    <div id="flood-meter-tooltip" class="meter-pin-tooltip">-- m</div>
+                        <!-- Clean Multi-Hour Prediction Box -->
+                        <div class="flood-prediction-box">
+                            <div class="pred-top-row">
+                                <span class="pred-label"><i class="fa-solid fa-clock"></i> Forecast Time:</span>
+                                <div class="pred-time-pills">
+                                    <button type="button" class="pred-pill active" data-hours="3">3 Hours</button>
+                                    <button type="button" class="pred-pill" data-hours="6">6 Hours</button>
+                                    <button type="button" class="pred-pill" data-hours="12">12 Hours</button>
+                                    <button type="button" class="pred-pill" data-hours="24">24 Hours</button>
                                 </div>
                             </div>
-                            <div class="flood-meter-labels">
-                                <span>0m (Bed)</span>
-                                <span class="meter-lbl-warn"><i class="fa-solid fa-caret-up"></i> Warn: <strong id="flood-warning-level">-- m</strong></span>
-                                <span class="meter-lbl-danger"><i class="fa-solid fa-caret-up"></i> Danger: <strong id="flood-danger-level">-- m</strong></span>
-                            </div>
-                        </div>
-
-                        <!-- Threshold Benchmarks Grid -->
-                        <div class="flood-benchmark-grid">
-                            <div class="benchmark-pill warn-pill">
-                                <span class="dot-indicator" style="background: #f59e0b;"></span>
-                                <div>
-                                    <span class="bm-title">Warning Mark</span>
-                                    <span id="flood-warn-val-display" class="bm-value">-- m MSL</span>
+                            <div class="pred-result-row">
+                                <div class="pred-result-text">
+                                    Expected in <span id="flood-hours-label">3 Hours</span>: <strong id="flood-forecast-val">-- m</strong>
                                 </div>
-                            </div>
-                            <div class="benchmark-pill danger-pill">
-                                <span class="dot-indicator" style="background: #ef4444;"></span>
-                                <div>
-                                    <span class="bm-title">Danger Mark</span>
-                                    <span id="flood-danger-val-display" class="bm-value">-- m MSL</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Box 3: Predictive Trend & AI Forecast -->
-                    <div class="flood-bento-col flood-forecast-box-col">
-                        <div class="flood-forecast-card">
-                            <span class="flood-box-label"><i class="fa-solid fa-chart-line"></i> Hydrology Velocity Trend</span>
-                            <div class="flood-trend-row">
-                                <div id="flood-trend-chip" class="trend-badge stable">
+                                <div id="flood-trend-chip" class="pred-trend-chip stable">
                                     <i id="flood-trend-icon" class="fa-solid fa-arrow-right"></i>
-                                    <span id="flood-trend-val">Calculating trend...</span>
+                                    <span id="flood-trend-val">Water is Stable</span>
                                 </div>
                             </div>
-                            <p class="flood-trend-subtitle">Linear regression slope computed from last 10 telemetry intervals.</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Simple Water Level Gauge -->
+                    <div class="flood-clean-right">
+                        <div class="gauge-card-header">
+                            <span class="gauge-title">Current Water Level</span>
+                            <div class="gauge-big-num">
+                                <span id="flood-current-level">--</span> <span class="gauge-unit">meters</span>
+                            </div>
                         </div>
 
-                        <div class="flood-forecast-card forecast-highlight">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="flood-box-label" style="color: var(--cyan-primary);"><i class="fa-solid fa-clock-rotate-left"></i> 3-Hour AI Projection</span>
-                                <span class="forecast-conf-tag">High Confidence</span>
+                        <!-- One Clean, Clear Progress Bar -->
+                        <div class="simple-gauge-track">
+                            <div id="flood-meter-fill" class="simple-gauge-fill" style="width: 40%;"></div>
+                        </div>
+
+                        <!-- Safety Margin and Thresholds -->
+                        <div class="gauge-marks-row">
+                            <div class="gauge-mark safe">
+                                <span class="mark-dot" style="background: #10b981;"></span>
+                                <span>Safety Buffer: <strong id="flood-buffer-val">-- m</strong></span>
                             </div>
-                            <div class="flood-projected-level">
-                                <span id="flood-forecast-val" class="forecast-val-num">-- m MSL</span>
-                            </div>
-                            <div id="flood-forecast-status-line" class="forecast-status-note">
-                                Projected condition remains safely below warning thresholds.
+                            <div class="gauge-mark danger">
+                                <span class="mark-dot" style="background: #ef4444;"></span>
+                                <span>Danger Mark: <strong id="flood-danger-level">-- m</strong></span>
                             </div>
                         </div>
                     </div>
