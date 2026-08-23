@@ -1,0 +1,151 @@
+{
+  "_default": {
+    "warningMultiplier": 1.25,
+    "dangerMultiplier": 1.5,
+    "hflMultiplier": 1.75,
+    "fallbackWarningLevel": 10.0,
+    "fallbackDangerLevel": 14.0,
+    "fallbackHFL": 18.0,
+    "isEstimated": true
+  },
+  "BH73": {
+    "cwcStationCode": "CWC-PAT-02",
+    "stationName": "Gandhi Ghat, Patna",
+    "river": "Ganga",
+    "state": "Bihar",
+    "warningLevel": 47.6,
+    "dangerLevel": 48.6,
+    "highestFloodLevel": 50.52,
+    "isEstimated": false
+  },
+  "BH72": {
+    "cwcStationCode": "CWC-PAT-01",
+    "stationName": "Digha Ghat, Patna",
+    "river": "Ganga",
+    "state": "Bihar",
+    "warningLevel": 50.5,
+    "dangerLevel": 52.0,
+    "highestFloodLevel": 53.2,
+    "isEstimated": false
+  },
+  "BH71": {
+    "cwcStationCode": "CWC-PAT-03",
+    "stationName": "Maner, Patna",
+    "river": "Ganga",
+    "state": "Bihar",
+    "warningLevel": 52.0,
+    "dangerLevel": 54.5,
+    "highestFloodLevel": 55.8,
+    "isEstimated": true
+  },
+  "MH301": {
+    "cwcStationCode": "CWC-NSK-01",
+    "stationName": "Nashik City Bridge",
+    "river": "Godavari",
+    "state": "Maharashtra",
+    "warningLevel": 558.1,
+    "dangerLevel": 559.6,
+    "highestFloodLevel": 563.51,
+    "isEstimated": false
+  },
+  "GJ601": {
+    "cwcStationCode": "CWC-ABU-01",
+    "stationName": "Abu Road",
+    "river": "Banas",
+    "state": "Rajasthan",
+    "warningLevel": 258.0,
+    "dangerLevel": 259.0,
+    "highestFloodLevel": 265.4,
+    "isEstimated": false
+  },
+  "UP101": {
+    "cwcStationCode": "CWC-VAR-01",
+    "stationName": "Varanasi Ghat",
+    "river": "Ganga",
+    "state": "Uttar Pradesh",
+    "warningLevel": 70.26,
+    "dangerLevel": 71.26,
+    "highestFloodLevel": 73.9,
+    "isEstimated": false
+  },
+  "UP102": {
+    "cwcStationCode": "CWC-KAN-01",
+    "stationName": "Kanpur Barrage",
+    "river": "Ganga",
+    "state": "Uttar Pradesh",
+    "warningLevel": 113.0,
+    "dangerLevel": 114.0,
+    "highestFloodLevel": 115.5,
+    "isEstimated": false
+  },
+  "UP103": {
+    "cwcStationCode": "CWC-PRG-01",
+    "stationName": "Prayagraj Sangam",
+    "river": "Ganga",
+    "state": "Uttar Pradesh",
+    "warningLevel": 83.73,
+    "dangerLevel": 84.73,
+    "highestFloodLevel": 87.98,
+    "isEstimated": false
+  },
+  "WB201": {
+    "cwcStationCode": "CWC-KOL-01",
+    "stationName": "Garden Reach, Kolkata",
+    "river": "Hooghly",
+    "state": "West Bengal",
+    "warningLevel": 20.25,
+    "dangerLevel": 21.25,
+    "highestFloodLevel": 22.8,
+    "isEstimated": false
+  },
+  "DL01": {
+    "cwcStationCode": "CWC-DEL-01",
+    "stationName": "Old Railway Bridge, Delhi",
+    "river": "Yamuna",
+    "state": "Delhi",
+    "warningLevel": 204.5,
+    "dangerLevel": 205.33,
+    "highestFloodLevel": 208.66,
+    "isEstimated": false
+  },
+  "AP401": {
+    "cwcStationCode": "CWC-RAJ-01",
+    "stationName": "Dowleswaram Barrage, Rajahmundry",
+    "river": "Godavari",
+    "state": "Andhra Pradesh",
+    "warningLevel": 13.75,
+    "dangerLevel": 14.75,
+    "highestFloodLevel": 16.8,
+    "isEstimated": false
+  },
+  "KA501": {
+    "cwcStationCode": "CWC-VIJ-01",
+    "stationName": "Almatti Reservoir",
+    "river": "Krishna",
+    "state": "Karnataka",
+    "warningLevel": 518.0,
+    "dangerLevel": 520.0,
+    "highestFloodLevel": 523.5,
+    "isEstimated": false
+  },
+  "AS701": {
+    "cwcStationCode": "CWC-GUW-01",
+    "stationName": "Pandu Ghat, Guwahati",
+    "river": "Brahmaputra",
+    "state": "Assam",
+    "warningLevel": 49.0,
+    "dangerLevel": 49.68,
+    "highestFloodLevel": 51.46,
+    "isEstimated": false
+  },
+  "UK801": {
+    "cwcStationCode": "CWC-HRD-01",
+    "stationName": "Haridwar Bhimgoda Barrage",
+    "river": "Ganga",
+    "state": "Uttarakhand",
+    "warningLevel": 293.0,
+    "dangerLevel": 294.0,
+    "highestFloodLevel": 296.3,
+    "isEstimated": false
+  }
+}

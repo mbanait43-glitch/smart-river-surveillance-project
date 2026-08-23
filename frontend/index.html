@@ -376,6 +376,71 @@
             </section>
         </div>
 
+        <!-- CENTRAL WATER COMMISSION (CWC) • 7-DAY ADVISORY FLOOD HYDROGRAPH -->
+        <section id="cwc-hydrograph-section" class="panel-card no-print" style="margin-top: 18px;">
+            <div class="panel-header" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="cwc-logo-icon">
+                        <i class="fa-solid fa-chart-area" style="color: #ffffff; font-size: 1.1rem;"></i>
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                                Advisory Flood Forecast Hydrograph (7-Day Outlook)
+                            </h3>
+                            <span class="cwc-official-badge"><i class="fa-solid fa-certificate"></i> CWC AFF Standard</span>
+                        </div>
+                        <span style="font-size: 0.76rem; color: var(--text-muted);">
+                            Pan-India 1D Hydrodynamic Routing • IMD 7-Day Precipitation • Station: <strong id="hydro-station-title" style="color: var(--cyan-primary);">--</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- CWC Benchmarks & Official Portal Link -->
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <div class="cwc-benchmarks-pill">
+                        <span title="Warning Level"><small>WL:</small> <strong id="hydro-wl-val" style="color: #eab308;">-- m</strong></span>
+                        <span class="cwc-bm-sep">•</span>
+                        <span title="Danger Level"><small>DL:</small> <strong id="hydro-dl-val" style="color: #f97316;">-- m</strong></span>
+                        <span class="cwc-bm-sep">•</span>
+                        <span title="Highest Flood Level"><small>HFL:</small> <strong id="hydro-hfl-val" style="color: #ef4444;">-- m</strong></span>
+                    </div>
+                    <a href="https://aff.india-water.gov.in/hydro.php" target="_blank" class="gis-radar-link" title="Open Official CWC AFF Hydrograph Portal" style="background: rgba(2,132,199,0.12); color: var(--cyan-primary); text-decoration: none; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> CWC AFF Portal
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel-body" style="padding: 20px 24px;">
+                <!-- Summary Advisory Bar -->
+                <div class="cwc-summary-strip">
+                    <div class="cwc-advisory-badge-wrap">
+                        <span class="cwc-badge-label">7-DAY FLOOD SITUATION</span>
+                        <div id="hydro-advisory-tier" class="cwc-tier-tag tier-normal">
+                            <i class="fa-solid fa-shield-halved"></i> 🟢 NORMAL FLOW
+                        </div>
+                    </div>
+                    <div class="cwc-outlook-message">
+                        <i class="fa-solid fa-circle-info" style="color: var(--cyan-primary); font-size: 1rem;"></i>
+                        <span id="hydro-summary-text">Calculating hydro-meteorological river stage trajectory and catchment runoff...</span>
+                    </div>
+                    <div class="cwc-peak-chip">
+                        <span class="cwc-peak-label"><i class="fa-solid fa-arrow-trend-up"></i> Forecasted Peak</span>
+                        <strong id="hydro-peak-text">Calculating...</strong>
+                    </div>
+                </div>
+
+                <!-- Dual Hydrograph Canvas Container -->
+                <div class="hydrograph-canvas-container" style="position: relative; width: 100%; height: 340px; margin-bottom: 18px; background: rgba(0,0,0,0.15); border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                    <canvas id="hydrographCanvas"></canvas>
+                </div>
+
+                <!-- 7-Day Quick Strip (Mini Cards) -->
+                <div class="cwc-7day-deck" id="hydro-7day-deck">
+                    <!-- Dynamic 7 Day Cards rendered here -->
+                </div>
+            </div>
+        </section>
 
         <!-- Report & Export Actions Bar (Placed at VERY BOTTOM) -->
         <section id="report-actions-bottom" class="panel-card no-print" style="margin-top: 10px;">
