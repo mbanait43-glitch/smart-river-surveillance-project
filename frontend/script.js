@@ -226,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (success && rawData.length > 0) {
+            await fetchCWCBenchmarks();
             processRawData(rawData);
 
             if (statusBadge) {
@@ -846,6 +847,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update Live CPCB Station Surveillance Camera Photo & Info Panel!
         updateStationLivePhoto(station);
 
+        // Update Official CWC 7-Day Advisory Flood Hydrograph
+        updateCWC7DayHydrograph(station, stationOverrides);
+
 
     }
 
@@ -1259,7 +1263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function updateCWC7DayHydrograph(station, overrides) {
         if (!station) return;
 
-        const stId = station.stationId;
+        const stId = station.id || station.stationNo || '';
         const bm = cwcBenchmarks[stId] || cwcBenchmarks._default || {
             warningMultiplier: 1.25,
             dangerMultiplier: 1.50,
@@ -1271,25 +1275,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Extract current water level
         let rawLevel = 0;
-        if (station.parameters && station.parameters['Water Level']) {
+        if (overrides && overrides['Water Level'] !== undefined) {
+            rawLevel = parseFloat(overrides['Water Level']) || 0;
+        } else if (station.parameters && station.parameters['Water Level']) {
             rawLevel = parseFloat(station.parameters['Water Level'].value) || 0;
         } else if (station.parameters && station.parameters['River Stage']) {
             rawLevel = parseFloat(station.parameters['River Stage'].value) || 0;
         }
-        if (rawLevel <= 0) rawLevel = 5.2;
+        if (rawLevel <= 0) rawLevel = 49.2;
 
         let warningLevel = bm.warningLevel;
         let dangerLevel = bm.dangerLevel;
         let highestFloodLevel = bm.highestFloodLevel;
 
         if (!warningLevel || !dangerLevel) {
-            warningLevel = parseFloat((rawLevel * (bm.warningMultiplier || 1.25)).toFixed(2));
-            dangerLevel = parseFloat((rawLevel * (bm.dangerMultiplier || 1.50)).toFixed(2));
-            highestFloodLevel = parseFloat((rawLevel * (bm.hflMultiplier || 1.75)).toFixed(2));
+            warningLevel = parseFloat((rawLevel * (bm.warningMultiplier || 1.05)).toFixed(2));
+            dangerLevel = parseFloat((rawLevel * (bm.dangerMultiplier || 1.10)).toFixed(2));
+            highestFloodLevel = parseFloat((rawLevel * (bm.hflMultiplier || 1.18)).toFixed(2));
         }
 
-        const lat = station.latitude || 25.61;
-        const lon = station.longitude || 85.14;
+        const lat = parseFloat(station.lat || station.latitude || 25.61);
+        const lon = parseFloat(station.lng || station.longitude || 85.14);
         const weatherData = await getStation7DayHourlyRain(lat, lon);
 
         // Build 7-day hourly timeline (Past 24h observed + Next 7 days forecast = 192 hours)
@@ -1511,6 +1517,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = canvas.getContext('2d');
 
         hydrographChartInstance = new Chart(ctx, {
+            type: 'line',
             data: {
                 labels: labels,
                 datasets: [
