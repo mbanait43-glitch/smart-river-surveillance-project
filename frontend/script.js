@@ -715,30 +715,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 100% Exact Official CPCB Dashboard Source Code Rules (Direct from assets/page-index-7bd1c4cc.js)
         function getParamStatusInfo(paramKey, val) {
-            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: '⚪ Not Monitored' };
+            if (val === undefined || val === null || isNaN(val)) return { color: 'white', label: 'âšª Not Monitored' };
             const num = parseFloat(val);
 
             // 1. pH Level: CPCB Interval [6.5, 8.5) -> Green if 6.5 <= num < 8.5, else Red
             if (paramKey === 'pH') {
-                if (num >= 6.5 && num < 8.5) return { color: 'green', label: '🟢 Safe pH' };
-                return { color: 'red', label: '🔴 pH Violation' };
+                if (num >= 6.5 && num < 8.5) return { color: 'green', label: 'ðŸŸ¢ Safe pH' };
+                return { color: 'red', label: 'ðŸ”´ pH Violation' };
             }
 
             // 2. BOD: CPCB Max < 3.0 -> Green if num < 3.0, else Red
             if (paramKey === 'Biochemical Oxygen Demand' || paramKey === 'BOD') {
-                if (num < 3.0) return { color: 'green', label: '🟢 Safe BOD' };
-                return { color: 'red', label: '🔴 High BOD Hazard' };
+                if (num < 3.0) return { color: 'green', label: 'ðŸŸ¢ Safe BOD' };
+                return { color: 'red', label: 'ðŸ”´ High BOD Hazard' };
             }
 
             // 3. Dissolved Oxygen (DO): CPCB Min >= 5.0 -> Green if num >= 5.0, else Red
             if (paramKey === 'Oxygen, dissolved' || paramKey === 'Dissolved Oxygen' || paramKey === 'DO') {
-                if (num >= 5.0) return { color: 'green', label: '🟢 Healthy DO' };
-                return { color: 'red', label: '🔴 Critical DO Risk' };
+                if (num >= 5.0) return { color: 'green', label: 'ðŸŸ¢ Healthy DO' };
+                return { color: 'red', label: 'ðŸ”´ Critical DO Risk' };
             }
 
             // ALL OTHER 9 PARAMETERS (WT, COD, Turbidity, EC, Nitrate, Chloride, TOC, Depth, Stage)
             // Official CPCB Source Code displays them as Neutral / White without judged color!
-            return { color: 'white', label: '⚪ CPCB Monitored' };
+            return { color: 'white', label: 'âšª CPCB Monitored' };
         }
 
         // Dynamic CPCB Status Color Renderer for Metric Cards (Green, Red, White)
@@ -801,13 +801,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (reportStatusLabel) {
             reportStatusLabel.innerHTML = hasOverride 
-                ? `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">✓ Admin Verified <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`
-                : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">● Official Data Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
+                ? `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">âœ“ Admin Verified <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`
+                : `<a href="https://rtwqmsdb1.cpcb.gov.in" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 700;">â— Official Data Source <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i></a>`;
         }
 
         updateCardById('card-level', 'Water Level', 'm above MSL');
         updateCardById('card-ph', 'pH', 'pH');
-        updateCardById('card-temp', 'Water Temperature', '°C');
+        updateCardById('card-temp', 'Water Temperature', 'Â°C');
         updateCardById('card-do', 'Dissolved Oxygen', 'mg/l');
         updateCardById('card-bod', 'Biochemical Oxygen Demand', 'mg/l');
         updateCardById('card-cod', 'Chemical Oxygen Demand', 'mg/l');
@@ -821,7 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update Live CPCB Station Surveillance Camera Photo & Info Panel!
         updateStationLivePhoto(station);
 
-        // 🔮 Update 72-Hour Flood Prediction & Alert System
+        // ðŸ”® Update 72-Hour Flood Prediction & Alert System
         updateFloodPredictionSystem(station, stationOverrides);
     }
 
@@ -1150,7 +1150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             csvContent += `SELECTED STATION: "${station.name}"\n`;
             csvContent += `STATION CODE: "${station.id}"\n`;
             csvContent += `SOURCE NAME / LINK: CPCB RTWQMS (https://rtwqmsdb1.cpcb.gov.in)\n`;
-            csvContent += `DATA STATUS LABEL: ${Object.keys(stationOverrides).length > 0 ? "✓ Admin Verified" : "● CPCB RTWQMS Source"}\n`;
+            csvContent += `DATA STATUS LABEL: ${Object.keys(stationOverrides).length > 0 ? "âœ“ Admin Verified" : "â— CPCB RTWQMS Source"}\n`;
             csvContent += `ORIGINAL OBSERVATION TIME: "${station.lastTimestamp || 'N/A'}"\n`;
             csvContent += `LAST CHECKED BY WEBSITE: ${new Date().toLocaleString()}\n`;
             csvContent += `ACTIVE ALERTS: None\n`;
@@ -1159,7 +1159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             csvContent += "Parameter Name,Value,Unit,Status\n";
             Object.entries(station.parameters).forEach(([pName, pObj]) => {
                 const val = stationOverrides[pName] !== undefined ? stationOverrides[pName] : pObj.value;
-                const status = stationOverrides[pName] !== undefined ? "✓ Admin Verified" : "● CPCB RTWQMS Source";
+                const status = stationOverrides[pName] !== undefined ? "âœ“ Admin Verified" : "â— CPCB RTWQMS Source";
                 csvContent += `"${pName}",${val},"${pObj.unit}","${status}"\n`;
             });
 
@@ -1174,13 +1174,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ========================================================================
-    // 🔮 72-HOUR FLOOD PREDICTION & ALERT SYSTEM (FPAS)
+    // ðŸ”® 72-HOUR FLOOD PREDICTION & ALERT SYSTEM (FPAS)
     // Sources: CPCB Live Level + Open-Meteo Rainfall + Rate-of-Rise Algorithm
     // ========================================================================
 
     let fpasChartInstance = null;
 
-    // ① Rate-of-Rise tracker (localStorage history)
+    // â‘  Rate-of-Rise tracker (localStorage history)
     function fpasGetRateOfRise(stationId, currentLevel) {
         const key = `fpas_hist_${stationId}`;
         const now = Date.now();
@@ -1200,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseFloat(((newest.val - oldest.val) / hrs).toFixed(4));
     }
 
-    // ② Flood risk probability calculator
+    // â‘¡ Flood risk probability calculator
     function fpasRiskPct(levelVal, wl, dl, rain24, ror, turbVal) {
         let risk = 5;
         // Water level contribution (max 40%)
@@ -1223,18 +1223,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.min(97, Math.max(3, risk));
     }
 
-    // ③ CWC Advisory generator
+    // â‘¢ CWC Advisory generator
     function fpasAdvisory(station, levelVal, wl, dl, risk, ttdHrs, ror, rain48, predictedPeak) {
         if (risk >= 65) {
-            return `🚨 CRITICAL FLOOD ALERT — ${station.name} (${station.state}): Current water level ${levelVal}m is critically close to/above CWC Danger Level (${dl}m). Rate of rise: +${ror.toFixed(3)} m/hr. Forecast peak: ~${predictedPeak.toFixed(2)}m in 72h.${ttdHrs > 0 && ttdHrs < 48 ? ` Danger breach in ~${ttdHrs.toFixed(1)} hrs.` : ''} IMMEDIATE ACTIONS: Activate NDRF/SDRF, evacuate low-lying riverside areas, close vulnerable bridges, alert fishermen & boat operators, open flood relief camps. Source: CWC Flood Bulletin Protocol.`;
+            return `ðŸš¨ CRITICAL FLOOD ALERT â€” ${station.name} (${station.state}): Current water level ${levelVal}m is critically close to/above CWC Danger Level (${dl}m). Rate of rise: +${ror.toFixed(3)} m/hr. Forecast peak: ~${predictedPeak.toFixed(2)}m in 72h.${ttdHrs > 0 && ttdHrs < 48 ? ` Danger breach in ~${ttdHrs.toFixed(1)} hrs.` : ''} IMMEDIATE ACTIONS: Activate NDRF/SDRF, evacuate low-lying riverside areas, close vulnerable bridges, alert fishermen & boat operators, open flood relief camps. Source: CWC Flood Bulletin Protocol.`;
         } else if (risk >= 35) {
-            return `⚠️ FLOOD WATCH ADVISORY — ${station.name} (${station.river || 'River'}, ${station.state}): Water level ${levelVal}m and rising${ror > 0.05 ? ` at +${ror.toFixed(3)} m/hr` : ''}. Rainfall forecast: ${rain48.toFixed(1)}mm/48h contributing to inflow surge. Warning Level (${wl}m) ${levelVal >= wl ? 'already reached' : 'may be reached within 48h'}. Recommended: Alert district administration, warn riverside communities, monitor livestock near banks, avoid river crossings. CWC classification: WATCH / ADVISORY.`;
+            return `âš ï¸ FLOOD WATCH ADVISORY â€” ${station.name} (${station.river || 'River'}, ${station.state}): Water level ${levelVal}m and rising${ror > 0.05 ? ` at +${ror.toFixed(3)} m/hr` : ''}. Rainfall forecast: ${rain48.toFixed(1)}mm/48h contributing to inflow surge. Warning Level (${wl}m) ${levelVal >= wl ? 'already reached' : 'may be reached within 48h'}. Recommended: Alert district administration, warn riverside communities, monitor livestock near banks, avoid river crossings. CWC classification: WATCH / ADVISORY.`;
         } else {
-            return `✅ NO FLOOD RISK — ${station.name} (${station.river || 'River Basin'}, ${station.state}): Water level ${levelVal}m is well within safe CWC thresholds (Warning: ${wl}m, Danger: ${dl}m). Flood risk probability: ${risk}%. No precautionary actions required. Routine CPCB monitoring active. Next assessment: auto-refresh in 60 seconds.`;
+            return `âœ… NO FLOOD RISK â€” ${station.name} (${station.river || 'River Basin'}, ${station.state}): Water level ${levelVal}m is well within safe CWC thresholds (Warning: ${wl}m, Danger: ${dl}m). Flood risk probability: ${risk}%. No precautionary actions required. Routine CPCB monitoring active. Next assessment: auto-refresh in 60 seconds.`;
         }
     }
 
-    // ④ Main FPAS Updater
+    // â‘£ Main FPAS Updater
     async function updateFloodPredictionSystem(station, stOverrides) {
         if (!station) return;
 
@@ -1273,16 +1273,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (levelVal === null) {
             if (banner) banner.className = 'fpas-master-banner fpas-state-idle';
-            if (bannerTitle) bannerTitle.textContent = '⚪ WATER LEVEL DATA UNAVAILABLE';
-            if (bannerSub) bannerSub.textContent = `${station.name} — No water level reported by CPCB.`;
+            if (bannerTitle) bannerTitle.textContent = 'âšª WATER LEVEL DATA UNAVAILABLE';
+            if (bannerSub) bannerSub.textContent = `${station.name} â€” No water level reported by CPCB.`;
             if (riskPctEl) riskPctEl.textContent = '--';
             if (advisory) advisory.textContent = 'Water level data is not available for this station. Please select a station with active water level sensors.';
             return;
         }
 
-        // CWC Thresholds (WL = +20%, DL = +35%)
-        const wl = parseFloat((levelVal * 1.20).toFixed(2));
-        const dl = parseFloat((levelVal * 1.35).toFixed(2));
+        // CWC Thresholds — computed from MINIMUM observed baseline (not current level)
+        // This ensures risk rises meaningfully when level exceeds normal range
+        const baseline = fpasGetBaseline(station.id, levelVal);
+        const wl = parseFloat((baseline * 1.20).toFixed(2));
+        const dl = parseFloat((baseline * 1.35).toFixed(2));
 
         // Update threshold pills
         const elCL = document.getElementById('fpas-current-level');
@@ -1306,10 +1308,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const ttdEl = document.getElementById('fpas-ttd');
         if (ttdEl) {
             if (ttdHrs === null || ttdHrs < 0) {
-                ttdEl.textContent = levelVal >= dl ? '⚠️ AT DANGER' : 'Stable';
+                ttdEl.textContent = levelVal >= dl ? 'âš ï¸ AT DANGER' : 'Stable';
                 ttdEl.style.color = levelVal >= dl ? '#ef4444' : '#10b981';
             } else if (ttdHrs < 6) {
-                ttdEl.textContent = `${ttdHrs.toFixed(1)} hrs ⚠️`;
+                ttdEl.textContent = `${ttdHrs.toFixed(1)} hrs âš ï¸`;
                 ttdEl.style.color = '#ef4444';
             } else if (ttdHrs < 24) {
                 ttdEl.textContent = `${ttdHrs.toFixed(1)} hrs`;
@@ -1362,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let h = 0; h <= 72; h += 6) {
             labels.push(h === 0 ? 'Now' : `+${h}h`);
-            // Prediction = current level + (rate_of_rise × hours) + (rainfall_contribution × h/72)
+            // Prediction = current level + (rate_of_rise Ã— hours) + (rainfall_contribution Ã— h/72)
             const rainContrib = rainEffect * (h / 72);
             const predicted = parseFloat((levelVal + (ror * h) + rainContrib).toFixed(3));
             predictedLevels.push(predicted);
@@ -1381,9 +1383,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const prob72 = fpasRiskPct(pred72, wl, dl, rain72, ror, turbVal || 0);
 
         function getStatusLabel(prob) {
-            if (prob >= 65) return '🔴 HIGH FLOOD RISK';
-            if (prob >= 35) return '🟡 WATCH / ADVISORY';
-            return '🟢 LOW RISK';
+            if (prob >= 65) return 'ðŸ”´ HIGH FLOOD RISK';
+            if (prob >= 35) return 'ðŸŸ¡ WATCH / ADVISORY';
+            return 'ðŸŸ¢ LOW RISK';
         }
 
         function applyPredCard(cardId, levelId, fillId, probId, statusId, level, prob) {
@@ -1412,18 +1414,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Master Banner
         let bannerState = 'fpas-state-safe';
         let bIcon = 'fa-shield-halved';
-        let bTitle = `🟢 NO FLOOD RISK — ${station.name.substring(0, 25).toUpperCase()}`;
+        let bTitle = `ðŸŸ¢ NO FLOOD RISK â€” ${station.name.substring(0, 25).toUpperCase()}`;
         let bSub = `Water level ${levelVal}m is safe. 72h peak: ${peakLevel.toFixed(2)}m. No flood threat detected.`;
 
         if (overallRisk >= 65) {
             bannerState = 'fpas-state-danger';
             bIcon = 'fa-skull-crossbones';
-            bTitle = `🔴 HIGH FLOOD ALERT — ${station.name.substring(0, 20).toUpperCase()}`;
+            bTitle = `ðŸ”´ HIGH FLOOD ALERT â€” ${station.name.substring(0, 20).toUpperCase()}`;
             bSub = `CRITICAL: ${overallRisk}% flood probability. Predicted peak: ${peakLevel.toFixed(2)}m.${ttdHrs > 0 && ttdHrs < 72 ? ` Danger Level in ~${ttdHrs.toFixed(1)} hrs.` : ''} Emergency protocol activated.`;
         } else if (overallRisk >= 35) {
             bannerState = 'fpas-state-watch';
             bIcon = 'fa-triangle-exclamation';
-            bTitle = `🟡 FLOOD WATCH — ${station.name.substring(0, 22).toUpperCase()}`;
+            bTitle = `ðŸŸ¡ FLOOD WATCH â€” ${station.name.substring(0, 22).toUpperCase()}`;
             bSub = `${overallRisk}% flood probability in 72h. Rising trend detected. Monitor continuously.`;
         }
 
@@ -1435,7 +1437,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Advisory
         if (advisory) advisory.textContent = fpasAdvisory(station, levelVal, wl, dl, overallRisk, ttdHrs, ror, rain48, peakLevel);
 
-        // Chart.js — 72h Water Level Trajectory
+        // Chart.js â€” 72h Water Level Trajectory
         const canvas = document.getElementById('fpasChart');
         if (canvas) {
             if (fpasChartInstance) { fpasChartInstance.destroy(); fpasChartInstance = null; }
@@ -1505,302 +1507,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-    // Upstream → Downstream River Cascade Network (CWC Standard Travel Times)
-    const RIVER_CASCADE = {
-        'Ganga River': 'Upstream surge in Ganga basin → Downstream stations (Kanpur, Patna, Buxar) may be affected in 18–36 hours.',
-        'Yamuna River': 'Upstream surge at Delhi/Agra → Downstream stations may be affected in 12–24 hours.',
-        'Kosi River': 'Kosi basin surge detected → Bihar plains at elevated risk in 6–12 hours.',
-        'Brahmaputra River': 'Brahmaputra level rise → Assam downstream zones alert in 8–16 hours.',
-        'Godavari River': 'Godavari upstream surge → Coastal Andhra risk in 12–18 hours.',
-        'Mahanadi River': 'Mahanadi catchment surge → Odisha delta region alert in 10–20 hours.',
-        'Damodar River': 'Damodar upstream → DVC zone and West Bengal plains alert in 6–12 hours.',
-    };
-
-    // ① CWC Threshold Calculator (Scientific Estimate: +20% WL, +35% DL)
-    function getCWCThresholds(levelVal) {
-        const base = parseFloat(levelVal);
-        if (isNaN(base) || base <= 0) return { wl: null, dl: null };
-        // CWC Standard: Warning Level = base + 20%, Danger Level = base + 35%
-        const wl = parseFloat((base * 1.20).toFixed(2));
-        const dl = parseFloat((base * 1.35).toFixed(2));
-        return { wl, dl };
+    // â‘¤ Baseline Level Store â€” records MINIMUM observed level per station as "normal"
+    // This ensures WL/DL are computed from real low-water baseline, not current (rising) level
+    function fpasGetBaseline(stationId, currentLevel) {
+        const key = `fpas_baseline_${stationId}`;
+        const stored = parseFloat(localStorage.getItem(key) || '0');
+        if (stored <= 0 || currentLevel < stored) {
+            // Store the lowest seen level as normal baseline
+            localStorage.setItem(key, currentLevel.toFixed(3));
+            return currentLevel;
+        }
+        return stored;
     }
 
-    // ② Rate of Rise Engine (Δh/Δt) — tracks history in localStorage
-    function calculateRateOfRise(stationId, currentLevel) {
-        const key = `flood_history_${stationId}`;
-        const now = Date.now();
-        const levelNum = parseFloat(currentLevel);
-        if (isNaN(levelNum)) return { rate: null, trend: 'unknown' };
-
-        let history = [];
-        try { history = JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { history = []; }
-
-        // Save current reading
-        history.push({ ts: now, val: levelNum });
-
-        // Keep only last 10 readings (max ~10 minutes of history)
-        if (history.length > 10) history = history.slice(-10);
-        localStorage.setItem(key, JSON.stringify(history));
-
-        if (history.length < 2) return { rate: 0, trend: 'insufficient_history' };
-
-        // Calculate rate over available window
-        const oldest = history[0];
-        const newest = history[history.length - 1];
-        const timeDiffHours = (newest.ts - oldest.ts) / (1000 * 60 * 60);
-        if (timeDiffHours < 0.0001) return { rate: 0, trend: 'insufficient_history' };
-
-        const rate = (newest.val - oldest.val) / timeDiffHours; // m/hr
-        let trend = 'stable';
-        if (rate > 0.30) trend = 'rapid_rise';
-        else if (rate > 0.10) trend = 'rising';
-        else if (rate < -0.10) trend = 'falling';
-
-        return { rate: parseFloat(rate.toFixed(3)), trend };
-    }
-
-    // ③ Main Flood Warning Section Updater
-    function updateFloodWarningSection(station, stOverrides) {
-        if (!station) return;
-
-        // --- Get raw values ---
-        let levelVal = null;
-        if (stOverrides && stOverrides['Water Level'] !== undefined) {
-            levelVal = parseFloat(stOverrides['Water Level']);
-        } else if (station.parameters['Water Level'] && station.parameters['Water Level'].value != null) {
-            levelVal = parseFloat(station.parameters['Water Level'].value);
-        } else if (station.parameters['River Stage'] && station.parameters['River Stage'].value != null) {
-            levelVal = parseFloat(station.parameters['River Stage'].value);
-        }
-
-        let turbVal = null;
-        if (stOverrides && stOverrides['Water Turbidity'] !== undefined) {
-            turbVal = parseFloat(stOverrides['Water Turbidity']);
-        } else if (station.parameters['Water Turbidity'] && station.parameters['Water Turbidity'].value != null) {
-            turbVal = parseFloat(station.parameters['Water Turbidity'].value);
-        }
-
-        // --- DOM Elements ---
-        const bannerEl = document.getElementById('flood-banner');
-        const bannerTitleEl = document.getElementById('flood-banner-title');
-        const bannerSubEl = document.getElementById('flood-banner-subtitle');
-        const bannerBadgeEl = document.getElementById('flood-alert-badge');
-        const stationLabelEl = document.getElementById('flood-station-label');
-        const currentLevelEl = document.getElementById('flood-current-level');
-        const gaugeFillEl = document.getElementById('flood-gauge-fill');
-        const wlMarkerEl = document.getElementById('flood-wl-marker');
-        const dlMarkerEl = document.getElementById('flood-dl-marker');
-        const wlValueEl = document.getElementById('flood-wl-value');
-        const dlValueEl = document.getElementById('flood-dl-value');
-        const rorValueEl = document.getElementById('flood-ror-value');
-        const rorStatusEl = document.getElementById('flood-ror-status');
-        const ttdValueEl = document.getElementById('flood-ttd-value');
-        const ttdSubEl = document.getElementById('flood-ttd-sub');
-        const f6hEl = document.getElementById('flood-f6h');
-        const f12hEl = document.getElementById('flood-f12h');
-        const turbValueEl = document.getElementById('flood-turb-value');
-        const turbStatusEl = document.getElementById('flood-turb-status');
-        const cascadeRowEl = document.getElementById('flood-cascade-row');
-        const cascadeTextEl = document.getElementById('flood-cascade-text');
-        const advisoryTextEl = document.getElementById('flood-advisory-text');
-        const rorBoxEl = document.getElementById('flood-box-ror');
-        const ttdBoxEl = document.getElementById('flood-box-ttd');
-        const turbBoxEl = document.getElementById('flood-box-turb');
-
-        if (!bannerEl) return;
-
-        // --- Station label ---
-        if (stationLabelEl) stationLabelEl.textContent = (station.name || 'Unknown').substring(0, 35);
-
-        // --- Water Level Display ---
-        if (currentLevelEl) currentLevelEl.textContent = levelVal !== null ? `${levelVal}` : '--';
-
-        if (levelVal === null) {
-            // No level data
-            if (bannerEl) { bannerEl.className = 'flood-banner flood-safe'; }
-            if (bannerTitleEl) bannerTitleEl.textContent = '⚪ WATER LEVEL DATA NOT AVAILABLE';
-            if (bannerSubEl) bannerSubEl.textContent = `${station.name} — Water level sensor data not reported by CPCB for this station.`;
-            if (bannerBadgeEl) bannerBadgeEl.textContent = 'NO LEVEL DATA';
-            if (advisoryTextEl) advisoryTextEl.textContent = 'Water level data is not available for this monitoring station. Please select a station with active water level sensors.';
-            return;
-        }
-
-        // --- CWC Thresholds ---
-        const { wl, dl } = getCWCThresholds(levelVal);
-        if (wlValueEl) wlValueEl.textContent = `${wl} m`;
-        if (dlValueEl) dlValueEl.textContent = `${dl} m`;
-
-        // Gauge fill % (current level relative to danger level)
-        const gaugePct = Math.min(96, Math.max(2, (levelVal / dl) * 100));
-        if (gaugeFillEl) gaugeFillEl.style.width = `${gaugePct}%`;
-
-        // Dynamic marker positions based on actual WL/DL ratio
-        // WL marker: where warning level sits relative to danger level
-        const wlMarkerPct = Math.min(92, Math.max(50, (wl / dl) * 100));
-        const dlMarkerPct = 96; // always near end of gauge
-        if (wlMarkerEl) wlMarkerEl.style.left = `${wlMarkerPct}%`;
-        if (dlMarkerEl) dlMarkerEl.style.left = `${dlMarkerPct}%`;
-
-        // --- Rate of Rise ---
-        const rorData = calculateRateOfRise(station.id, levelVal);
-        const rate = rorData.rate;
-        const trend = rorData.trend;
-
-        if (rorValueEl) {
-            if (trend === 'insufficient_history') {
-                rorValueEl.textContent = 'Calculating...';
-            } else {
-                const sign = rate > 0 ? '+' : '';
-                rorValueEl.textContent = `${sign}${rate.toFixed(3)} m/hr`;
-                rorValueEl.style.color = rate > 0.30 ? '#ef4444' : rate > 0.10 ? '#f59e0b' : '#10b981';
-            }
-        }
-
-        if (rorStatusEl) {
-            const trendLabels = {
-                'rapid_rise': '🔴 Rapid Rise — Emergency Protocol',
-                'rising': '🟡 Rising — Monitor Closely',
-                'stable': '🟢 Stable — Normal Flow',
-                'falling': '🟢 Falling — Receding',
-                'insufficient_history': '⏳ Collecting readings...',
-                'unknown': '⚪ Insufficient data'
-            };
-            rorStatusEl.textContent = trendLabels[trend] || trend;
-        }
-
-        if (rorBoxEl) {
-            rorBoxEl.classList.toggle('alert-active', rate !== null && rate > 0.30);
-        }
-
-        // --- 6h & 12h Forecast ---
-        const f6h = rate !== null ? parseFloat((levelVal + rate * 6).toFixed(2)) : null;
-        const f12h = rate !== null ? parseFloat((levelVal + rate * 12).toFixed(2)) : null;
-        if (f6hEl) f6hEl.textContent = f6h !== null ? `6h: ${f6h} m` : '6h: --';
-        if (f12hEl) f12hEl.textContent = f12h !== null ? `${f12h} m` : '--';
-
-        // --- Time to Danger (TTD) ---
-        let ttdHours = null;
-        if (rate !== null && rate > 0.005 && dl !== null) {
-            ttdHours = (dl - levelVal) / rate;
-        }
-
-        if (ttdValueEl) {
-            if (ttdHours === null || ttdHours < 0) {
-                ttdValueEl.textContent = levelVal >= dl ? '⚠️ AT DANGER' : 'N/A';
-                ttdValueEl.style.color = levelVal >= dl ? '#ef4444' : 'var(--text-primary)';
-            } else if (ttdHours < 3) {
-                ttdValueEl.textContent = `${ttdHours.toFixed(1)} hrs ⚠️`;
-                ttdValueEl.style.color = '#ef4444';
-            } else if (ttdHours < 12) {
-                ttdValueEl.textContent = `${ttdHours.toFixed(1)} hrs`;
-                ttdValueEl.style.color = '#f59e0b';
-            } else {
-                ttdValueEl.textContent = `${ttdHours.toFixed(0)}+ hrs`;
-                ttdValueEl.style.color = '#10b981';
-            }
-        }
-
-        if (ttdSubEl) {
-            ttdSubEl.textContent = ttdHours !== null && ttdHours > 0
-                ? `Danger Level (${dl} m) breach estimate`
-                : rate !== null && rate <= 0.005
-                    ? 'Level stable or falling — no breach risk'
-                    : 'Estimating...';
-        }
-
-        if (ttdBoxEl) ttdBoxEl.classList.toggle('alert-active', ttdHours !== null && ttdHours < 6 && ttdHours > 0);
-
-        // --- Turbidity Flash-Flood Trigger ---
-        if (turbValueEl) turbValueEl.textContent = turbVal !== null ? `${turbVal} NTU` : '-- NTU';
-        if (turbStatusEl) {
-            if (turbVal === null) {
-                turbStatusEl.textContent = 'Turbidity not reported';
-                turbStatusEl.style.color = '';
-            } else if (turbVal > 500) {
-                turbStatusEl.textContent = '🔴 FLASH FLOOD TRIGGER — Massive sediment surge!';
-                turbStatusEl.style.color = '#ef4444';
-                if (turbBoxEl) turbBoxEl.classList.add('alert-active');
-            } else if (turbVal > 100) {
-                turbStatusEl.textContent = '🟡 High Turbidity — Upstream inflow surge detected';
-                turbStatusEl.style.color = '#f59e0b';
-                if (turbBoxEl) turbBoxEl.classList.remove('alert-active');
-            } else {
-                turbStatusEl.textContent = '🟢 Normal sediment load';
-                turbStatusEl.style.color = '#10b981';
-                if (turbBoxEl) turbBoxEl.classList.remove('alert-active');
-            }
-        }
-
-        // --- Determine Overall Alert Level ---
-        const isAtDanger = levelVal >= dl;
-        const isNearDanger = levelVal >= wl || (ttdHours !== null && ttdHours < 6 && ttdHours > 0);
-        const isRapidRise = rate !== null && rate > 0.30;
-        const isRising = rate !== null && rate > 0.10;
-        const isTurbAlert = turbVal !== null && turbVal > 100;
-
-        let alertLevel = 'safe';
-        if (isAtDanger || isRapidRise || (ttdHours !== null && ttdHours < 3 && ttdHours > 0)) {
-            alertLevel = 'danger';
-        } else if (isNearDanger || isRising || isTurbAlert) {
-            alertLevel = 'watch';
-        }
-
-        // --- Update Banner ---
-        if (bannerEl) bannerEl.className = `flood-banner flood-${alertLevel}`;
-
-        const bannerConfig = {
-            safe: {
-                title: '🟢 NO FLOOD RISK — SYSTEM SAFE',
-                badge: 'LOW RISK',
-                icon: 'fa-shield-halved',
-                subtitle: `${station.name} water level (${levelVal}m) is within safe CWC threshold. No immediate flood threat.`
-            },
-            watch: {
-                title: '🟡 FLOOD WATCH — ADVISORY ISSUED',
-                badge: 'WATCH / ADVISORY',
-                icon: 'fa-triangle-exclamation',
-                subtitle: `${station.name} water level rising${rate !== null ? ` at +${rate.toFixed(3)} m/hr` : ''}. Monitor continuously. Upstream inflow detected.`
-            },
-            danger: {
-                title: '🔴 HIGH FLOOD ALERT — EMERGENCY PROTOCOL',
-                badge: 'DANGER ALERT',
-                icon: 'fa-skull-crossbones',
-                subtitle: `CRITICAL: ${station.name} approaching/exceeding CWC Danger Level (${dl}m).${ttdHours > 0 && ttdHours < 24 ? ` Breach estimated in ${ttdHours.toFixed(1)} hours.` : ''} Immediate action required.`
-            }
-        };
-
-        const cfg = bannerConfig[alertLevel];
-        if (bannerTitleEl) bannerTitleEl.textContent = cfg.title;
-        if (bannerSubEl) bannerSubEl.textContent = cfg.subtitle;
-        if (bannerBadgeEl) bannerBadgeEl.textContent = cfg.badge;
-
-        const bannerIconEl = document.getElementById('flood-banner-icon');
-        if (bannerIconEl) bannerIconEl.innerHTML = `<i class="fa-solid ${cfg.icon}"></i>`;
-
-        // --- Cascade Warning ---
-        const cascadeMsg = RIVER_CASCADE[station.river];
-        if (cascadeRowEl) {
-            if (alertLevel !== 'safe' && cascadeMsg) {
-                cascadeRowEl.style.display = 'flex';
-                if (cascadeTextEl) cascadeTextEl.textContent = cascadeMsg;
-            } else {
-                cascadeRowEl.style.display = 'none';
-            }
-        }
-
-        // --- Emergency Advisory Text ---
-        const advisoryMessages = {
-            safe: `All parameters at ${station.name} (${station.river || 'River Basin'}, ${station.state}) are within normal CWC thresholds. Water level: ${levelVal}m. Warning Level: ${wl}m. Danger Level: ${dl}m. Continue standard monitoring. No public advisory required at this time.`,
-            watch: `FLOOD WATCH ISSUED for ${station.name} (${station.state}). Water level: ${levelVal}m${rate ? `, rising at ${rate.toFixed(3)} m/hr` : ''}. Warning Level (${wl}m) ${levelVal >= wl ? 'REACHED' : 'approaching'}. Recommended actions: Alert local administration, warn riverside communities, check boats and livestock, avoid unnecessary river crossings.`,
-            danger: `🚨 EMERGENCY ALERT — ${station.name} (${station.state}): Water level ${levelVal}m is near/above CWC Danger Level (${dl}m).${ttdHours > 0 && ttdHours < 24 ? ` Danger Level breach projected in ~${ttdHours.toFixed(1)} hours.` : ''} IMMEDIATE ACTIONS: Activate flood emergency response, issue evacuation orders for low-lying riverbank areas, alert NDRF/SDRF teams, place fishing community on high alert, close vulnerable bridges.`
-        };
-
-        if (advisoryTextEl) advisoryTextEl.textContent = advisoryMessages[alertLevel];
-    }
-
-    // --- Home Reset Button Listener (Top Logo Reset Only) ---
+    // --- Home Reset Button Listener ---
     const btnHomeReset = document.getElementById('btn-home-reset');
 
     function resetHomeDefault() {
