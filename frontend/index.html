@@ -376,66 +376,6 @@
             </section>
         </div>
 
-        <!-- CENTRAL WATER COMMISSION (CWC) • 7-DAY ADVISORY FLOOD FORECAST -->
-        <section id="cwc-forecast-section" class="panel-card no-print" style="margin-top: 18px;">
-            <div class="panel-header" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div class="cwc-logo-icon">
-                        <i class="fa-solid fa-water-ladder" style="color: #ffffff; font-size: 1rem;"></i>
-                    </div>
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
-                                Central Water Commission (CWC) • 7-Day Advisory Flood Forecast
-                            </h3>
-                            <span class="cwc-official-badge"><i class="fa-solid fa-certificate"></i> CWC Standard</span>
-                        </div>
-                        <span style="font-size: 0.76rem; color: var(--text-muted);">
-                            Hydro-Meteorological Basin Routing • 7-Day Rainfall Forecast (IMD/NWP) • Station Code: <strong id="cwc-station-code" style="color: var(--cyan-primary);">--</strong>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- CWC Benchmarks Pill & Official Portal Link -->
-                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <div class="cwc-benchmarks-pill">
-                        <span><small>WL (Warning):</small> <strong id="cwc-benchmark-wl" style="color: #eab308;">-- m</strong></span>
-                        <span class="cwc-bm-sep">•</span>
-                        <span><small>DL (Danger):</small> <strong id="cwc-benchmark-dl" style="color: #ef4444;">-- m</strong></span>
-                        <span class="cwc-bm-sep">•</span>
-                        <span><small>HFL (Record):</small> <strong id="cwc-benchmark-hfl" style="color: #a855f7;">-- m</strong></span>
-                    </div>
-                    <a href="https://aff.india-water.gov.in/home.php" target="_blank" class="gis-radar-link" title="Open CWC Official Advisory Flood Forecast Portal (AFF)" style="background: rgba(2,132,199,0.12); color: var(--cyan-primary); text-decoration: none; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> CWC AFF Portal
-                    </a>
-                </div>
-            </div>
-
-            <div class="panel-body" style="padding: 20px 24px;">
-                <!-- CWC 7-Day Outlook Summary Bar -->
-                <div class="cwc-summary-strip">
-                    <div class="cwc-advisory-badge-wrap">
-                        <span class="cwc-badge-label">CWC 7-DAY ADVISORY</span>
-                        <div id="cwc-current-tier" class="cwc-tier-tag tier-normal">
-                            <i class="fa-solid fa-shield-halved"></i> 🟢 NORMAL DISCHARGE
-                        </div>
-                    </div>
-                    <div class="cwc-outlook-message">
-                        <i class="fa-solid fa-circle-info" style="color: var(--cyan-primary); font-size: 1rem;"></i>
-                        <span id="cwc-outlook-text">Calculating 7-day hydro-meteorological river stage forecast...</span>
-                    </div>
-                    <div class="cwc-peak-chip">
-                        <span class="cwc-peak-label"><i class="fa-solid fa-arrow-trend-up"></i> 7-Day Peak Outlook</span>
-                        <strong id="cwc-peak-text">Calculating...</strong>
-                    </div>
-                </div>
-
-                <!-- 7-Day Horizontal Advisory Deck -->
-                <div class="cwc-7day-deck" id="cwc-7day-deck">
-                    <!-- 7 Daily Cards will be dynamically rendered here -->
-                </div>
-            </div>
-        </section>
 
         <!-- Report & Export Actions Bar (Placed at VERY BOTTOM) -->
         <section id="report-actions-bottom" class="panel-card no-print" style="margin-top: 10px;">
