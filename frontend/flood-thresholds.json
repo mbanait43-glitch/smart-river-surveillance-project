@@ -1,0 +1,540 @@
+{
+  "_default": {
+    "warningMultiplier": 1.25,
+    "dangerMultiplier": 1.5,
+    "fallbackWarningLevel": 10.0,
+    "fallbackDangerLevel": 15.0,
+    "isEstimated": true
+  },
+  "BH72": {
+    "warningLevel": 59.32,
+    "dangerLevel": 60.32,
+    "river": "Ganga River",
+    "location": "Chausa, Buxar, Bihar",
+    "isEstimated": false
+  },
+  "11819": {
+    "warningLevel": 59.32,
+    "dangerLevel": 60.32,
+    "river": "Ganga River",
+    "location": "Chausa, Buxar, Bihar",
+    "isEstimated": false
+  },
+  "BH73": {
+    "warningLevel": 55.0,
+    "dangerLevel": 58.0,
+    "river": "Ghaghra River",
+    "location": "Manjhi, Chappra, Bihar",
+    "isEstimated": false
+  },
+  "11804": {
+    "warningLevel": 55.0,
+    "dangerLevel": 58.0,
+    "river": "Ghaghra River",
+    "location": "Manjhi, Chappra, Bihar",
+    "isEstimated": false
+  },
+  "BH74": {
+    "warningLevel": 59.32,
+    "dangerLevel": 60.32,
+    "river": "Ganga River",
+    "location": "D/s Buxar, Bihar",
+    "isEstimated": false
+  },
+  "11805": {
+    "warningLevel": 59.32,
+    "dangerLevel": 60.32,
+    "river": "Ganga River",
+    "location": "D/s Buxar, Bihar",
+    "isEstimated": false
+  },
+  "BH75": {
+    "warningLevel": 33.68,
+    "dangerLevel": 34.68,
+    "river": "Ganga River",
+    "location": "Bhagalpur, Bihar",
+    "isEstimated": false
+  },
+  "11822": {
+    "warningLevel": 33.68,
+    "dangerLevel": 34.68,
+    "river": "Ganga River",
+    "location": "Bhagalpur, Bihar",
+    "isEstimated": false
+  },
+  "BH76": {
+    "warningLevel": 30.5,
+    "dangerLevel": 31.5,
+    "river": "Ganga River",
+    "location": "Kahalgaon, Bihar",
+    "isEstimated": false
+  },
+  "11806": {
+    "warningLevel": 30.5,
+    "dangerLevel": 31.5,
+    "river": "Ganga River",
+    "location": "Kahalgaon, Bihar",
+    "isEstimated": false
+  },
+  "BH77": {
+    "warningLevel": 49.6,
+    "dangerLevel": 50.52,
+    "river": "Ganga River",
+    "location": "Khurji, Patna, Bihar",
+    "isEstimated": false
+  },
+  "11807": {
+    "warningLevel": 49.6,
+    "dangerLevel": 50.52,
+    "river": "Ganga River",
+    "location": "Khurji, Patna, Bihar",
+    "isEstimated": false
+  },
+  "BH78": {
+    "warningLevel": 35.5,
+    "dangerLevel": 36.58,
+    "river": "Burhi Gandak",
+    "location": "Khagaria, Bihar",
+    "isEstimated": false
+  },
+  "11808": {
+    "warningLevel": 35.5,
+    "dangerLevel": 36.58,
+    "river": "Burhi Gandak",
+    "location": "Khagaria, Bihar",
+    "isEstimated": false
+  },
+  "BH79": {
+    "warningLevel": 47.0,
+    "dangerLevel": 48.6,
+    "river": "Ganga River",
+    "location": "Munger, Bihar",
+    "isEstimated": false
+  },
+  "11809": {
+    "warningLevel": 47.0,
+    "dangerLevel": 48.6,
+    "river": "Ganga River",
+    "location": "Munger, Bihar",
+    "isEstimated": false
+  },
+  "BH80": {
+    "warningLevel": 52.0,
+    "dangerLevel": 53.5,
+    "river": "Son River",
+    "location": "Arrah, Bihar",
+    "isEstimated": false
+  },
+  "11810": {
+    "warningLevel": 52.0,
+    "dangerLevel": 53.5,
+    "river": "Son River",
+    "location": "Arrah, Bihar",
+    "isEstimated": false
+  },
+  "BH81": {
+    "warningLevel": 49.5,
+    "dangerLevel": 50.5,
+    "river": "Gandak River",
+    "location": "Hajipur, Bihar",
+    "isEstimated": false
+  },
+  "11811": {
+    "warningLevel": 49.5,
+    "dangerLevel": 50.5,
+    "river": "Gandak River",
+    "location": "Hajipur, Bihar",
+    "isEstimated": false
+  },
+  "UK51": {
+    "warningLevel": 450.0,
+    "dangerLevel": 455.0,
+    "river": "Ganga River",
+    "location": "Devprayag, Uttarakhand",
+    "isEstimated": true
+  },
+  "11785": {
+    "warningLevel": 450.0,
+    "dangerLevel": 455.0,
+    "river": "Ganga River",
+    "location": "Devprayag, Uttarakhand",
+    "isEstimated": true
+  },
+  "UK52": {
+    "warningLevel": 340.0,
+    "dangerLevel": 345.0,
+    "river": "Ganga River",
+    "location": "Rishikesh, Uttarakhand",
+    "isEstimated": true
+  },
+  "11821": {
+    "warningLevel": 340.0,
+    "dangerLevel": 345.0,
+    "river": "Ganga River",
+    "location": "Rishikesh, Uttarakhand",
+    "isEstimated": true
+  },
+  "UK53": {
+    "warningLevel": 825.0,
+    "dangerLevel": 830.0,
+    "river": "Bhagirathi River",
+    "location": "Tehri Dam D/s, Uttarakhand",
+    "isEstimated": false
+  },
+  "11786": {
+    "warningLevel": 825.0,
+    "dangerLevel": 830.0,
+    "river": "Bhagirathi River",
+    "location": "Tehri Dam D/s, Uttarakhand",
+    "isEstimated": false
+  },
+  "UK54": {
+    "warningLevel": 293.0,
+    "dangerLevel": 294.0,
+    "river": "Ganga River",
+    "location": "Raiwala, Haridwar, Uttarakhand",
+    "isEstimated": false
+  },
+  "11787": {
+    "warningLevel": 293.0,
+    "dangerLevel": 294.0,
+    "river": "Ganga River",
+    "location": "Raiwala, Haridwar, Uttarakhand",
+    "isEstimated": false
+  },
+  "UK55": {
+    "warningLevel": 293.0,
+    "dangerLevel": 294.0,
+    "river": "Ganga River",
+    "location": "Har Ki Pauri, Haridwar, Uttarakhand",
+    "isEstimated": false
+  },
+  "11788": {
+    "warningLevel": 293.0,
+    "dangerLevel": 294.0,
+    "river": "Ganga River",
+    "location": "Har Ki Pauri, Haridwar, Uttarakhand",
+    "isEstimated": false
+  },
+  "UT57": {
+    "warningLevel": 210.0,
+    "dangerLevel": 212.5,
+    "river": "Yamuna River",
+    "location": "Hathnikund / Yamunanagar",
+    "isEstimated": false
+  },
+  "11790": {
+    "warningLevel": 210.0,
+    "dangerLevel": 212.5,
+    "river": "Yamuna River",
+    "location": "Hathnikund / Yamunanagar",
+    "isEstimated": false
+  },
+  "UT58": {
+    "warningLevel": 204.5,
+    "dangerLevel": 205.33,
+    "river": "Yamuna River",
+    "location": "Delhi Old Railway Bridge",
+    "isEstimated": false
+  },
+  "11791": {
+    "warningLevel": 204.5,
+    "dangerLevel": 205.33,
+    "river": "Yamuna River",
+    "location": "Delhi Old Railway Bridge",
+    "isEstimated": false
+  },
+  "UT59": {
+    "warningLevel": 199.5,
+    "dangerLevel": 200.6,
+    "river": "Yamuna River",
+    "location": "Okhla Barrage, Delhi",
+    "isEstimated": false
+  },
+  "11792": {
+    "warningLevel": 199.5,
+    "dangerLevel": 200.6,
+    "river": "Yamuna River",
+    "location": "Okhla Barrage, Delhi",
+    "isEstimated": false
+  },
+  "UT60": {
+    "warningLevel": 165.2,
+    "dangerLevel": 166.0,
+    "river": "Yamuna River",
+    "location": "Mathura / Gokul Barrage, UP",
+    "isEstimated": false
+  },
+  "11793": {
+    "warningLevel": 165.2,
+    "dangerLevel": 166.0,
+    "river": "Yamuna River",
+    "location": "Mathura / Gokul Barrage, UP",
+    "isEstimated": false
+  },
+  "UT61": {
+    "warningLevel": 149.5,
+    "dangerLevel": 151.0,
+    "river": "Yamuna River",
+    "location": "Agra Water Works, UP",
+    "isEstimated": false
+  },
+  "11794": {
+    "warningLevel": 149.5,
+    "dangerLevel": 151.0,
+    "river": "Yamuna River",
+    "location": "Agra Water Works, UP",
+    "isEstimated": false
+  },
+  "UT62": {
+    "warningLevel": 113.0,
+    "dangerLevel": 114.0,
+    "river": "Ganga River",
+    "location": "Kanpur Barrage, UP",
+    "isEstimated": false
+  },
+  "11818": {
+    "warningLevel": 113.0,
+    "dangerLevel": 114.0,
+    "river": "Kanpur Barrage, UP",
+    "isEstimated": false
+  },
+  "UT63": {
+    "warningLevel": 83.73,
+    "dangerLevel": 84.73,
+    "river": "Yamuna / Ganga River",
+    "location": "Sangam, Prayagraj, UP",
+    "isEstimated": false
+  },
+  "11795": {
+    "warningLevel": 83.73,
+    "dangerLevel": 84.73,
+    "river": "Yamuna / Ganga River",
+    "location": "Sangam, Prayagraj, UP",
+    "isEstimated": false
+  },
+  "UT64": {
+    "warningLevel": 70.26,
+    "dangerLevel": 71.26,
+    "river": "Ganga River",
+    "location": "Rajghat, Varanasi, UP",
+    "isEstimated": false
+  },
+  "11796": {
+    "warningLevel": 70.26,
+    "dangerLevel": 71.26,
+    "river": "Ganga River",
+    "location": "Rajghat, Varanasi, UP",
+    "isEstimated": false
+  },
+  "UT66": {
+    "warningLevel": 64.5,
+    "dangerLevel": 65.5,
+    "river": "Ganga River",
+    "location": "Ghazipur, UP",
+    "isEstimated": false
+  },
+  "11798": {
+    "warningLevel": 64.5,
+    "dangerLevel": 65.5,
+    "river": "Ganga River",
+    "location": "Ghazipur, UP",
+    "isEstimated": false
+  },
+  "UT67": {
+    "warningLevel": 88.0,
+    "dangerLevel": 89.5,
+    "river": "Sai River",
+    "location": "Pratapgarh, UP",
+    "isEstimated": true
+  },
+  "11799": {
+    "warningLevel": 88.0,
+    "dangerLevel": 89.5,
+    "river": "Sai River",
+    "location": "Pratapgarh, UP",
+    "isEstimated": true
+  },
+  "UT68": {
+    "warningLevel": 60.5,
+    "dangerLevel": 61.5,
+    "river": "Ganga River",
+    "location": "Zamania, Ghazipur, UP",
+    "isEstimated": false
+  },
+  "11800": {
+    "warningLevel": 60.5,
+    "dangerLevel": 61.5,
+    "river": "Ganga River",
+    "location": "Zamania, Ghazipur, UP",
+    "isEstimated": false
+  },
+  "UT69": {
+    "warningLevel": 66.0,
+    "dangerLevel": 67.5,
+    "river": "Ganga River",
+    "location": "Chunar, Mirzapur, UP",
+    "isEstimated": false
+  },
+  "11801": {
+    "warningLevel": 66.0,
+    "dangerLevel": 67.5,
+    "river": "Ganga River",
+    "location": "Chunar, Mirzapur, UP",
+    "isEstimated": false
+  },
+  "UT70": {
+    "warningLevel": 76.5,
+    "dangerLevel": 77.7,
+    "river": "Ganga River",
+    "location": "Mirzapur, UP",
+    "isEstimated": false
+  },
+  "11802": {
+    "warningLevel": 76.5,
+    "dangerLevel": 77.7,
+    "river": "Ganga River",
+    "location": "Mirzapur, UP",
+    "isEstimated": false
+  },
+  "UT71": {
+    "warningLevel": 178.0,
+    "dangerLevel": 180.0,
+    "river": "Ramganga River",
+    "location": "Beladandi, Moradabad, UP",
+    "isEstimated": true
+  },
+  "11803": {
+    "warningLevel": 178.0,
+    "dangerLevel": 180.0,
+    "river": "Ramganga River",
+    "location": "Beladandi, Moradabad, UP",
+    "isEstimated": true
+  },
+  "WB85": {
+    "warningLevel": 23.5,
+    "dangerLevel": 24.5,
+    "river": "Ganga River",
+    "location": "Malda, West Bengal",
+    "isEstimated": false
+  },
+  "11814": {
+    "warningLevel": 23.5,
+    "dangerLevel": 24.5,
+    "river": "Ganga River",
+    "location": "Malda, West Bengal",
+    "isEstimated": false
+  },
+  "WB86": {
+    "warningLevel": 21.25,
+    "dangerLevel": 22.25,
+    "river": "Ganga River",
+    "location": "Farakka Barrage, West Bengal",
+    "isEstimated": false
+  },
+  "11815": {
+    "warningLevel": 21.25,
+    "dangerLevel": 22.25,
+    "river": "Ganga River",
+    "location": "Farakka Barrage, West Bengal",
+    "isEstimated": false
+  },
+  "WB88": {
+    "warningLevel": 12.5,
+    "dangerLevel": 13.8,
+    "river": "Hooghly River",
+    "location": "Berhampore, West Bengal",
+    "isEstimated": true
+  },
+  "11817": {
+    "warningLevel": 12.5,
+    "dangerLevel": 13.8,
+    "river": "Hooghly River",
+    "location": "Berhampore, West Bengal",
+    "isEstimated": true
+  },
+  "WB89": {
+    "warningLevel": 8.5,
+    "dangerLevel": 9.8,
+    "river": "Hooghly River",
+    "location": "Tribeni, Hooghly, West Bengal",
+    "isEstimated": true
+  },
+  "11783": {
+    "warningLevel": 8.5,
+    "dangerLevel": 9.8,
+    "river": "Hooghly River",
+    "location": "Tribeni, Hooghly, West Bengal",
+    "isEstimated": true
+  },
+  "WB90": {
+    "warningLevel": 5.8,
+    "dangerLevel": 6.9,
+    "river": "Hooghly River",
+    "location": "Garden Reach, Kolkata, West Bengal",
+    "isEstimated": true
+  },
+  "11784": {
+    "warningLevel": 5.8,
+    "dangerLevel": 6.9,
+    "river": "Hooghly River",
+    "location": "Garden Reach, Kolkata, West Bengal",
+    "isEstimated": true
+  },
+  "JH82": {
+    "warningLevel": 28.5,
+    "dangerLevel": 29.8,
+    "river": "Ganga River",
+    "location": "Sahibganj, Jharkhand",
+    "isEstimated": false
+  },
+  "11812": {
+    "warningLevel": 28.5,
+    "dangerLevel": 29.8,
+    "river": "Ganga River",
+    "location": "Sahibganj, Jharkhand",
+    "isEstimated": false
+  },
+  "JH83": {
+    "warningLevel": 27.0,
+    "dangerLevel": 28.3,
+    "river": "Ganga River",
+    "location": "Kahalgaon Border / Rajmahal, Jharkhand",
+    "isEstimated": false
+  },
+  "11813": {
+    "warningLevel": 27.0,
+    "dangerLevel": 28.3,
+    "river": "Ganga River",
+    "location": "Kahalgaon Border / Rajmahal, Jharkhand",
+    "isEstimated": false
+  },
+  "JH84": {
+    "warningLevel": 26.25,
+    "dangerLevel": 27.25,
+    "river": "Ganga River",
+    "location": "Rajmahal, Jharkhand",
+    "isEstimated": false
+  },
+  "11820": {
+    "warningLevel": 26.25,
+    "dangerLevel": 27.25,
+    "river": "Ganga River",
+    "location": "Rajmahal, Jharkhand",
+    "isEstimated": false
+  },
+  "HR56": {
+    "warningLevel": 218.0,
+    "dangerLevel": 220.5,
+    "river": "Yamuna River",
+    "location": "Sonipat, Haryana",
+    "isEstimated": true
+  },
+  "11789": {
+    "warningLevel": 218.0,
+    "dangerLevel": 220.5,
+    "river": "Yamuna River",
+    "location": "Sonipat, Haryana",
+    "isEstimated": true
+  }
+}

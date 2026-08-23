@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -376,8 +376,48 @@
             </section>
         </div>
 
+        <!-- Real-Time Flood Alert & Risk Prediction Section -->
+        <section id="flood-alert-section" class="panel-card" style="margin-top: 18px;">
+            <div class="panel-header" style="padding: 16px 22px; display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b;"></i> Real-Time Flood Alert &amp; Risk Prediction
+                </h3>
+                <span class="panel-tag" id="flood-badge-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">Hydrology Active</span>
+            </div>
+            <div class="panel-body" style="padding: 18px 24px;">
+                <div id="flood-status-card" class="flood-card flood-normal">
+                    <div class="flood-left">
+                        <div class="flood-badge-icon" id="flood-icon-box">
+                            <i class="fa-solid fa-water" id="flood-main-icon"></i>
+                        </div>
+                        <div style="min-width: 0;">
+                            <h3 id="flood-title-text" style="font-size: 1.05rem; font-weight: 800; margin-bottom: 4px;">NORMAL WATER FLOW - NO FLOOD RISK</h3>
+                            <p id="flood-sub-text" style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">Water level is within safe hydrological discharge limits. Upstream-to-downstream flow is standard.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; font-size: 0.82rem;" class="flood-meta-metrics">
+                                <span>Current Level: <strong id="flood-current-level" style="color: var(--text-primary); font-size: 0.95rem;">-- m MSL</strong></span>
+                                <span>Warning Mark: <strong id="flood-warning-level" style="color: #f59e0b;">-- m MSL</strong></span>
+                                <span>Danger Mark: <strong id="flood-danger-level" style="color: #ef4444;">-- m MSL</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flood-right">
+                        <div id="flood-status-tag" class="flood-status-tag normal">
+                            <i class="fa-solid fa-shield-halved"></i> NORMAL FLOW
+                        </div>
+                        <div class="flood-forecast-box" style="text-align: right; font-size: 0.8rem; margin-top: 6px;">
+                            <div id="flood-trend-label" style="font-weight: 700; color: var(--text-primary);">
+                                <i class="fa-solid fa-chart-line" style="color: var(--cyan-primary); margin-right: 4px;"></i> Trend: <span id="flood-trend-val">Calculating trend...</span>
+                            </div>
+                            <div id="flood-forecast-val" style="color: var(--text-muted); font-size: 0.76rem; margin-top: 3px;">
+                                Forecast: Estimated in 3 hrs: -- m MSL
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <!-- Report &amp; Export Actions Bar (Placed at VERY BOTTOM) -->
+        <!-- Report & Export Actions Bar (Placed at VERY BOTTOM) -->
         <section id="report-actions-bottom" class="panel-card no-print" style="margin-top: 10px;">
             <div class="panel-body" style="display: flex; align-items: center; justify-content: space-between; padding: 24px 30px;">
                 <div>

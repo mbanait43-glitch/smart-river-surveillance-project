@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    SMART RIVER WATER LEVEL AND QUALITY SURVEILLANCE - DESIGN SYSTEM CSS
    ========================================================================== */
 
@@ -562,6 +562,159 @@ body.light-mode .wqi-score-card.wqi-critical .wqi-left p { color: #be123c !impor
 
 .wqi-status-tag { padding: 5px 12px; border-radius: 18px; font-size: 0.78rem; font-weight: 700; }
 .wqi-status-tag.good { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+
+/* --- REAL-TIME FLOOD ALERT & RISK RADAR STYLES --- */
+.flood-card {
+    width: 100%;
+    border-radius: 18px;
+    padding: 22px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .flood-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .flood-right {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 12px;
+    }
+    .flood-forecast-box {
+        text-align: right;
+    }
+}
+
+/* 1. Normal Flow State (Green) */
+.flood-card.flood-normal {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(6, 182, 212, 0.12));
+    border: 1px solid rgba(16, 185, 129, 0.4);
+}
+.flood-card.flood-normal .flood-left h3 { color: #ffffff !important; font-weight: 800; }
+.flood-card.flood-normal .flood-left p { color: #a7f3d0 !important; }
+
+body.light-mode .flood-card.flood-normal {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 1px solid #a7f3d0;
+}
+body.light-mode .flood-card.flood-normal .flood-left h3 { color: #064e3b !important; font-weight: 800; }
+body.light-mode .flood-card.flood-normal .flood-left p { color: #047857 !important; }
+
+/* 2. Flood Watch / Warning State (Amber) */
+.flood-card.flood-watch {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(217, 119, 6, 0.14));
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);
+}
+.flood-card.flood-watch .flood-left h3 { color: #ffffff !important; font-weight: 800; }
+.flood-card.flood-watch .flood-left p { color: #fde68a !important; }
+
+body.light-mode .flood-card.flood-watch {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1px solid #fde68a;
+}
+body.light-mode .flood-card.flood-watch .flood-left h3 { color: #78350f !important; font-weight: 800; }
+body.light-mode .flood-card.flood-watch .flood-left p { color: #b45309 !important; }
+
+/* 3. High Flood Alert State (Red/Pulsing) */
+.flood-card.flood-alert {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(225, 29, 72, 0.18));
+    border: 1.5px solid rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 35px rgba(239, 68, 68, 0.3);
+    animation: floodPulseGlow 2s infinite ease-in-out;
+}
+.flood-card.flood-alert .flood-left h3 { color: #ffffff !important; font-weight: 800; }
+.flood-card.flood-alert .flood-left p { color: #fecdd3 !important; }
+
+body.light-mode .flood-card.flood-alert {
+    background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+    border: 1.5px solid #fda4af;
+    box-shadow: 0 0 25px rgba(225, 29, 72, 0.18);
+}
+body.light-mode .flood-card.flood-alert .flood-left h3 { color: #881337 !important; font-weight: 800; }
+body.light-mode .flood-card.flood-alert .flood-left p { color: #be123c !important; }
+
+@keyframes floodPulseGlow {
+    0% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+    50% { box-shadow: 0 0 35px rgba(239, 68, 68, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+}
+
+.flood-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+
+.flood-badge-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #10b981;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+}
+
+.flood-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+
+.flood-status-tag {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.flood-status-tag.normal {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid #10b981;
+}
+.flood-status-tag.watch {
+    background: rgba(245, 158, 11, 0.25);
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+}
+.flood-status-tag.alert {
+    background: rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+    border: 1px solid #ef4444;
+    animation: alertTagBlink 1.5s infinite;
+}
+
+@keyframes alertTagBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.65; }
+}
+
+body.light-mode .flood-status-tag.normal {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+body.light-mode .flood-status-tag.watch {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+body.light-mode .flood-status-tag.alert {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
 
 /* 8 Metrics Grid */
 .metrics-grid {

@@ -126,6 +126,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let markersMap = {}; // stationId -> Leaflet marker
     let chartInstance = null;
     let selectedStationId = null;
+    // --- REAL-TIME FLOOD ALERT & HYDROLOGY THRESHOLD ENGINE ---
+    let floodThresholds = {};
+
+    async function fetchFloodThresholds() {
+        try {
+            const res = await fetch('flood-thresholds.json?t=' + Date.now());
+            if (res.ok) {
+                floodThresholds = await res.json();
+                // If a station is already displayed on screen, immediately re-evaluate and update flood card
+                if (selectedStationId && stationMap[selectedStationId]) {
+                    const overrides = JSON.parse(localStorage.getItem('admin_overrides') || '{}');
+                    updateFloodAlertCard(stationMap[selectedStationId], overrides[selectedStationId] || {});
+                }
+            }
+        } catch (e) {
+            console.warn('Using default adaptive flood thresholds fallback', e);
+        }
+    }
+    fetchFloodThresholds();
+
 
     // Strict parameter mapping for all 12 official CPCB Parameters (100% exact CPCB names & key matching)
     const parameterMapping = {
@@ -211,6 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (alertBanner) alertBanner.style.display = 'none';
 
+            // 1. Await flood thresholds to eliminate any race condition before initial render
+            await fetchFloodThresholds();
+
+            // 2. Populate dropdowns & trigger initial station render
             populateDropdowns();
             renderMapMarkers();
             updateTimestamp();
@@ -821,6 +845,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update Live CPCB Station Surveillance Camera Photo & Info Panel!
         updateStationLivePhoto(station);
 
+        // Update Real-Time Flood Alert Card!
+        updateFloodAlertCard(station, stationOverrides);
+
     }
 
     // Helper: Construct Official CPCB Server Station Image URL (Supports Admin Custom Uploads)
@@ -862,6 +889,268 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+
+    // --- REAL-TIME FLOOD STATUS EVALUATOR (CWC BENCHMARKS & ADAPTIVE FALLBACK) ---
+    function getFloodStatus(currentLevel, station) {
+        const defaultRule = (floodThresholds && floodThresholds['_default']) || {
+            warningMultiplier: 1.25,
+            dangerMultiplier: 1.5,
+            fallbackWarningLevel: 10.0,
+            fallbackDangerLevel: 15.0,
+            isEstimated: true
+        };
+
+        const stKey = (station && (station.stationNo || station.id)) ? (floodThresholds[station.stationNo] ? station.stationNo : (floodThresholds[station.id] ? station.id : null)) : null;
+        let warningLevel = 0;
+        let dangerLevel = 0;
+        let isEstimated = true;
+
+        if (stKey && floodThresholds[stKey]) {
+            warningLevel = parseFloat(floodThresholds[stKey].warningLevel);
+            dangerLevel = parseFloat(floodThresholds[stKey].dangerLevel);
+            isEstimated = !!floodThresholds[stKey].isEstimated;
+        } else {
+            // Adaptive baseline threshold calculation for dynamically added stations
+            if (currentLevel !== null && !isNaN(currentLevel) && currentLevel > 0) {
+                warningLevel = Number((currentLevel * (defaultRule.warningMultiplier || 1.25)).toFixed(2));
+                dangerLevel = Number((currentLevel * (defaultRule.dangerMultiplier || 1.5)).toFixed(2));
+            } else {
+                warningLevel = defaultRule.fallbackWarningLevel || 10.0;
+                dangerLevel = defaultRule.fallbackDangerLevel || 15.0;
+            }
+            isEstimated = true;
+        }
+
+        let status = 'normal'; // 'normal' | 'watch' | 'alert'
+        if (currentLevel !== null && !isNaN(currentLevel)) {
+            if (currentLevel >= dangerLevel) {
+                status = 'alert';
+            } else if (currentLevel >= warningLevel) {
+                status = 'watch';
+            } else {
+                status = 'normal';
+            }
+        }
+
+        return {
+            status,
+            warningLevel: warningLevel.toFixed(2),
+            dangerLevel: dangerLevel.toFixed(2),
+            isEstimated
+        };
+    }
+
+    // --- REAL HISTORICAL TELEMETRY STORAGE (localStorage, max 20 entries) ---
+    function storeFloodHistory(stationId, level) {
+        if (!stationId || level === null || isNaN(level)) return;
+        try {
+            const key = `flood_history_${stationId}`;
+            const history = JSON.parse(localStorage.getItem(key) || '[]');
+            const now = Date.now();
+            
+            // Only add if last entry is older than 5 seconds or level changed
+            const last = history[history.length - 1];
+            if (!last || Math.abs(last.level - level) > 0.001 || (now - last.timestamp) > 5000) {
+                history.push({ level: Number(level), timestamp: now });
+            }
+
+            // Cap at last 20 entries
+            while (history.length > 20) {
+                history.shift();
+            }
+
+            localStorage.setItem(key, JSON.stringify(history));
+        } catch (e) {
+            console.warn('Error saving flood history to localStorage', e);
+        }
+    }
+
+    // --- REAL TREND CALCULATION VIA LINEAR REGRESSION MATH ---
+    function calculateFloodTrend(history, currentLevel) {
+        if (!history || history.length < 2 || currentLevel === null || isNaN(currentLevel)) {
+            return {
+                trendText: 'Calculating trend...',
+                trendDirection: 'calculating',
+                slopePerHour: 0,
+                forecast3h: null
+            };
+        }
+
+        // Use last 5 to 10 entries for sensitive, real-time trend detection
+        const sample = history.slice(-10);
+        const n = sample.length;
+        if (n < 2) {
+            return {
+                trendText: 'Calculating trend...',
+                trendDirection: 'calculating',
+                slopePerHour: 0,
+                forecast3h: null
+            };
+        }
+
+        const t0 = sample[0].timestamp;
+        let sumX = 0;
+        let sumY = 0;
+        let sumXY = 0;
+        let sumX2 = 0;
+
+        for (let i = 0; i < n; i++) {
+            const x = (sample[i].timestamp - t0) / 3600000; // time in hours
+            const y = sample[i].level;
+            sumX += x;
+            sumY += y;
+            sumXY += (x * y);
+            sumX2 += (x * x);
+        }
+
+        const denominator = (n * sumX2 - sumX * sumX);
+        let slope = 0; // meters per hour
+        if (Math.abs(denominator) > 1e-6) {
+            slope = (n * sumXY - sumX * sumY) / denominator;
+        }
+
+        // 3-hour projection
+        const forecast3h = Number((currentLevel + (slope * 3)).toFixed(2));
+
+        // Slope classification threshold: ±0.015 m/hr (1.5 cm/hr)
+        let trendText = '';
+        let trendDirection = 'stable';
+
+        if (slope > 0.015) {
+            trendDirection = 'rising';
+            trendText = `Rising ↑ (+${(slope).toFixed(2)} m/hr)`;
+        } else if (slope < -0.015) {
+            trendDirection = 'falling';
+            trendText = `Falling ↓ (${(slope).toFixed(2)} m/hr)`;
+        } else {
+            trendDirection = 'stable';
+            trendText = `Stable → (±0.00 m/hr)`;
+        }
+
+        return {
+            trendText,
+            trendDirection,
+            slopePerHour: slope,
+            forecast3h: Math.max(0, forecast3h)
+        };
+    }
+
+    // --- RENDER & UPDATE FLOOD ALERT CARD IN UI ---
+    function updateFloodAlertCard(station, stationOverrides) {
+        const floodCard = document.getElementById('flood-status-card');
+        const badgeTag = document.getElementById('flood-badge-tag');
+        const iconBox = document.getElementById('flood-icon-box');
+        const mainIcon = document.getElementById('flood-main-icon');
+        const titleText = document.getElementById('flood-title-text');
+        const subText = document.getElementById('flood-sub-text');
+        const currentLevelEl = document.getElementById('flood-current-level');
+        const warningLevelEl = document.getElementById('flood-warning-level');
+        const dangerLevelEl = document.getElementById('flood-danger-level');
+        const statusTag = document.getElementById('flood-status-tag');
+        const trendValEl = document.getElementById('flood-trend-val');
+        const forecastValEl = document.getElementById('flood-forecast-val');
+
+        if (!station || !floodCard) return;
+
+        // 1. Extract Current Water Level (Same standard pattern as metric cards / WQI)
+        let currentLevel = null;
+        if (stationOverrides['Water Level'] !== undefined && !isNaN(parseFloat(stationOverrides['Water Level']))) {
+            currentLevel = parseFloat(stationOverrides['Water Level']);
+        } else if (station.parameters['Water Level'] && station.parameters['Water Level'].value !== undefined && station.parameters['Water Level'].value !== null) {
+            const p = parseFloat(station.parameters['Water Level'].value);
+            if (!isNaN(p)) currentLevel = p;
+        } else if (station.parameters['River Stage'] && station.parameters['River Stage'].value !== undefined && station.parameters['River Stage'].value !== null) {
+            const p = parseFloat(station.parameters['River Stage'].value);
+            if (!isNaN(p)) currentLevel = p;
+        } else if (station.parameters['Stage'] && station.parameters['Stage'].value !== undefined && station.parameters['Stage'].value !== null) {
+            const p = parseFloat(station.parameters['Stage'].value);
+            if (!isNaN(p)) currentLevel = p;
+        }
+
+        // 2. Persist to real localStorage history
+        if (currentLevel !== null) {
+            storeFloodHistory(station.id, currentLevel);
+        }
+
+        // 3. Compute Flood Status & Thresholds
+        const floodInfo = getFloodStatus(currentLevel, station);
+
+        // 4. Compute Real Trend & 3-Hour Forecast
+        const historyKey = `flood_history_${station.id}`;
+        const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+        const trendInfo = calculateFloodTrend(history, currentLevel);
+
+        // 5. Update DOM Content
+        if (currentLevelEl) {
+            currentLevelEl.textContent = currentLevel !== null ? `${currentLevel.toFixed(2)} m MSL` : 'N/A';
+        }
+        if (warningLevelEl) {
+            warningLevelEl.textContent = `${floodInfo.warningLevel} m MSL${floodInfo.isEstimated ? ' (Est.)' : ''}`;
+        }
+        if (dangerLevelEl) {
+            dangerLevelEl.textContent = `${floodInfo.dangerLevel} m MSL${floodInfo.isEstimated ? ' (Est.)' : ''}`;
+        }
+
+        if (badgeTag) {
+            badgeTag.textContent = floodInfo.isEstimated ? 'Hydrology Estimated (Unverified)' : 'Official CWC Benchmarked';
+            badgeTag.style.background = floodInfo.isEstimated ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)';
+            badgeTag.style.color = floodInfo.isEstimated ? '#f59e0b' : '#10b981';
+            badgeTag.style.borderColor = floodInfo.isEstimated ? 'rgba(245, 158, 11, 0.3)' : 'rgba(16, 185, 129, 0.3)';
+        }
+
+        if (trendValEl) {
+            trendValEl.textContent = trendInfo.trendText;
+            if (trendInfo.trendDirection === 'rising') {
+                trendValEl.style.color = '#f59e0b';
+            } else if (trendInfo.trendDirection === 'falling') {
+                trendValEl.style.color = '#10b981';
+            } else {
+                trendValEl.style.color = 'var(--text-primary)';
+            }
+        }
+
+        if (forecastValEl) {
+            if (trendInfo.forecast3h !== null) {
+                forecastValEl.textContent = `Forecast: Estimated in 3 hrs: ${trendInfo.forecast3h.toFixed(2)} m MSL`;
+            } else {
+                forecastValEl.textContent = 'Forecast: Estimated in 3 hrs: -- m MSL';
+            }
+        }
+
+        // 6. Apply Dynamic Status Variants (.flood-normal, .flood-watch, .flood-alert)
+        floodCard.className = `flood-card flood-${floodInfo.status}`;
+
+        if (floodInfo.status === 'alert') {
+            if (titleText) titleText.textContent = 'HIGH FLOOD ALERT - CRITICAL LEVEL BREACH';
+            if (subText) subText.textContent = `Water level (${currentLevel !== null ? currentLevel.toFixed(2) : '--'} m) has breached the Danger Mark (${floodInfo.dangerLevel} m). Immediate emergency riverbank precautions advised.`;
+            if (statusTag) {
+                statusTag.className = 'flood-status-tag alert';
+                statusTag.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> HIGH FLOOD ALERT';
+            }
+            if (iconBox) iconBox.style.background = '#ef4444';
+            if (mainIcon) mainIcon.className = 'fa-solid fa-triangle-exclamation';
+        } else if (floodInfo.status === 'watch') {
+            if (titleText) titleText.textContent = 'FLOOD WATCH - WARNING LEVEL ACTIVE';
+            if (subText) subText.textContent = `Water level (${currentLevel !== null ? currentLevel.toFixed(2) : '--'} m) has exceeded the Warning Mark (${floodInfo.warningLevel} m). River discharge is elevated.`;
+            if (statusTag) {
+                statusTag.className = 'flood-status-tag watch';
+                statusTag.innerHTML = '<i class="fa-solid fa-bell"></i> FLOOD WATCH';
+            }
+            if (iconBox) iconBox.style.background = '#f59e0b';
+            if (mainIcon) mainIcon.className = 'fa-solid fa-bell';
+        } else {
+            if (titleText) titleText.textContent = 'NORMAL WATER FLOW - NO FLOOD RISK';
+            if (subText) subText.textContent = 'Water level is within safe hydrological discharge limits. Upstream-to-downstream flow is standard.';
+            if (statusTag) {
+                statusTag.className = 'flood-status-tag normal';
+                statusTag.innerHTML = '<i class="fa-solid fa-shield-halved"></i> NORMAL FLOW';
+            }
+            if (iconBox) iconBox.style.background = '#10b981';
+            if (mainIcon) mainIcon.className = 'fa-solid fa-water';
+        }
+    }
+
 
     // --- Live CPCB Station Surveillance & Camera Photo Updater (100% Instant Zero-Delay Switching) ---
     function updateStationLivePhoto(station) {
