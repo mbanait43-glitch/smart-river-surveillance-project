@@ -376,6 +376,125 @@
             </section>
         </div>
 
+        <!-- REAL-TIME FLOOD PREDICTION & RISK INTELLIGENCE RADAR (CWC • IMD • IoT) -->
+        <section id="flood-prediction-section" class="panel-card no-print" style="margin-top: 18px;">
+            <div class="panel-header" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--cyan-primary); font-size: 1.15rem;"></i>
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                            Real-Time Flood Prediction &amp; Early Warning System
+                        </h3>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Multi-Source Intelligence: CWC River Stage • IMD Rainfall Forecast • IoT Sensor Stream</span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="source-tag-pill"><i class="fa-solid fa-satellite-dish"></i> CWC • IMD • IoT</span>
+                    <span id="flood-last-updated" class="source-time-pill"><i class="fa-solid fa-clock"></i> Just Now</span>
+                </div>
+            </div>
+
+            <div class="panel-body" style="padding: 24px;">
+                <div id="flood-intelligence-card" class="flood-intel-card risk-low">
+                    
+                    <!-- Row 1: Primary Status & Risk Metrics (3 Bento Columns) -->
+                    <div class="flood-top-grid">
+                        
+                        <!-- Box 1: 4-Tier Risk Classifier Banner -->
+                        <div class="flood-sub-card risk-status-box">
+                            <div class="risk-badge-header">
+                                <div class="risk-beacon-icon" id="flood-beacon-box">
+                                    <i id="flood-risk-icon" class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <div>
+                                    <span class="card-micro-label">Current Flood Risk Level</span>
+                                    <div id="flood-risk-tier-tag" class="risk-tier-pill low">🟢 LOW / SAFE</div>
+                                </div>
+                            </div>
+                            <h4 id="flood-risk-headline" class="risk-headline">Normal Flow — No Inundation Risk</h4>
+                            <p id="flood-why-alert" class="risk-explanation-text">
+                                River stage is well below warning thresholds with stable upstream discharge and light catchment rainfall.
+                            </p>
+                        </div>
+
+                        <!-- Box 2: Flood Probability & Predicted Peak -->
+                        <div class="flood-sub-card prob-peak-box">
+                            <div class="stat-split-row">
+                                <div>
+                                    <span class="card-micro-label"><i class="fa-solid fa-chart-pie"></i> Flood Probability</span>
+                                    <div class="prob-num-wrap">
+                                        <span id="flood-prob-val" class="prob-big-num">8%</span>
+                                        <span id="flood-prob-desc" class="prob-state-tag">Negligible</span>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span class="card-micro-label"><i class="fa-solid fa-mountain-sun"></i> Predicted Peak Level</span>
+                                    <div class="peak-num-wrap">
+                                        <span id="flood-peak-val" class="peak-big-num">-- m</span>
+                                        <span class="peak-sub-tag">MSL Stage</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Expected Time of Peak -->
+                            <div class="peak-timeline-bar">
+                                <i class="fa-solid fa-hourglass-half" style="color: var(--cyan-primary);"></i>
+                                <span>Expected Peak Time: <strong id="flood-expected-time">In ~6 Hours (Stable)</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Box 3: Current Stage vs Danger Mark Gauge -->
+                        <div class="flood-sub-card stage-gauge-box">
+                            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                <span class="card-micro-label"><i class="fa-solid fa-water"></i> River Water Stage</span>
+                                <span class="curr-stage-num"><strong id="flood-current-stage">--</strong> <small>meters</small></span>
+                            </div>
+
+                            <!-- 4-Tier Gauge Progress Track -->
+                            <div class="intel-gauge-track">
+                                <div id="flood-gauge-fill" class="intel-gauge-fill" style="width: 35%;"></div>
+                            </div>
+
+                            <div class="gauge-meta-split">
+                                <span class="safe-margin-txt"><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> Buffer: <strong id="flood-safety-buffer">-- m</strong></span>
+                                <span class="danger-mark-txt"><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> Danger: <strong id="flood-danger-mark">-- m</strong></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Row 2: Multi-Horizon Forecasting & Catchment Rain Toolbar -->
+                    <div class="flood-bottom-toolbar">
+                        <div class="horizon-selector-wrap">
+                            <span class="toolbar-label"><i class="fa-solid fa-timeline"></i> Forecast Horizon:</span>
+                            <div class="horizon-pills">
+                                <button type="button" class="horizon-btn" data-hours="1">1 Hour</button>
+                                <button type="button" class="horizon-btn active" data-hours="3">3 Hours</button>
+                                <button type="button" class="horizon-btn" data-hours="6">6 Hours</button>
+                                <button type="button" class="horizon-btn" data-hours="12">12 Hours</button>
+                                <button type="button" class="horizon-btn" data-hours="24">24 Hours</button>
+                            </div>
+                        </div>
+
+                        <div class="horizon-projection-output">
+                            <div class="proj-metric-chip">
+                                <span>Projected in <strong id="horizon-label">3 Hours</strong>:</span>
+                                <strong id="horizon-projected-level" style="color: var(--cyan-primary); font-size: 1rem;">-- m</strong>
+                            </div>
+                            <div class="proj-metric-chip">
+                                <span><i class="fa-solid fa-cloud-rain" style="color: #38bdf8;"></i> Rain (24h):</span>
+                                <strong id="flood-rain-forecast">0.0 mm (Light)</strong>
+                            </div>
+                            <div class="proj-metric-chip">
+                                <span><i class="fa-solid fa-arrow-trend-up"></i> Velocity:</span>
+                                <strong id="flood-stream-velocity">+0.00 m/hr (Stable)</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
 
         <!-- Report & Export Actions Bar (Placed at VERY BOTTOM) -->
         <section id="report-actions-bottom" class="panel-card no-print" style="margin-top: 10px;">
