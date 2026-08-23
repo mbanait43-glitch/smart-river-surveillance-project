@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -40,7 +40,6 @@
             <a href="#overview" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
             <a href="#map-section" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> GIS Map</a>
             <a href="#live-camera-section" class="nav-link"><i class="fa-solid fa-camera"></i> Live Station Photo</a>
-            <a href="#flood-prediction-section" class="nav-link"><i class="fa-solid fa-triangle-exclamation"></i> Flood Prediction</a>
         </div>
 
         <div class="nav-actions">
@@ -140,7 +139,7 @@
             <div class="detail-pill"><strong>Location / State:</strong> <span id="report-location">--</span></div>
             <div class="detail-pill"><strong>Station Name:</strong> <span id="report-station">--</span></div>
             <div class="detail-pill"><strong>Station Code:</strong> <span id="report-station-code">--</span></div>
-            <div class="detail-pill"><strong>Status Label:</strong> <span id="report-status-label" class="status-indicator">● Sensors Operational</span></div>
+            <div class="detail-pill"><strong>Status Label:</strong> <span id="report-status-label" class="status-indicator">â— Sensors Operational</span></div>
         </section>
 
         <!-- Alerts Container -->
@@ -206,7 +205,7 @@
                 </div>
                 <div class="metric-body">
                     <span class="metric-val value">--</span>
-                    <span class="metric-unit">°C</span>
+                    <span class="metric-unit">Â°C</span>
                 </div>
                 <div class="gauge-bar"><div class="gauge-fill" style="width: 55%;"></div></div>
                 <div class="metric-footer status-indicator">Loading data...</div>
@@ -377,194 +376,6 @@
             </section>
         </div>
 
-        <!-- 🔮 72-Hour Flood Prediction & Alert System -->
-        <section id="flood-prediction-section" class="fpas-section no-print">
-
-            <!-- Section Header -->
-            <div class="fpas-header">
-                <div class="fpas-header-left">
-                    <span class="fpas-badge"><i class="fa-solid fa-satellite-dish"></i> CWC · CPCB · OPEN-METEO LIVE INTEGRATION</span>
-                    <h3>72-Hour Flood Prediction &amp; Alert System</h3>
-                    <span class="fpas-sub">Real-time hydrological forecasting using live water level data, rainfall radar &amp; rate-of-rise analysis</span>
-                </div>
-                <div class="fpas-header-right">
-                    <span id="fpas-last-updated" class="fpas-update-tag"><i class="fa-solid fa-clock"></i> Awaiting data...</span>
-                </div>
-            </div>
-
-            <!-- Master Alert Banner -->
-            <div id="fpas-master-banner" class="fpas-master-banner fpas-state-idle">
-                <div class="fpas-banner-icon" id="fpas-banner-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                <div class="fpas-banner-body">
-                    <div class="fpas-banner-title" id="fpas-banner-title">SELECT A STATION TO ACTIVATE FLOOD PREDICTION</div>
-                    <div class="fpas-banner-sub" id="fpas-banner-sub">Choose any monitoring station from the filter bar above to begin real-time flood risk analysis.</div>
-                </div>
-                <div class="fpas-risk-score-wrap">
-                    <div class="fpas-risk-donut" id="fpas-risk-donut">
-                        <span class="fpas-risk-pct" id="fpas-risk-pct">--</span>
-                        <span class="fpas-risk-label">RISK</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Body Grid -->
-            <div class="fpas-body-grid">
-
-                <!-- LEFT COL: Chart + Rainfall -->
-                <div class="fpas-left-col">
-
-                    <!-- Predicted Level Chart -->
-                    <div class="fpas-chart-panel">
-                        <div class="fpas-panel-header">
-                            <span><i class="fa-solid fa-chart-area"></i> Predicted Water Level — 72h Trajectory</span>
-                            <span id="fpas-chart-station" class="fpas-chart-tag">No Station</span>
-                        </div>
-                        <div class="fpas-chart-wrap">
-                            <canvas id="fpasChart" height="180"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Rainfall Contribution Row -->
-                    <div class="fpas-rain-panel">
-                        <div class="fpas-rain-icon"><i class="fa-solid fa-cloud-rain"></i></div>
-                        <div class="fpas-rain-body">
-                            <span class="fpas-rain-label">OPEN-METEO LIVE RAINFALL CONTRIBUTION</span>
-                            <div class="fpas-rain-values">
-                                <div class="fpas-rain-item">
-                                    <span>24h Rain</span>
-                                    <strong id="fpas-rain-24h">-- mm</strong>
-                                </div>
-                                <div class="fpas-rain-item">
-                                    <span>48h Rain</span>
-                                    <strong id="fpas-rain-48h">-- mm</strong>
-                                </div>
-                                <div class="fpas-rain-item">
-                                    <span>72h Rain</span>
-                                    <strong id="fpas-rain-72h">-- mm</strong>
-                                </div>
-                                <div class="fpas-rain-item">
-                                    <span>Rise Effect</span>
-                                    <strong id="fpas-rain-effect">+-- m</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="https://open-meteo.com" target="_blank" class="fpas-source-link">
-                            Open-Meteo <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem"></i>
-                        </a>
-                    </div>
-
-                </div>
-
-                <!-- RIGHT COL: 3 Prediction Cards + Metrics -->
-                <div class="fpas-right-col">
-
-                    <!-- CWC Thresholds Row -->
-                    <div class="fpas-threshold-row">
-                        <div class="fpas-thresh-pill fpas-current-pill">
-                            <i class="fa-solid fa-water"></i>
-                            <div>
-                                <span>Current Level</span>
-                                <strong id="fpas-current-level">-- m</strong>
-                            </div>
-                        </div>
-                        <div class="fpas-thresh-pill fpas-wl-pill">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            <div>
-                                <span>Warning Level</span>
-                                <strong id="fpas-wl">-- m</strong>
-                            </div>
-                        </div>
-                        <div class="fpas-thresh-pill fpas-dl-pill">
-                            <i class="fa-solid fa-skull-crossbones"></i>
-                            <div>
-                                <span>Danger Level</span>
-                                <strong id="fpas-dl">-- m</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 3 Time Prediction Cards -->
-                    <div class="fpas-pred-cards">
-
-                        <div class="fpas-pred-card" id="fpas-card-24h">
-                            <div class="fpas-pred-time">24 HOURS</div>
-                            <div class="fpas-pred-level" id="fpas-level-24h">-- m</div>
-                            <div class="fpas-pred-prob-wrap">
-                                <div class="fpas-pred-prob-bar">
-                                    <div class="fpas-pred-prob-fill" id="fpas-fill-24h" style="width:0%"></div>
-                                </div>
-                                <span class="fpas-pred-prob-val" id="fpas-prob-24h">--%</span>
-                            </div>
-                            <div class="fpas-pred-status" id="fpas-status-24h">Awaiting data</div>
-                        </div>
-
-                        <div class="fpas-pred-card" id="fpas-card-48h">
-                            <div class="fpas-pred-time">48 HOURS</div>
-                            <div class="fpas-pred-level" id="fpas-level-48h">-- m</div>
-                            <div class="fpas-pred-prob-wrap">
-                                <div class="fpas-pred-prob-bar">
-                                    <div class="fpas-pred-prob-fill" id="fpas-fill-48h" style="width:0%"></div>
-                                </div>
-                                <span class="fpas-pred-prob-val" id="fpas-prob-48h">--%</span>
-                            </div>
-                            <div class="fpas-pred-status" id="fpas-status-48h">Awaiting data</div>
-                        </div>
-
-                        <div class="fpas-pred-card" id="fpas-card-72h">
-                            <div class="fpas-pred-time">72 HOURS</div>
-                            <div class="fpas-pred-level" id="fpas-level-72h">-- m</div>
-                            <div class="fpas-pred-prob-wrap">
-                                <div class="fpas-pred-prob-bar">
-                                    <div class="fpas-pred-prob-fill" id="fpas-fill-72h" style="width:0%"></div>
-                                </div>
-                                <span class="fpas-pred-prob-val" id="fpas-prob-72h">--%</span>
-                            </div>
-                            <div class="fpas-pred-status" id="fpas-status-72h">Awaiting data</div>
-                        </div>
-
-                    </div>
-
-                    <!-- Rate of Rise + TTD Row -->
-                    <div class="fpas-metrics-row">
-                        <div class="fpas-mini-metric">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
-                            <div>
-                                <span>Rise Rate (Δh/Δt)</span>
-                                <strong id="fpas-ror">-- m/hr</strong>
-                            </div>
-                        </div>
-                        <div class="fpas-mini-metric">
-                            <i class="fa-solid fa-clock" style="color:#f59e0b"></i>
-                            <div>
-                                <span>Time to Danger</span>
-                                <strong id="fpas-ttd">--</strong>
-                            </div>
-                        </div>
-                        <div class="fpas-mini-metric">
-                            <i class="fa-solid fa-droplet" style="color:#38bdf8"></i>
-                            <div>
-                                <span>Turbidity Trigger</span>
-                                <strong id="fpas-turb">-- NTU</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- AI Advisory Footer -->
-            <div class="fpas-advisory" id="fpas-advisory">
-                <div class="fpas-advisory-icon"><i class="fa-solid fa-bullhorn"></i></div>
-                <div class="fpas-advisory-text">
-                    <strong>CWC Flood Advisory:</strong>
-                    <span id="fpas-advisory-text">Select a monitoring station to generate a real-time CWC flood advisory based on live water level, rainfall forecast, and rate-of-rise analysis.</span>
-                </div>
-                <a href="https://cwc.gov.in" target="_blank" class="fpas-cwc-link">
-                    CWC India <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem"></i>
-                </a>
-            </div>
-
-        </section>
 
         <!-- Report &amp; Export Actions Bar (Placed at VERY BOTTOM) -->
         <section id="report-actions-bottom" class="panel-card no-print" style="margin-top: 10px;">
