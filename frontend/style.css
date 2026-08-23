@@ -563,364 +563,379 @@ body.light-mode .wqi-score-card.wqi-critical .wqi-left p { color: #be123c !impor
 .wqi-status-tag { padding: 5px 12px; border-radius: 18px; font-size: 0.78rem; font-weight: 700; }
 .wqi-status-tag.good { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
 
-/* --- ULTRA CLEAN & INTUITIVE FLOOD RISK & WATER PREDICTION CARD --- */
-.flood-clean-card {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 24px;
-    align-items: stretch;
-    background: rgba(255, 255, 255, 0.02);
+/* --- UNIFIED PREMIUM FLOOD ALERT & PREDICTION SYSTEM --- */
+.flood-card {
+    width: 100%;
     border-radius: 18px;
-    padding: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.3s ease;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-@media (max-width: 900px) {
-    .flood-clean-card {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 18px;
+/* 1. Main Header Row */
+.flood-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .flood-main-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .flood-right-stat {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 12px;
     }
 }
 
-/* Left Side: Status & Forecast */
-.flood-clean-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 14px;
-}
-
-.flood-status-header {
+.flood-left-info {
     display: flex;
     align-items: center;
     gap: 16px;
+    min-width: 0;
 }
 
-.flood-status-badge {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
+.flood-badge-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
     background: #10b981;
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     flex-shrink: 0;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
     transition: all 0.3s ease;
 }
 
-.flood-simple-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-}
-
-.flood-simple-pill.normal {
-    background: rgba(16, 185, 129, 0.18);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.35);
-}
-.flood-simple-pill.watch {
-    background: rgba(245, 158, 11, 0.2);
-    color: #f59e0b;
-    border: 1px solid rgba(245, 158, 11, 0.4);
-}
-.flood-simple-pill.alert {
-    background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.4);
-}
-
 .flood-main-title {
-    font-size: 1.18rem;
+    font-size: 1.15rem;
     font-weight: 800;
     margin: 0;
-    color: var(--text-primary);
+    letter-spacing: -0.2px;
 }
 
-.flood-simple-desc {
-    font-size: 0.88rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    margin: 0;
-}
-
-/* Multi-Hour Prediction Box */
-.flood-prediction-box {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-top: 4px;
-}
-
-.pred-top-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.pred-label {
-    font-size: 0.78rem;
+.flood-source-tag {
+    font-size: 0.72rem;
     font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
 }
 
-.pred-time-pills {
-    display: flex;
-    gap: 6px;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 3px;
-    border-radius: 10px;
-}
-
-.pred-pill {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 0.74rem;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 7px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.pred-pill:hover {
-    color: var(--text-primary);
-}
-
-.pred-pill.active {
-    background: var(--cyan-primary);
-    color: #ffffff;
-    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
-}
-
-.pred-result-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 10px;
-}
-
-.pred-result-text {
-    font-size: 0.88rem;
-    color: var(--text-primary);
-}
-
-.pred-result-text strong {
-    color: var(--cyan-primary);
-    font-size: 1rem;
-    margin-left: 4px;
-}
-
-.pred-trend-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 0.78rem;
-    font-weight: 700;
-}
-
-.pred-trend-chip.rising {
-    background: rgba(245, 158, 11, 0.15);
-    color: #f59e0b;
-    border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.pred-trend-chip.falling {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.pred-trend-chip.stable {
-    background: rgba(255, 255, 255, 0.06);
+.flood-main-desc {
+    font-size: 0.86rem;
     color: var(--text-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 1.4;
 }
 
-/* Right Side: Simple Water Level Gauge */
-.flood-clean-right {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 20px;
+.flood-right-stat {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
     gap: 16px;
+    flex-shrink: 0;
 }
 
-.gauge-card-header {
+.flood-stat-num-wrap {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
+    gap: 6px;
 }
 
-.gauge-title {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-}
-
-.gauge-big-num {
-    font-size: 2rem;
+.flood-stat-big {
+    font-size: 2.1rem;
     font-weight: 900;
-    color: var(--text-primary);
     letter-spacing: -0.5px;
+    color: var(--text-primary);
 }
 
-.gauge-unit {
+.flood-stat-unit {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-muted);
 }
 
-.simple-gauge-track {
-    width: 100%;
-    height: 14px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    overflow: hidden;
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.flood-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
-.simple-gauge-fill {
-    height: 100%;
-    border-radius: 7px;
-    background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
-    box-shadow: 0 0 14px rgba(6, 182, 212, 0.6);
-    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+.flood-status-pill.normal {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid #10b981;
 }
 
-.gauge-marks-row {
+.flood-status-pill.watch {
+    background: rgba(245, 158, 11, 0.25);
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+}
+
+.flood-status-pill.alert {
+    background: rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+    border: 1px solid #ef4444;
+    animation: alertTagBlink 1.5s infinite;
+}
+
+/* 2. Visual Level Gauge Bar */
+.flood-gauge-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.flood-gauge-meta-labels {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.gauge-mark {
+.flood-gauge-track {
+    width: 100%;
+    height: 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    position: relative;
+}
+
+.flood-gauge-progress {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 3. Multi-Hour Forecast Toolbar */
+.flood-forecast-toolbar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 16px;
+}
+
+.forecast-prompt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.forecast-time-tabs {
+    display: flex;
     gap: 6px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 4px;
+    border-radius: 10px;
 }
 
-.mark-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
+.fc-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.gauge-mark.safe strong { color: #10b981; }
-.gauge-mark.danger strong { color: #ef4444; }
+.fc-tab:hover {
+    color: var(--text-primary);
+}
+
+.fc-tab.active {
+    background: var(--cyan-primary);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+.forecast-live-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.86rem;
+    color: var(--text-primary);
+}
+
+.fc-trend-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.fc-trend-pill.rising {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.fc-trend-pill.falling {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.fc-trend-pill.stable {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Status Color Variations (Dark Mode) */
+.flood-card.flood-normal {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(6, 182, 212, 0.06) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.flood-card.flood-normal .flood-main-title { color: #ffffff; }
+
+.flood-card.flood-watch {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.08) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.12);
+}
+.flood-card.flood-watch .flood-badge-icon {
+    background: #f59e0b;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+.flood-card.flood-watch .flood-main-title { color: #fde68a; }
+.flood-card.flood-watch .flood-gauge-progress {
+    background: linear-gradient(90deg, #10b981 0%, #f59e0b 100%);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+.flood-card.flood-alert {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(225, 29, 72, 0.1) 100%);
+    border: 1.5px solid rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 35px rgba(239, 68, 68, 0.25);
+    animation: floodPulseGlow 2s infinite ease-in-out;
+}
+.flood-card.flood-alert .flood-badge-icon {
+    background: #ef4444;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
+}
+.flood-card.flood-alert .flood-main-title { color: #fecdd3; }
+.flood-card.flood-alert .flood-gauge-progress {
+    background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%);
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.7);
+}
 
 @keyframes floodPulseGlow {
     0%, 100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
     50% { box-shadow: 0 0 35px rgba(239, 68, 68, 0.5); }
 }
 
-/* Status Color Themes */
-.flood-clean-card.flood-normal {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.04) 100%);
-    border-color: rgba(16, 185, 129, 0.3);
-}
-
-.flood-clean-card.flood-watch {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(217, 119, 6, 0.05) 100%);
-    border-color: rgba(245, 158, 11, 0.4);
-}
-.flood-clean-card.flood-watch .flood-status-badge {
-    background: #f59e0b;
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
-}
-.flood-clean-card.flood-watch .simple-gauge-fill {
-    background: linear-gradient(90deg, #10b981 0%, #f59e0b 100%);
-    box-shadow: 0 0 14px rgba(245, 158, 11, 0.6);
-}
-
-.flood-clean-card.flood-alert {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(225, 29, 72, 0.08) 100%);
-    border-color: rgba(239, 68, 68, 0.5);
-    animation: floodPulseGlow 2s infinite ease-in-out;
-}
-.flood-clean-card.flood-alert .flood-status-badge {
-    background: #ef4444;
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
-}
-.flood-clean-card.flood-alert .simple-gauge-fill {
-    background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%);
-    box-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
-}
-
 /* Light Mode Overrides */
-body.light-mode .flood-clean-card {
+body.light-mode .flood-card {
     background: #ffffff;
-    border-color: #e2e8f0;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-body.light-mode .flood-clean-right,
-body.light-mode .flood-prediction-box {
+body.light-mode .flood-gauge-bar-wrapper {
     background: #f8fafc;
     border-color: #e2e8f0;
 }
 
-body.light-mode .pred-time-pills {
+body.light-mode .flood-gauge-track {
     background: #e2e8f0;
 }
 
-body.light-mode .pred-pill {
+body.light-mode .forecast-time-tabs {
+    background: #e2e8f0;
+}
+
+body.light-mode .fc-tab {
     color: #64748b;
 }
 
-body.light-mode .simple-gauge-track {
-    background: #e2e8f0;
-    border-color: #cbd5e1;
+body.light-mode .flood-forecast-toolbar {
+    border-color: #e2e8f0;
 }
 
-body.light-mode .flood-clean-card.flood-normal {
+body.light-mode .flood-source-tag {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #475569;
+}
+
+body.light-mode .flood-card.flood-normal {
     background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-    border-color: #a7f3d0;
+    border: 1px solid #a7f3d0;
+}
+body.light-mode .flood-card.flood-normal .flood-main-title { color: #064e3b; }
+body.light-mode .flood-card.flood-normal .flood-main-desc { color: #047857; }
+body.light-mode .flood-status-pill.normal {
+    background: #dcfce7;
+    color: #15803d;
+    border-color: #86efac;
 }
 
-body.light-mode .flood-clean-card.flood-watch {
+body.light-mode .flood-card.flood-watch {
     background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1px solid #fde68a;
+}
+body.light-mode .flood-card.flood-watch .flood-main-title { color: #78350f; }
+body.light-mode .flood-card.flood-watch .flood-main-desc { color: #b45309; }
+body.light-mode .flood-status-pill.watch {
+    background: #fef3c7;
+    color: #b45309;
     border-color: #fde68a;
 }
 
-body.light-mode .flood-clean-card.flood-alert {
+body.light-mode .flood-card.flood-alert {
     background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
-    border-color: #fda4af;
+    border: 1px solid #fda4af;
+}
+body.light-mode .flood-card.flood-alert .flood-main-title { color: #881337; }
+body.light-mode .flood-card.flood-alert .flood-main-desc { color: #be123c; }
+body.light-mode .flood-status-pill.alert {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fca5a5;
 }
 
 /* 8 Metrics Grid */

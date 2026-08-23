@@ -376,87 +376,62 @@
             </section>
         </div>
 
-        <!-- Real-Time Flood Alert & Early Prediction Section (Ultra Clean & Simple) -->
-        <section id="flood-alert-section" class="panel-card" style="margin-top: 18px;">
-            <div class="panel-header" style="padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fa-solid fa-water" style="color: var(--cyan-primary); font-size: 1.15rem;"></i>
-                    <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--text-primary);">
-                        Flood Risk &amp; Water Prediction
-                    </h3>
-                </div>
-                <span class="panel-tag" id="flood-badge-tag">Official CWC Data</span>
-            </div>
-            
-            <div class="panel-body" style="padding: 24px;">
-                <div id="flood-status-card" class="flood-clean-card flood-normal">
+        <!-- Flood Alert & Water Level Prediction Section (Unified Modern Design) -->
+        <section id="flood-alert-section" class="panel-card no-print" style="margin-top: 18px;">
+            <div class="panel-body" style="padding: 22px 28px;">
+                <div id="flood-status-card" class="flood-card flood-normal">
                     
-                    <!-- Left Side: Status & Simple Forecast -->
-                    <div class="flood-clean-left">
-                        <!-- Status Badge & Big Clear Text -->
-                        <div class="flood-status-header">
-                            <div class="flood-status-badge" id="flood-icon-box">
+                    <!-- Top Main Row: Icon, Headline, Real-Time Level, Risk Tag -->
+                    <div class="flood-main-row">
+                        <div class="flood-left-info">
+                            <div class="flood-badge-icon" id="flood-icon-box">
                                 <i class="fa-solid fa-shield-halved" id="flood-main-icon"></i>
                             </div>
                             <div>
-                                <div id="flood-status-tag" class="flood-simple-pill normal">
-                                    🟢 SAFE - NO FLOOD RISK
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
+                                    <h3 id="flood-title-text" class="flood-main-title">River Water Level is Normal</h3>
+                                    <span id="flood-badge-tag" class="flood-source-tag">Official CWC Data</span>
                                 </div>
-                                <h3 id="flood-title-text" class="flood-main-title">River Water Level is Normal</h3>
+                                <p id="flood-sub-text" class="flood-main-desc">Water is currently at a safe level. There is no flood danger at this station.</p>
                             </div>
                         </div>
-
-                        <p id="flood-sub-text" class="flood-simple-desc">
-                            Water is currently at a safe level. There is no flood danger at this station.
-                        </p>
-
-                        <!-- Clean Multi-Hour Prediction Box -->
-                        <div class="flood-prediction-box">
-                            <div class="pred-top-row">
-                                <span class="pred-label"><i class="fa-solid fa-clock"></i> Forecast Time:</span>
-                                <div class="pred-time-pills">
-                                    <button type="button" class="pred-pill active" data-hours="3">3 Hours</button>
-                                    <button type="button" class="pred-pill" data-hours="6">6 Hours</button>
-                                    <button type="button" class="pred-pill" data-hours="12">12 Hours</button>
-                                    <button type="button" class="pred-pill" data-hours="24">24 Hours</button>
-                                </div>
+                        <div class="flood-right-stat">
+                            <div class="flood-stat-num-wrap">
+                                <span id="flood-current-level" class="flood-stat-big">--</span>
+                                <span class="flood-stat-unit">meters</span>
                             </div>
-                            <div class="pred-result-row">
-                                <div class="pred-result-text">
-                                    Expected in <span id="flood-hours-label">3 Hours</span>: <strong id="flood-forecast-val">-- m</strong>
-                                </div>
-                                <div id="flood-trend-chip" class="pred-trend-chip stable">
-                                    <i id="flood-trend-icon" class="fa-solid fa-arrow-right"></i>
-                                    <span id="flood-trend-val">Water is Stable</span>
-                                </div>
+                            <div id="flood-status-tag" class="flood-status-pill normal">
+                                <i class="fa-solid fa-circle-check"></i> NORMAL
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Side: Simple Water Level Gauge -->
-                    <div class="flood-clean-right">
-                        <div class="gauge-card-header">
-                            <span class="gauge-title">Current Water Level</span>
-                            <div class="gauge-big-num">
-                                <span id="flood-current-level">--</span> <span class="gauge-unit">meters</span>
-                            </div>
+                    <!-- Middle: Visual Level Gauge Bar -->
+                    <div class="flood-gauge-bar-wrapper">
+                        <div class="flood-gauge-meta-labels">
+                            <span><i class="fa-solid fa-water" style="color: var(--cyan-primary);"></i> Current River Stage</span>
+                            <span>Safety Buffer: <strong id="flood-buffer-val" style="color: #10b981;">-- m</strong> &nbsp;|&nbsp; Danger Mark: <strong id="flood-danger-level" style="color: #ef4444;">-- m</strong></span>
                         </div>
-
-                        <!-- One Clean, Clear Progress Bar -->
-                        <div class="simple-gauge-track">
-                            <div id="flood-meter-fill" class="simple-gauge-fill" style="width: 40%;"></div>
+                        <div class="flood-gauge-track">
+                            <div id="flood-meter-fill" class="flood-gauge-progress" style="width: 40%;"></div>
                         </div>
+                    </div>
 
-                        <!-- Safety Margin and Thresholds -->
-                        <div class="gauge-marks-row">
-                            <div class="gauge-mark safe">
-                                <span class="mark-dot" style="background: #10b981;"></span>
-                                <span>Safety Buffer: <strong id="flood-buffer-val">-- m</strong></span>
-                            </div>
-                            <div class="gauge-mark danger">
-                                <span class="mark-dot" style="background: #ef4444;"></span>
-                                <span>Danger Mark: <strong id="flood-danger-level">-- m</strong></span>
-                            </div>
+                    <!-- Bottom: Multi-Hour Early Forecast Toolbar -->
+                    <div class="flood-forecast-toolbar">
+                        <div class="forecast-prompt">
+                            <i class="fa-solid fa-clock-rotate-left" style="color: var(--cyan-primary);"></i>
+                            <span>AI Forecast:</span>
+                        </div>
+                        <div class="forecast-time-tabs">
+                            <button type="button" class="fc-tab active" data-hours="3">3 Hours</button>
+                            <button type="button" class="fc-tab" data-hours="6">6 Hours</button>
+                            <button type="button" class="fc-tab" data-hours="12">12 Hours</button>
+                            <button type="button" class="fc-tab" data-hours="24">24 Hours</button>
+                        </div>
+                        <div class="forecast-live-result">
+                            <span>Expected in <strong id="flood-hours-label">3 Hours</strong>: <strong id="flood-forecast-val" style="color: var(--cyan-primary);">-- m</strong></span>
+                            <span id="flood-trend-chip" class="fc-trend-pill stable"><i id="flood-trend-icon" class="fa-solid fa-arrow-right"></i> <span id="flood-trend-val">Water is Stable</span></span>
                         </div>
                     </div>
 
