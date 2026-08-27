@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (riverSelect) {
             riverSelect.disabled = false;
-            const curRiver = riverSelect.value;
+            const curRiver = forceReset ? 'ALL' : riverSelect.value;
             riverSelect.innerHTML = '<option value="ALL">All Rivers (' + rivers.size + ')</option>';
             Array.from(rivers).sort().forEach(rv => {
                 const opt = document.createElement('option');
@@ -373,23 +373,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 opt.textContent = rv;
                 riverSelect.appendChild(opt);
             });
-            if (curRiver && curRiver !== 'ALL') riverSelect.value = curRiver;
+            riverSelect.value = (curRiver && curRiver !== 'ALL' && !forceReset) ? curRiver : 'ALL';
         }
 
-        stateSelect.disabled = false;
-        const currentSelectedState = stateSelect.value;
-        stateSelect.innerHTML = '<option value="ALL">All States (' + states.size + ')</option>';
-        Array.from(states).sort().forEach(st => {
-            const opt = document.createElement('option');
-            opt.value = st;
-            opt.textContent = st;
-            stateSelect.appendChild(opt);
-        });
-        if (currentSelectedState && currentSelectedState !== 'ALL') {
-            stateSelect.value = currentSelectedState;
+        if (stateSelect) {
+            stateSelect.disabled = false;
+            const currentSelectedState = forceReset ? 'ALL' : stateSelect.value;
+            stateSelect.innerHTML = '<option value="ALL">All States (' + states.size + ')</option>';
+            Array.from(states).sort().forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st;
+                opt.textContent = st;
+                stateSelect.appendChild(opt);
+            });
+            stateSelect.value = (currentSelectedState && currentSelectedState !== 'ALL' && !forceReset) ? currentSelectedState : 'ALL';
         }
 
-        updateStationList();
+        updateStationList('INIT');
     }
 
     function updateStationList(trigger = 'INIT', forceStationId = null) {
@@ -1263,11 +1263,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetHomeDefault() {
         selectedStationId = null;
-        populateFilters();
-        if (riverSelect) riverSelect.value = 'ALL';
-        if (stateSelect) stateSelect.value = 'ALL';
-        updateStationList('INIT');
+        populateFilters(true);
+
+        // Reset active nav-link to Dashboard
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        const defaultNav = document.querySelector('.nav-link[href="#overview"]');
+        if (defaultNav) defaultNav.classList.add('active');
+
         if (map) {
+            map.closePopup();
             map.flyTo([22.5937, 78.9629], 5, {
                 duration: 1.2,
                 easeLinearity: 0.25
@@ -1276,7 +1280,12 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    if (btnHomeReset) btnHomeReset.addEventListener('click', resetHomeDefault);
+    if (btnHomeReset) {
+        btnHomeReset.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetHomeDefault();
+        });
+    }
 
     // --- Core Navigation & Filter Event Listeners ---
     if (btnRefresh) btnRefresh.addEventListener('click', fetchData);
