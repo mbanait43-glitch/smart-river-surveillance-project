@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Populate Rivers, State & Station Dropdowns ---
-    function populateDropdowns() {
+    function populateDropdowns(forceReset = false) {
         const rivers = new Set();
         const states = new Set();
 
@@ -1263,7 +1263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetHomeDefault() {
         selectedStationId = null;
-        populateFilters(true);
+        populateDropdowns(true);
 
         // Reset active nav-link to Dashboard
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
