@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         stateSelect.disabled = false;
         const currentSelectedState = stateSelect.value;
-        stateSelect.innerHTML = '<option value="ALL">All Locations (' + states.size + ')</option>';
+        stateSelect.innerHTML = '<option value="ALL">All States (' + states.size + ')</option>';
         Array.from(states).sort().forEach(st => {
             const opt = document.createElement('option');
             opt.value = st;
