@@ -400,24 +400,90 @@ document.addEventListener('DOMContentLoaded', () => {
         let curState = stateSelect ? stateSelect.value : 'ALL';
 
         if (trigger === 'RIVER') {
-            // User selected a River: if specific state doesn't have this river, reset state to ALL
-            if (curRiver !== 'ALL' && curState !== 'ALL') {
+            if (curRiver && curRiver !== 'ALL') {
                 const riverStations = allStations.filter(s => s.river === curRiver);
-                const validStatesForRiver = new Set(riverStations.map(s => s.state));
-                if (!validStatesForRiver.has(curState)) {
-                    curState = 'ALL';
-                    if (stateSelect) stateSelect.value = 'ALL';
+                const riverStates = Array.from(new Set(riverStations.map(s => s.state))).filter(Boolean);
+
+                stateSelect.innerHTML = '';
+                if (riverStates.length === 1) {
+                    const opt = document.createElement('option');
+                    opt.value = riverStates[0];
+                    opt.textContent = riverStates[0];
+                    stateSelect.appendChild(opt);
+                    stateSelect.value = riverStates[0];
+                    curState = riverStates[0];
+                } else {
+                    const defaultOpt = document.createElement('option');
+                    defaultOpt.value = 'ALL';
+                    defaultOpt.textContent = 'All States (' + riverStates.length + ')';
+                    stateSelect.appendChild(defaultOpt);
+                    riverStates.sort().forEach(st => {
+                        const opt = document.createElement('option');
+                        opt.value = st;
+                        opt.textContent = st;
+                        stateSelect.appendChild(opt);
+                    });
+                    if (curState && riverStates.includes(curState)) {
+                        stateSelect.value = curState;
+                    } else {
+                        stateSelect.value = 'ALL';
+                        curState = 'ALL';
+                    }
                 }
+            } else {
+                const allStates = Array.from(new Set(allStations.map(s => s.state))).filter(Boolean);
+                stateSelect.innerHTML = '<option value="ALL">All States (' + allStates.length + ')</option>';
+                allStates.sort().forEach(st => {
+                    const opt = document.createElement('option');
+                    opt.value = st;
+                    opt.textContent = st;
+                    stateSelect.appendChild(opt);
+                });
+                stateSelect.value = 'ALL';
+                curState = 'ALL';
             }
         } else if (trigger === 'STATE') {
-            // User selected a State: if specific river doesn't exist in this state, reset river to ALL
-            if (curState !== 'ALL' && curRiver !== 'ALL') {
+            if (curState && curState !== 'ALL') {
                 const stateStations = allStations.filter(s => s.state === curState);
-                const validRiversForState = new Set(stateStations.map(s => s.river));
-                if (!validRiversForState.has(curRiver)) {
-                    curRiver = 'ALL';
-                    if (riverSelect) riverSelect.value = 'ALL';
+                const stateRivers = Array.from(new Set(stateStations.map(s => s.river))).filter(Boolean);
+
+                riverSelect.innerHTML = '';
+                if (stateRivers.length === 1) {
+                    const opt = document.createElement('option');
+                    opt.value = stateRivers[0];
+                    opt.textContent = stateRivers[0];
+                    riverSelect.appendChild(opt);
+                    riverSelect.value = stateRivers[0];
+                    curRiver = stateRivers[0];
+                } else {
+                    const defaultOpt = document.createElement('option');
+                    defaultOpt.value = 'ALL';
+                    defaultOpt.textContent = 'All Rivers (' + stateRivers.length + ')';
+                    riverSelect.appendChild(defaultOpt);
+                    stateRivers.sort().forEach(rv => {
+                        const opt = document.createElement('option');
+                        opt.value = rv;
+                        opt.textContent = rv;
+                        riverSelect.appendChild(opt);
+                    });
+                    if (curRiver && stateRivers.includes(curRiver)) {
+                        riverSelect.value = curRiver;
+                    } else {
+                        riverSelect.value = 'ALL';
+                        curRiver = 'ALL';
+                    }
                 }
+            } else {
+                const allRivers = Array.from(new Set(allStations.map(s => s.river))).filter(Boolean);
+                riverSelect.innerHTML = '<option value="ALL">All Rivers (' + allRivers.length + ')</option>';
+                allRivers.sort().forEach(rv => {
+                    const opt = document.createElement('option');
+                    opt.value = rv;
+                    opt.textContent = rv;
+                    riverSelect.appendChild(opt);
+                });
+                riverSelect.value = 'ALL';
+                curRiver = 'ALL';
             }
         }
 
@@ -474,15 +540,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (autoSyncDropdowns) {
             if (riverSelect && station.river) {
                 const options = Array.from(riverSelect.options).map(o => o.value);
-                if (options.includes(station.river)) {
-                    riverSelect.value = station.river;
+                if (!options.includes(station.river)) {
+                    const opt = document.createElement('option');
+                    opt.value = station.river;
+                    opt.textContent = station.river;
+                    riverSelect.appendChild(opt);
                 }
+                riverSelect.value = station.river;
             }
             if (stateSelect && station.state) {
                 const stateOpts = Array.from(stateSelect.options).map(o => o.value);
-                if (stateOpts.includes(station.state)) {
-                    stateSelect.value = station.state;
+                if (!stateOpts.includes(station.state)) {
+                    const opt = document.createElement('option');
+                    opt.value = station.state;
+                    opt.textContent = station.state;
+                    stateSelect.appendChild(opt);
                 }
+                stateSelect.value = station.state;
             }
         }
 
@@ -1189,6 +1263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetHomeDefault() {
         selectedStationId = null;
+        populateFilters();
         if (riverSelect) riverSelect.value = 'ALL';
         if (stateSelect) stateSelect.value = 'ALL';
         updateStationList('INIT');
